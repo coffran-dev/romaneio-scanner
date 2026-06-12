@@ -327,7 +327,7 @@ body{
 /* =========================================================
    CONFIGURAÇÃO — cole aqui a URL do seu Apps Script Web App
    ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz1T3TaG0a6brgsa-Rud-jpV8MxoNdgIyaILbmIwsWmDRYCxvuEWbBk84etp67lt4RP/exec";
 
 const App = (() => {
   let html5Qr = null;
@@ -359,7 +359,7 @@ const App = (() => {
 
   // ---------- API (Apps Script - text/plain bypassa preflight CORS) ----------
   async function api(action, payload){
-    if(!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec')) {
+    if(!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbz1T3TaG0a6brgsa-Rud-jpV8MxoNdgIyaILbmIwsWmDRYCxvuEWbBk84etp67lt4RP/exec')) {
       throw new Error('API_URL não configurada');
     }
     const res = await fetch(API_URL, {
