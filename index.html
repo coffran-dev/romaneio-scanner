@@ -359,7 +359,7 @@ const App = (() => {
 
   // ---------- API (Apps Script - text/plain bypassa preflight CORS) ----------
   async function api(action, payload){
-    if(!API_URL || API_URL.includes('COLE_AQUI')) {
+    if(!API_URL || API_URL.includes('https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec')) {
       throw new Error('API_URL não configurada');
     }
     const res = await fetch(API_URL, {
