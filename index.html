@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Romaneio Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --bg:#12151b;
+  --surface:#1b1f27;
+  --surface-2:#252b35;
+  --line:#343b48;
+  --accent:#ff9f1c;
+  --accent-2:#36c79b;
+  --danger:#ef5b5b;
+  --text:#eef1f5;
+  --muted:#8b93a3;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.hidden{display:none !important;}
+
+/* ---------- AUTH SCREENS ---------- */
+.auth-wrap{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,159,28,0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(54,199,155,0.06), transparent 40%),
+    var(--bg);
+}
+.auth-card{
+  width:100%;max-width:400px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:32px 28px;
+  position:relative;
+  overflow:hidden;
+}
+.auth-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--accent) 0 14px, transparent 14px 22px);
+  opacity:.8;
+}
+.brand{
+  font-family:var(--font-display);font-weight:700;font-size:24px;
+  letter-spacing:.5px;margin-bottom:4px;display:flex;align-items:center;gap:10px;
+}
+.brand-mark{
+  width:32px;height:32px;border-radius:8px;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;color:#1a1303;
+  font-family:var(--font-mono);font-weight:700;font-size:14px;
+}
+.brand-sub{color:var(--muted);font-size:13px;margin-bottom:24px;font-family:var(--font-mono);letter-spacing:.5px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px;font-weight:500;}
+.field input{
+  width:100%;padding:11px 12px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text);font-size:14px;font-family:var(--font-body);
+}
+.field input:focus{outline:none;border-color:var(--accent);}
+.btn{
+  width:100%;padding:12px;border-radius:8px;border:none;
+  font-family:var(--font-display);font-weight:600;font-size:14px;
+  cursor:pointer;letter-spacing:.3px;transition:transform .08s ease, opacity .15s;
+}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--accent);color:#1a1303;}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-outline-accent{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+.switch-link{
+  margin-top:16px;text-align:center;font-size:13px;color:var(--muted);
+}
+.switch-link a{color:var(--accent);text-decoration:none;font-weight:600;cursor:pointer;}
+.err-msg{color:var(--danger);font-size:13px;margin-top:8px;min-height:18px;}
+
+/* ---------- APP SHELL ---------- */
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:20;
+}
+.topbar .brand{font-size:18px;margin:0;}
+.topbar .brand-mark{width:26px;height:26px;font-size:11px;}
+.status-row{display:flex;align-items:center;gap:10px;}
+.pill{
+  font-family:var(--font-mono);font-size:11px;padding:4px 9px;border-radius:20px;
+  display:flex;align-items:center;gap:6px;border:1px solid var(--line);color:var(--muted);
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+.dot.on{background:var(--accent-2);box-shadow:0 0 8px var(--accent-2);}
+.dot.off{background:var(--danger);}
+.user-chip{font-size:12px;color:var(--muted);font-family:var(--font-mono);}
+.logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;text-decoration:underline;}
+
+.tabs{
+  display:flex;background:var(--surface);border-bottom:1px solid var(--line);
+  position:sticky;top:57px;z-index:19;overflow-x:auto;
+}
+.tab{
+  flex:1;padding:12px 8px;text-align:center;font-family:var(--font-display);
+  font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;
+  border-bottom:3px solid transparent;white-space:nowrap;
+}
+.tab.active{color:var(--text);border-color:var(--accent);}
+.content{flex:1;padding:18px;max-width:760px;width:100%;margin:0 auto;}
+
+/* ---------- SCANNER ---------- */
+.scan-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px;margin-bottom:16px;
+}
+#reader{
+  width:100%;border-radius:10px;overflow:hidden;background:#000;
+  min-height:240px;
+}
+.scan-controls{display:flex;gap:10px;margin-top:12px;}
+.scan-controls .btn{flex:1;padding:11px;font-size:13px;}
+.op-select-row{display:flex;gap:8px;margin-bottom:12px;}
+.op-btn{
+  flex:1;padding:10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--muted);font-family:var(--font-display);
+  font-weight:600;font-size:12.5px;cursor:pointer;text-align:center;
+}
+.op-btn.active.saida{border-color:var(--danger);color:var(--danger);background:rgba(239,91,91,.08);}
+.op-btn.active.entrada{border-color:var(--accent-2);color:var(--accent-2);background:rgba(54,199,155,.08);}
+.op-btn.active.devolucao{border-color:var(--accent);color:var(--accent);background:rgba(255,159,28,.08);}
+.last-scan{
+  font-family:var(--font-mono);font-size:13px;color:var(--accent-2);
+  margin-top:10px;min-height:18px;
+}
+
+/* ---------- ROMANEIO FORM ---------- */
+.section-title{
+  font-family:var(--font-display);font-weight:700;font-size:14px;
+  text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+  margin:22px 0 10px;display:flex;align-items:center;gap:8px;
+}
+.section-title::after{content:"";flex:1;height:1px;background:var(--line);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:520px){.grid2{grid-template-columns:1fr;}}
+
+/* Manifest ticket - signature element */
+.ticket{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  overflow:hidden;margin-bottom:14px;position:relative;
+}
+.ticket-stripe{
+  height:10px;
+  background:repeating-linear-gradient(90deg,var(--accent) 0 10px, var(--surface) 10px 16px);
+}
+.ticket-body{padding:14px 16px;}
+.ticket-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.ticket-id{font-family:var(--font-mono);color:var(--accent);font-size:12px;}
+.ticket-status{
+  font-family:var(--font-mono);font-size:11px;padding:3px 8px;border-radius:6px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.status-pendente{background:rgba(255,159,28,.12);color:var(--accent);}
+.status-emitido{background:rgba(54,199,155,.12);color:var(--accent-2);}
+.status-cancelado{background:rgba(239,91,91,.12);color:var(--danger);}
+.ticket-meta{font-size:12.5px;color:var(--muted);line-height:1.6;}
+.ticket-meta b{color:var(--text);}
+.ticket-actions{display:flex;gap:8px;margin-top:12px;}
+.ticket-actions .btn{flex:1;padding:9px;font-size:12px;}
+
+/* item list */
+.item-list{margin-top:8px;}
+.item-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 12px;background:var(--surface-2);border-radius:8px;margin-bottom:6px;
+  font-size:13px;
+}
+.item-code{font-family:var(--font-mono);font-weight:600;}
+.item-meta{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
+.item-tag{
+  font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--font-mono);
+  text-transform:uppercase;
+}
+.tag-saida{background:rgba(239,91,91,.12);color:var(--danger);}
+.tag-entrada{background:rgba(54,199,155,.12);color:var(--accent-2);}
+.tag-devolucao{background:rgba(255,159,28,.12);color:var(--accent);}
+.item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;}
+
+.empty-state{
+  text-align:center;color:var(--muted);font-size:13px;padding:30px 10px;
+  border:1px dashed var(--line);border-radius:10px;
+}
+
+/* histórico filters */
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.filter-chip{
+  padding:7px 14px;border-radius:20px;border:1px solid var(--line);
+  background:var(--surface-2);color:var(--muted);font-size:12px;cursor:pointer;
+  font-family:var(--font-mono);
+}
+.filter-chip.active{border-color:var(--accent);color:var(--accent);}
+
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text);
+  padding:10px 18px;border-radius:8px;font-size:13px;z-index:100;
+  box-shadow:0 6px 24px rgba(0,0,0,.4);
+}
+</style>
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="screen-login" class="auth-wrap">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">RM</div>Romaneio<span style="color:var(--accent)">Scan</span></div>
+    <div class="brand-sub">CONTROLE DE CARGA · ENTRADA / SAÍDA / DEVOLUÇÃO</div>
+    <div class="field"><label>E-mail</label><input id="login-email" type="email" placeholder="seu@email.com"></div>
+    <div class="field"><label>Senha</label><input id="login-pass" type="password" placeholder="••••••••"></div>
+    <button class="btn btn-primary" onclick="App.login()">Entrar</button>
+    <div class="err-msg" id="login-err"></div>
+    <div class="switch-link">Não tem conta? <a onclick="App.showScreen('register')">Cadastre-se</a></div>
+  </div>
+</div>
+
+<!-- ================= REGISTER ================= -->
+<div id="screen-register" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">RM</div>Criar conta</div>
+    <div class="brand-sub">ACESSO AO PAINEL DE OPERAÇÕES</div>
+    <div class="field"><label>Nome</label><input id="reg-nome" type="text" placeholder="Seu nome completo"></div>
+    <div class="field"><label>E-mail</label><input id="reg-email" type="email" placeholder="seu@email.com"></div>
+    <div class="field"><label>Senha</label><input id="reg-pass" type="password" placeholder="mín. 6 caracteres"></div>
+    <button class="btn btn-primary" onclick="App.register()">Cadastrar</button>
+    <div class="err-msg" id="reg-err"></div>
+    <div class="switch-link">Já tem conta? <a onclick="App.showScreen('login')">Entrar</a></div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="screen-app" class="app hidden">
+  <div class="topbar">
+    <div class="brand"><div class="brand-mark">RM</div>RomaneioScan</div>
+    <div class="status-row">
+      <div class="pill"><span class="dot" id="net-dot"></span><span id="net-label">offline</span></div>
+      <div class="pill"><span id="sync-label">0 pendentes</span></div>
+      <span class="user-chip" id="user-chip"></span>
+      <button class="logout-btn" onclick="App.logout()">sair</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="scanner" onclick="App.switchTab('scanner')">Scanner</div>
+    <div class="tab" data-tab="romaneio" onclick="App.switchTab('romaneio')">Romaneio Atual</div>
+    <div class="tab" data-tab="historico" onclick="App.switchTab('historico')">Histórico</div>
+  </div>
+
+  <div class="content">
+
+    <!-- TAB: SCANNER -->
+    <div id="tab-scanner" class="tabpane">
+      <div class="op-select-row">
+        <div class="op-btn active saida" data-op="saida" onclick="App.setOp('saida')">Saída</div>
+        <div class="op-btn entrada" data-op="entrada" onclick="App.setOp('entrada')">Entrada</div>
+        <div class="op-btn devolucao" data-op="devolucao" onclick="App.setOp('devolucao')">Devolução</div>
+      </div>
+      <div class="scan-box">
+        <div id="reader"></div>
+        <div class="scan-controls">
+          <button class="btn btn-primary" id="btn-start" onclick="App.startScanner()">Iniciar</button>
+          <button class="btn btn-ghost" id="btn-stop" onclick="App.stopScanner()">Parar</button>
+          <button class="btn btn-outline-accent" id="btn-flash" onclick="App.toggleFlash()">Flash</button>
+        </div>
+        <div class="last-scan" id="last-scan"></div>
+      </div>
+      <div class="section-title">Itens lidos nesta sessão (<span id="count-itens">0</span>)</div>
+      <div class="item-list" id="item-list"></div>
+    </div>
+
+    <!-- TAB: ROMANEIO ATUAL -->
+    <div id="tab-romaneio" class="tabpane hidden">
+      <div class="section-title">Dados do romaneio</div>
+      <div class="grid2">
+        <div class="field"><label>Empresa remetente</label><input id="form-origem" type="text" placeholder="Quem está enviando"></div>
+        <div class="field"><label>Empresa destinatária</label><input id="form-destino" type="text" placeholder="Quem vai receber"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Data de emissão</label><input id="form-data" type="date"></div>
+        <div class="field"><label>Responsável</label><input id="form-responsavel" type="text" disabled></div>
+      </div>
+      <div class="section-title">Itens (<span id="count-itens-2">0</span>)</div>
+      <div class="item-list" id="item-list-2"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="App.emitirRomaneio()">Gerar PDF e salvar</button>
+        <button class="btn btn-ghost" onclick="App.limparRascunho()">Limpar tudo</button>
+      </div>
+    </div>
+
+    <!-- TAB: HISTÓRICO -->
+    <div id="tab-historico" class="tabpane hidden">
+      <div class="filter-row">
+        <div class="filter-chip active" data-f="todos" onclick="App.filterHist('todos')">Todos</div>
+        <div class="filter-chip" data-f="pendente" onclick="App.filterHist('pendente')">Pendentes</div>
+        <div class="filter-chip" data-f="emitido" onclick="App.filterHist('emitido')">Emitidos</div>
+        <div class="filter-chip" data-f="cancelado" onclick="App.filterHist('cancelado')">Cancelados</div>
+      </div>
+      <div id="hist-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO — cole aqui a URL do seu Apps Script Web App
+   ========================================================= */
+const API_URL = "https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec";
+
+const App = (() => {
+  let html5Qr = null;
+  let scanning = false;
+  let flashOn = false;
+  let currentOp = 'saida';
+  let user = null;
+
+  const LS_DRAFT = 'rm_draft_itens';
+  const LS_FORM = 'rm_draft_form';
+  const LS_ROMANEIOS = 'rm_romaneios';
+  const LS_USER = 'rm_user';
+
+  // ---------- HELPERS ----------
+  function toast(msg){
+    let t = document.createElement('div');
+    t.className = 'toast'; t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 2600);
+  }
+  function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) ?? def; }catch(e){ return def; } }
+  function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+  function nowISO(){ return new Date().toISOString(); }
+  function fmtDate(iso){
+    const d = new Date(iso);
+    return d.toLocaleString('pt-BR');
+  }
+  function uid(){ return 'RM-' + Date.now().toString(36).toUpperCase(); }
+
+  // ---------- API (Apps Script - text/plain bypassa preflight CORS) ----------
+  async function api(action, payload){
+    if(!API_URL || API_URL.includes('COLE_AQUI')) {
+      throw new Error('API_URL não configurada');
+    }
+    const res = await fetch(API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action, ...payload })
+    });
+    const data = await res.json();
+    if(!data.ok) throw new Error(data.error || 'Erro na API');
+    return data;
+  }
+
+  // ---------- AUTH ----------
+  function showScreen(name){
+    document.getElementById('screen-login').classList.toggle('hidden', name!=='login');
+    document.getElementById('screen-register').classList.toggle('hidden', name!=='register');
+    document.getElementById('screen-app').classList.toggle('hidden', name!=='app');
+  }
+
+  async function login(){
+    const email = document.getElementById('login-email').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    const err = document.getElementById('login-err');
+    err.textContent = '';
+    if(!email || !pass){ err.textContent='Preencha e-mail e senha.'; return; }
+    try{
+      const data = await api('login', { email, senha: pass });
+      user = data.user;
+      save(LS_USER, user);
+      initApp();
+    }catch(e){
+      err.textContent = navigator.onLine ? 'Credenciais inválidas ou erro de conexão.' : 'Sem conexão para validar login.';
+    }
+  }
+
+  async function register(){
+    const nome = document.getElementById('reg-nome').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const err = document.getElementById('reg-err');
+    err.textContent='';
+    if(!nome || !email || pass.length<6){ err.textContent='Preencha todos os campos (senha mín. 6 caracteres).'; return; }
+    try{
+      await api('register', { nome, email, senha: pass });
+      toast('Cadastro realizado! Faça login.');
+      showScreen('login');
+    }catch(e){
+      err.textContent = e.message || 'Erro ao cadastrar.';
+    }
+  }
+
+  function logout(){
+    user = null;
+    localStorage.removeItem(LS_USER);
+    stopScanner();
+    showScreen('login');
+  }
+
+  // ---------- APP INIT ----------
+  function initApp(){
+    showScreen('app');
+    document.getElementById('user-chip').textContent = user.nome + ' · ' + user.email;
+    document.getElementById('form-responsavel').value = user.nome;
+    document.getElementById('form-data').value = new Date().toISOString().slice(0,10);
+    renderItens();
+    renderHistorico();
+    updateNetStatus();
+    syncPending();
+  }
+
+  // ---------- NETWORK STATUS ----------
+  function updateNetStatus(){
+    const dot = document.getElementById('net-dot');
+    const label = document.getElementById('net-label');
+    if(navigator.onLine){ dot.className='dot on'; label.textContent='online'; }
+    else { dot.className='dot off'; label.textContent='offline'; }
+    const pend = load(LS_ROMANEIOS, []).filter(r=>!r.synced).length;
+    document.getElementById('sync-label').textContent = pend + ' pendente(s) de sync';
+  }
+  window.addEventListener('online', ()=>{ updateNetStatus(); syncPending(); });
+  window.addEventListener('offline', updateNetStatus);
+
+  // ---------- TABS ----------
+  function switchTab(name){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+    document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('hidden', p.id !== 'tab-'+name));
+    if(name==='romaneio') renderItens();
+    if(name==='historico') renderHistorico();
+  }
+
+  // ---------- OPERATION TYPE ----------
+  function setOp(op){
+    currentOp = op;
+    document.querySelectorAll('.op-btn').forEach(b=>{
+      b.classList.toggle('active', b.dataset.op===op);
+    });
+  }
+
+  // ---------- SCANNER ----------
+  function startScanner(){
+    if(scanning) return;
+    html5Qr = new Html5Qrcode("reader");
+    const config = {
+      fps: 12,
+      qrbox: { width: 250, height: 150 },
+      formatsToSupport: [
+        Html5QrcodeSupportedFormats.QR_CODE,
+        Html5QrcodeSupportedFormats.EAN_13,
+        Html5QrcodeSupportedFormats.EAN_8,
+        Html5QrcodeSupportedFormats.CODE_128,
+        Html5QrcodeSupportedFormats.CODE_39,
+        Html5QrcodeSupportedFormats.CODE_93,
+        Html5QrcodeSupportedFormats.UPC_A,
+        Html5QrcodeSupportedFormats.UPC_E,
+        Html5QrcodeSupportedFormats.ITF,
+        Html5QrcodeSupportedFormats.CODABAR,
+        Html5QrcodeSupportedFormats.DATA_MATRIX,
+        Html5QrcodeSupportedFormats.PDF_417,
+        Html5QrcodeSupportedFormats.AZTEC
+      ]
+    };
+    html5Qr.start({ facingMode: "environment" }, config, onScanSuccess)
+      .then(()=>{ scanning = true; })
+      .catch(err=>{ toast('Erro ao acessar câmera: ' + err); });
+  }
+
+  function stopScanner(){
+    if(html5Qr && scanning){
+      html5Qr.stop().then(()=>html5Qr.clear()).catch(()=>{});
+      scanning = false;
+      flashOn = false;
+    }
+  }
+
+  function toggleFlash(){
+    if(!html5Qr || !scanning){ toast('Inicie o scanner primeiro.'); return; }
+    flashOn = !flashOn;
+    html5Qr.applyVideoConstraints({ advanced: [{ torch: flashOn }] })
+      .catch(()=>toast('Flash não suportado neste dispositivo.'));
+  }
+
+  let lastCode = null, lastTime = 0;
+  function onScanSuccess(decodedText){
+    const now = Date.now();
+    if(decodedText === lastCode && now - lastTime < 1500) return; // debounce duplicado
+    lastCode = decodedText; lastTime = now;
+
+    const itens = load(LS_DRAFT, []);
+    itens.push({ codigo: decodedText, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
+    save(LS_DRAFT, itens);
+    document.getElementById('last-scan').textContent = '✓ ' + decodedText + ' (' + currentOp + ')';
+    renderItens();
+    if(navigator.vibrate) navigator.vibrate(80);
+  }
+
+  // ---------- ITEM LIST (draft) ----------
+  function renderItens(){
+    const itens = load(LS_DRAFT, []);
+    document.getElementById('count-itens').textContent = itens.length;
+    document.getElementById('count-itens-2').textContent = itens.length;
+    [['item-list'],['item-list-2']].forEach(([id])=>{
+      const el = document.getElementById(id);
+      if(itens.length===0){
+        el.innerHTML = '<div class="empty-state">Nenhum item escaneado ainda.</div>';
+        return;
+      }
+      el.innerHTML = itens.map((it,i)=>`
+        <div class="item-row">
+          <div>
+            <div class="item-code">${escapeHtml(it.codigo)}</div>
+            <div class="item-meta">${fmtDate(it.datahora)} · ${it.usuario}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="item-tag tag-${it.tipo}">${it.tipo}</span>
+            <button class="item-del" onclick="App.removeItem(${i})">✕</button>
+          </div>
+        </div>
+      `).join('');
+    });
+  }
+  function removeItem(i){
+    const itens = load(LS_DRAFT, []);
+    itens.splice(i,1);
+    save(LS_DRAFT, itens);
+    renderItens();
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+  function limparRascunho(){
+    if(!confirm('Limpar todos os itens lidos e dados do formulário?')) return;
+    localStorage.removeItem(LS_DRAFT);
+    document.getElementById('form-origem').value='';
+    document.getElementById('form-destino').value='';
+    renderItens();
+  }
+
+  // ---------- EMITIR ROMANEIO ----------
+  function emitirRomaneio(){
+    const itens = load(LS_DRAFT, []);
+    const origem = document.getElementById('form-origem').value.trim();
+    const destino = document.getElementById('form-destino').value.trim();
+    const data = document.getElementById('form-data').value;
+    if(itens.length===0){ toast('Escaneie ao menos um item.'); return; }
+    if(!origem || !destino){ toast('Preencha empresa remetente e destinatária.'); return; }
+
+    const romaneio = {
+      id: uid(),
+      dataEmissao: data,
+      empresaOrigem: origem,
+      empresaDestino: destino,
+      usuario: user.nome,
+      status: 'emitido',
+      synced: false,
+      criadoEm: nowISO(),
+      itens: itens
+    };
+
+    const all = load(LS_ROMANEIOS, []);
+    all.unshift(romaneio);
+    save(LS_ROMANEIOS, all);
+
+    gerarPDF(romaneio);
+
+    // limpa rascunho
+    localStorage.removeItem(LS_DRAFT);
+    document.getElementById('form-origem').value='';
+    document.getElementById('form-destino').value='';
+    renderItens();
+    updateNetStatus();
+    syncPending();
+    switchTab('historico');
+    toast('Romaneio ' + romaneio.id + ' gerado!');
+  }
+
+  // ---------- PDF ----------
+  function gerarPDF(rom){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(16);
+    doc.text('ROMANEIO DE CARGA', 14, 18);
+    doc.setFontSize(10);
+    doc.setFont('helvetica','normal');
+    doc.text('Código: ' + rom.id, 14, 28);
+    doc.text('Data de emissão: ' + rom.dataEmissao, 14, 34);
+    doc.text('Responsável: ' + rom.usuario, 14, 40);
+    doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, 48);
+    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, 54);
+
+    let y = 66;
+    doc.setFont('helvetica','bold');
+    doc.text('Código', 14, y);
+    doc.text('Tipo', 100, y);
+    doc.text('Data/Hora', 130, y);
+    doc.text('Usuário', 175, y);
+    doc.setFont('helvetica','normal');
+    y += 4;
+    doc.line(14, y, 196, y);
+    y += 6;
+
+    rom.itens.forEach(it=>{
+      if(y > 280){ doc.addPage(); y = 20; }
+      doc.text(String(it.codigo).slice(0,40), 14, y);
+      doc.text(it.tipo, 100, y);
+      doc.text(fmtDate(it.datahora), 130, y);
+      doc.text(it.usuario, 175, y);
+      y += 7;
+    });
+
+    doc.save(rom.id + '.pdf');
+  }
+
+  // ---------- HISTÓRICO ----------
+  let histFilter = 'todos';
+  function filterHist(f){
+    histFilter = f;
+    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
+    renderHistorico();
+  }
+  function renderHistorico(){
+    let all = load(LS_ROMANEIOS, []);
+    if(histFilter!=='todos') all = all.filter(r=>r.status===histFilter);
+    const el = document.getElementById('hist-list');
+    if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
+    el.innerHTML = all.map(r=>`
+      <div class="ticket">
+        <div class="ticket-stripe"></div>
+        <div class="ticket-body">
+          <div class="ticket-head">
+            <span class="ticket-id">${r.id}</span>
+            <span class="ticket-status status-${r.status}">${r.status}${r.synced ? '' : ' · local'}</span>
+          </div>
+          <div class="ticket-meta">
+            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
+            Emitido em ${r.dataEmissao} por ${escapeHtml(r.usuario)} · ${r.itens.length} item(ns)
+          </div>
+          <div class="ticket-actions">
+            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
+            ${r.status!=='cancelado' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function reimprimir(id){
+    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
+    if(r) gerarPDF(r);
+  }
+  function cancelarRomaneio(id){
+    if(!confirm('Cancelar este romaneio?')) return;
+    const all = load(LS_ROMANEIOS, []);
+    const r = all.find(x=>x.id===id);
+    if(r){ r.status='cancelado'; r.synced=false; save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); syncPending(); }
+  }
+
+  // ---------- SYNC ----------
+  async function syncPending(){
+    if(!navigator.onLine) return;
+    const all = load(LS_ROMANEIOS, []);
+    let changed = false;
+    for(const r of all){
+      if(r.synced) continue;
+      try{
+        await api('saveRomaneio', { romaneio: r });
+        r.synced = true;
+        changed = true;
+      }catch(e){ /* mantém pendente */ }
+    }
+    if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); }
+  }
+
+  // ---------- BOOT ----------
+  function boot(){
+    const savedUser = load(LS_USER, null);
+    if(savedUser){ user = savedUser; initApp(); }
+    else showScreen('login');
+    setInterval(()=>{ if(navigator.onLine) syncPending(); }, 30000);
+  }
+
+  return {
+    showScreen, login, register, logout,
+    switchTab, setOp, startScanner, stopScanner, toggleFlash,
+    removeItem, limparRascunho, emitirRomaneio,
+    filterHist, reimprimir, cancelarRomaneio,
+    boot
+  };
+})();
+
+App.boot();
+</script>
+</body>
+</html>
