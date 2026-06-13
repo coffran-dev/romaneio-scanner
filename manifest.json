@@ -1,6 +1,6 @@
 {
-  "name": "RomaneioScan",
-  "short_name": "RomaneioScan",
+  "name": "BateleScanner",
+  "short_name": "BateleScanner",
   "description": "Sistema de scanner para emissão de romaneios",
   "start_url": "./index.html",
   "scope": "./",
