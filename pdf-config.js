@@ -20,13 +20,13 @@ const PDF_CONFIG = {
 
   // Largura e altura da logo no PDF (em mm)
   LOGO_LARGURA: 30,
-  LOGO_ALTURA: 18,
+  LOGO_ALTURA: 30,
 
   // Nome da empresa que aparece no topo do romaneio
   NOME_EMPRESA: "Batele Scanner",
 
   // Subtítulo / endereço / CNPJ (aparece abaixo do nome da empresa)
-  SUBTITULO_EMPRESA: "Controle DE Romaneios - Entrada / Saída / Devolução",
+  SUBTITULO_EMPRESA: "Controle de Romaneios - Entrada / Saída / Devolução",
 
   // Cor principal usada nos títulos e linhas (RGB de 0 a 255)
   COR_PRIMARIA: [23, 145, 194],
