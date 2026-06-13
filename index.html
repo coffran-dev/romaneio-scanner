@@ -421,7 +421,7 @@ body{
     <div id="tab-historico" class="tabpane hidden">
       <div class="search-box">
         <div class="grid2">
-          <div class="field"><label>Código do romaneio</label><input id="search-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+          <div class="field"><label>Código / Descrição do romaneio</label><input id="search-codigo" type="text" placeholder="ex: RM-LX2Y3Z ou nome do item"></div>
           <div class="field"><label>Data de emissão</label><input id="search-data" type="date"></div>
         </div>
         <div class="grid2">
@@ -444,24 +444,21 @@ body{
 
     <!-- TAB: ADMIN -->
     <div id="tab-admin" class="tabpane hidden">
-      <!-- Sub-abas do Admin -->
       <div class="admin-subtabs">
         <div class="admin-subtab active" data-stab="usuarios" onclick="App.switchAdminTab('usuarios')">Usuários</div>
         <div class="admin-subtab" data-stab="romaneios-admin" onclick="App.switchAdminTab('romaneios-admin')">Todos os Romaneios</div>
       </div>
 
-      <!-- Painel: Usuários -->
       <div id="admin-stab-usuarios">
         <div class="section-title">Usuários cadastrados</div>
         <div id="admin-list"></div>
       </div>
 
-      <!-- Painel: Romaneios de todos os usuários -->
       <div id="admin-stab-romaneios-admin" class="hidden">
         <div class="search-box">
           <div class="grid2">
             <div class="field"><label>Usuário</label><input id="asearch-usuario" type="text" placeholder="Nome do usuário"></div>
-            <div class="field"><label>Código do romaneio</label><input id="asearch-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+            <div class="field"><label>Código / Descrição</label><input id="asearch-codigo" type="text" placeholder="ex: RM-LX2Y3Z ou nome do item"></div>
           </div>
           <div class="grid2">
             <div class="field"><label>Data de emissão</label><input id="asearch-data" type="date"></div>
@@ -794,7 +791,7 @@ const App = (() => {
         <div class="item-row">
           <div>
             <div class="item-code">${escapeHtml(it.codigo)}</div>
-            <div class="item-meta">${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
+            <div class="item-meta"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;">Cód./Desc.</span> · ${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="item-tag tag-${it.tipo}">${it.tipo}</span>
@@ -892,7 +889,7 @@ const App = (() => {
 
     doc.setFont('helvetica','bold');
     doc.setTextColor(cor[0],cor[1],cor[2]);
-    doc.text('Código', 14, y);
+    doc.text('Código / Descrição', 14, y);
     doc.text('Tipo', 100, y);
     doc.text('Data/Hora', 130, y);
     doc.text('Usuário', 175, y);
@@ -1032,7 +1029,6 @@ const App = (() => {
       try{
         const remote = await api('listAllRomaneios', { adminEmail: user.email });
         if(remote.romaneios){
-          // Mescla com dados locais, priorizando o servidor
           const local = load(LS_ROMANEIOS, []);
           remote.romaneios.forEach(r=>{
             const idx = local.findIndex(l=>l.id===r.id);
@@ -1061,8 +1057,8 @@ const App = (() => {
     if(adminHistFilter!=='todos') all = all.filter(r=>r.status===adminHistFilter);
 
     const usuario = document.getElementById('asearch-usuario').value.trim().toLowerCase();
-    const codigo = document.getElementById('asearch-codigo').value.trim().toLowerCase();
-    const data = document.getElementById('asearch-data').value;
+    const codigo  = document.getElementById('asearch-codigo').value.trim().toLowerCase();
+    const data    = document.getElementById('asearch-data').value;
     const empresa = document.getElementById('asearch-empresa').value.trim().toLowerCase();
 
     if(usuario) all = all.filter(r=>(r.usuario||'').toLowerCase().includes(usuario));
