@@ -789,6 +789,21 @@ const App = (() => {
     switchTab('historico');
     toast('Romaneio ' + romaneio.id + ' gerado!');
   }
+  // ---------- PDF (usa PDF_CONFIG de pdf-config.js) ----------
+  function gerarPDF(rom){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const cfg = (typeof PDF_CONFIG !== 'undefined') ? PDF_CONFIG : {};
+    const cor = cfg.COR_PRIMARIA || [255,159,28];
+    let y = 18;
+    let textX = 14;
+
+    if(cfg.LOGO_BASE64){
+      try{
+        doc.addImage(cfg.LOGO_BASE64, cfg.LOGO_FORMATO || 'PNG', 14, 10, cfg.LOGO_LARGURA || 30, cfg.LOGO_ALTURA || 18);
+        textX = 14 + (cfg.LOGO_LARGURA || 30) + 6;
+      }catch(e){ /* logo inválida, segue sem ela */ }
+    }
 
     doc.setTextColor(cor[0],cor[1],cor[2]);
     doc.setFont('helvetica','bold');
