@@ -13,7 +13,7 @@
 
 const PDF_CONFIG = {
   // Logo da empresa em Base64 (veja instruções acima). Deixe "" para não usar logo.
-LOGO_BASE64: ""
+LOGO_BASE64: "",
  // Formato da imagem usada no LOGO_BASE64: "PNG" ou "JPEG"
   LOGO_FORMATO: "PNG",
 
