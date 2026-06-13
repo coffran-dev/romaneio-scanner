@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="pdf-config.js"></script>
+<script src="pdf-config.js" onerror="console.warn('pdf-config.js nao carregado, usando padroes.')"></script>
 <style>
 :root{
   --bg:#12151b;
@@ -253,6 +253,18 @@ body{
 .badge-bloqueado{background:rgba(239,91,91,.12);color:var(--danger);}
 .badge-pendente{background:rgba(255,159,28,.12);color:var(--accent);}
 
+/* admin sub-tabs */
+.admin-subtabs{
+  display:flex;gap:0;margin-bottom:18px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;
+}
+.admin-subtab{
+  flex:1;padding:11px 8px;text-align:center;font-family:var(--font-display);
+  font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;
+  border-bottom:3px solid transparent;
+}
+.admin-subtab.active{color:var(--text);border-color:var(--accent);background:var(--surface);}
+
 .toast{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   background:var(--surface-2);border:1px solid var(--line);color:var(--text);
@@ -432,8 +444,42 @@ body{
 
     <!-- TAB: ADMIN -->
     <div id="tab-admin" class="tabpane hidden">
-      <div class="section-title">Usuários cadastrados</div>
-      <div id="admin-list"></div>
+      <!-- Sub-abas do Admin -->
+      <div class="admin-subtabs">
+        <div class="admin-subtab active" data-stab="usuarios" onclick="App.switchAdminTab('usuarios')">Usuários</div>
+        <div class="admin-subtab" data-stab="romaneios-admin" onclick="App.switchAdminTab('romaneios-admin')">Todos os Romaneios</div>
+      </div>
+
+      <!-- Painel: Usuários -->
+      <div id="admin-stab-usuarios">
+        <div class="section-title">Usuários cadastrados</div>
+        <div id="admin-list"></div>
+      </div>
+
+      <!-- Painel: Romaneios de todos os usuários -->
+      <div id="admin-stab-romaneios-admin" class="hidden">
+        <div class="search-box">
+          <div class="grid2">
+            <div class="field"><label>Usuário</label><input id="asearch-usuario" type="text" placeholder="Nome do usuário"></div>
+            <div class="field"><label>Código do romaneio</label><input id="asearch-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>Data de emissão</label><input id="asearch-data" type="date"></div>
+            <div class="field"><label>Empresa remetente / destinatária</label><input id="asearch-empresa" type="text" placeholder="Buscar empresa"></div>
+          </div>
+          <div class="search-actions">
+            <button class="btn btn-primary" onclick="App.renderAdminRomaneios()">Buscar</button>
+            <button class="btn btn-ghost" onclick="App.limparBuscaAdmin()">Limpar</button>
+          </div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-chip active" data-af="todos" onclick="App.filterAdminHist('todos')">Todos</div>
+          <div class="filter-chip" data-af="pendente" onclick="App.filterAdminHist('pendente')">Pendentes</div>
+          <div class="filter-chip" data-af="emitido" onclick="App.filterAdminHist('emitido')">Emitidos</div>
+          <div class="filter-chip" data-af="cancelado" onclick="App.filterAdminHist('cancelado')">Cancelados</div>
+        </div>
+        <div id="admin-rom-list"></div>
+      </div>
     </div>
 
   </div>
@@ -699,6 +745,25 @@ const App = (() => {
       .catch(()=>toast('Flash não suportado neste dispositivo.'));
   }
 
+  // ---------- BIP DO SCANNER ----------
+  let _audioCtx = null;
+  function beepScan(){
+    try{
+      if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = _audioCtx.createOscillator();
+      const gain = _audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(_audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1480, _audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, _audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.4, _audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, _audioCtx.currentTime + 0.15);
+      osc.start(_audioCtx.currentTime);
+      osc.stop(_audioCtx.currentTime + 0.15);
+    }catch(e){ /* fallback silencioso */ }
+  }
+
   let lastCode = null, lastTime = 0;
   function onScanSuccess(decodedText){
     const now = Date.now();
@@ -710,7 +775,8 @@ const App = (() => {
     save(LS_DRAFT, itens);
     document.getElementById('last-scan').textContent = '✓ ' + decodedText + ' (' + currentOp + ')';
     renderItens();
-    if(navigator.vibrate) navigator.vibrate(80);
+    beepScan();
+    if(navigator.vibrate) navigator.vibrate([60, 30, 60]);
   }
 
   // ---------- ITEM LIST (draft) ----------
@@ -952,6 +1018,84 @@ const App = (() => {
     if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); }
   }
 
+  // ---------- ADMIN — ROMANEIOS (todos os usuários) ----------
+  let adminHistFilter = 'todos';
+  function switchAdminTab(name){
+    document.querySelectorAll('.admin-subtab').forEach(t=>t.classList.toggle('active', t.dataset.stab===name));
+    document.getElementById('admin-stab-usuarios').classList.toggle('hidden', name!=='usuarios');
+    document.getElementById('admin-stab-romaneios-admin').classList.toggle('hidden', name!=='romaneios-admin');
+    if(name==='romaneios-admin') loadAdminRomaneios();
+    if(name==='usuarios') loadAdmin();
+  }
+  async function loadAdminRomaneios(){
+    if(navigator.onLine){
+      try{
+        const remote = await api('listAllRomaneios', { adminEmail: user.email });
+        if(remote.romaneios){
+          // Mescla com dados locais, priorizando o servidor
+          const local = load(LS_ROMANEIOS, []);
+          remote.romaneios.forEach(r=>{
+            const idx = local.findIndex(l=>l.id===r.id);
+            if(idx===-1) local.push({ ...r, synced:true });
+            else local[idx] = { ...r, synced:true };
+          });
+          save(LS_ROMANEIOS, local);
+        }
+      }catch(e){ /* usa dados locais */ }
+    }
+    renderAdminRomaneios();
+  }
+  function filterAdminHist(f){
+    adminHistFilter = f;
+    document.querySelectorAll('.filter-chip[data-af]').forEach(c=>c.classList.toggle('active', c.dataset.af===f));
+    renderAdminRomaneios();
+  }
+  function limparBuscaAdmin(){
+    ['asearch-usuario','asearch-codigo','asearch-data','asearch-empresa'].forEach(id=>{
+      document.getElementById(id).value='';
+    });
+    renderAdminRomaneios();
+  }
+  function renderAdminRomaneios(){
+    let all = load(LS_ROMANEIOS, []);
+    if(adminHistFilter!=='todos') all = all.filter(r=>r.status===adminHistFilter);
+
+    const usuario = document.getElementById('asearch-usuario').value.trim().toLowerCase();
+    const codigo = document.getElementById('asearch-codigo').value.trim().toLowerCase();
+    const data = document.getElementById('asearch-data').value;
+    const empresa = document.getElementById('asearch-empresa').value.trim().toLowerCase();
+
+    if(usuario) all = all.filter(r=>(r.usuario||'').toLowerCase().includes(usuario));
+    if(codigo)  all = all.filter(r=>r.id.toLowerCase().includes(codigo));
+    if(data)    all = all.filter(r=>r.dataEmissao===data);
+    if(empresa) all = all.filter(r=>
+      (r.empresaOrigem||'').toLowerCase().includes(empresa) ||
+      (r.empresaDestino||'').toLowerCase().includes(empresa)
+    );
+
+    const el = document.getElementById('admin-rom-list');
+    if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
+    el.innerHTML = all.map(r=>`
+      <div class="ticket">
+        <div class="ticket-stripe"></div>
+        <div class="ticket-body">
+          <div class="ticket-head">
+            <span class="ticket-id">${r.id}</span>
+            <span class="ticket-status status-${r.status}">${r.status}${r.synced ? '' : ' · local'}</span>
+          </div>
+          <div class="ticket-meta">
+            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
+            Emitido em ${r.dataEmissao} por <b style="color:var(--accent)">${escapeHtml(r.usuario)}</b> · ${r.itens.length} item(ns)
+          </div>
+          <div class="ticket-actions">
+            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
+            ${r.status!=='cancelado' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
   // ---------- ADMIN ----------
   async function loadAdmin(){
     const el = document.getElementById('admin-list');
@@ -1016,6 +1160,7 @@ const App = (() => {
     removeItem, limparRascunho, emitirRomaneio,
     filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
     changeRole, changeStatus, removeUser,
+    switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios,
     boot
   };
 })();
