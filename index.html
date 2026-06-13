@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Batele Romaneio Scanner</title>
+<meta name="theme-color" content="#ff9f1c">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Romaneio Scanner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="pdf-config.js"></script>
 <style>
 :root{
   --bg:#12151b;
@@ -63,7 +67,7 @@ body{
 .brand-mark{
   width:32px;height:32px;border-radius:8px;background:var(--accent);
   display:flex;align-items:center;justify-content:center;color:#1a1303;
-  font-family:var(--font-mono);font-weight:700;font-size:14px;
+  font-family:var(--font-mono);font-weight:700;font-size:14px;flex-shrink:0;
 }
 .brand-sub{color:var(--muted);font-size:13px;margin-bottom:24px;font-family:var(--font-mono);letter-spacing:.5px;}
 .field{margin-bottom:14px;}
@@ -89,30 +93,37 @@ body{
 }
 .switch-link a{color:var(--accent);text-decoration:none;font-weight:600;cursor:pointer;}
 .err-msg{color:var(--danger);font-size:13px;margin-top:8px;min-height:18px;}
+.ok-msg{color:var(--accent-2);font-size:13px;margin-top:8px;min-height:18px;}
+.info-msg{color:var(--muted);font-size:12.5px;margin-bottom:14px;line-height:1.5;}
 
 /* ---------- APP SHELL ---------- */
 .app{display:flex;flex-direction:column;min-height:100vh;}
 .topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;background:var(--surface);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  gap:8px;padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--line);
   position:sticky;top:0;z-index:20;
 }
-.topbar .brand{font-size:18px;margin:0;}
+.topbar .brand{font-size:18px;margin:0;min-width:0;}
 .topbar .brand-mark{width:26px;height:26px;font-size:11px;}
-.status-row{display:flex;align-items:center;gap:10px;}
+.brand-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.status-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;min-width:0;}
 .pill{
   font-family:var(--font-mono);font-size:11px;padding:4px 9px;border-radius:20px;
   display:flex;align-items:center;gap:6px;border:1px solid var(--line);color:var(--muted);
+  white-space:nowrap;
 }
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex-shrink:0;}
 .dot.on{background:var(--accent-2);box-shadow:0 0 8px var(--accent-2);}
 .dot.off{background:var(--danger);}
-.user-chip{font-size:12px;color:var(--muted);font-family:var(--font-mono);}
-.logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;text-decoration:underline;}
+.user-chip{
+  font-size:12px;color:var(--muted);font-family:var(--font-mono);
+  max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;text-decoration:underline;flex-shrink:0;}
 
 .tabs{
   display:flex;background:var(--surface);border-bottom:1px solid var(--line);
-  position:sticky;top:57px;z-index:19;overflow-x:auto;
+  position:sticky;top:0;z-index:19;overflow-x:auto;
 }
 .tab{
   flex:1;padding:12px 8px;text-align:center;font-family:var(--font-display);
@@ -157,7 +168,7 @@ body{
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media (max-width:520px){.grid2{grid-template-columns:1fr;}}
 
-/* Manifest ticket - signature element */
+/* Manifest ticket */
 .ticket{
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
   overflow:hidden;margin-bottom:14px;position:relative;
@@ -167,11 +178,11 @@ body{
   background:repeating-linear-gradient(90deg,var(--accent) 0 10px, var(--surface) 10px 16px);
 }
 .ticket-body{padding:14px 16px;}
-.ticket-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.ticket-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:8px;flex-wrap:wrap;}
 .ticket-id{font-family:var(--font-mono);color:var(--accent);font-size:12px;}
 .ticket-status{
   font-family:var(--font-mono);font-size:11px;padding:3px 8px;border-radius:6px;
-  text-transform:uppercase;letter-spacing:.5px;
+  text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;
 }
 .status-pendente{background:rgba(255,159,28,.12);color:var(--accent);}
 .status-emitido{background:rgba(54,199,155,.12);color:var(--accent-2);}
@@ -186,18 +197,18 @@ body{
 .item-row{
   display:flex;justify-content:space-between;align-items:center;
   padding:10px 12px;background:var(--surface-2);border-radius:8px;margin-bottom:6px;
-  font-size:13px;
+  font-size:13px;gap:8px;
 }
-.item-code{font-family:var(--font-mono);font-weight:600;}
+.item-code{font-family:var(--font-mono);font-weight:600;word-break:break-all;}
 .item-meta{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
 .item-tag{
   font-size:10px;padding:2px 7px;border-radius:5px;font-family:var(--font-mono);
-  text-transform:uppercase;
+  text-transform:uppercase;white-space:nowrap;
 }
 .tag-saida{background:rgba(239,91,91,.12);color:var(--danger);}
 .tag-entrada{background:rgba(54,199,155,.12);color:var(--accent-2);}
 .tag-devolucao{background:rgba(255,159,28,.12);color:var(--accent);}
-.item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;}
+.item-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;}
 
 .empty-state{
   text-align:center;color:var(--muted);font-size:13px;padding:30px 10px;
@@ -213,11 +224,40 @@ body{
 }
 .filter-chip.active{border-color:var(--accent);color:var(--accent);}
 
+/* search box */
+.search-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:14px;margin-bottom:16px;
+}
+.search-box .grid2{margin-bottom:10px;}
+.search-actions{display:flex;gap:8px;}
+.search-actions .btn{flex:1;padding:10px;font-size:12.5px;}
+
+/* admin table */
+.user-row{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;
+}
+.user-info{min-width:0;}
+.user-name{font-weight:600;font-size:14px;}
+.user-email{font-size:12px;color:var(--muted);font-family:var(--font-mono);word-break:break-all;}
+.user-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.user-controls select{
+  background:var(--surface-2);color:var(--text);border:1px solid var(--line);
+  border-radius:6px;padding:6px 8px;font-size:12px;font-family:var(--font-body);
+}
+.badge{font-size:10px;padding:2px 8px;border-radius:5px;font-family:var(--font-mono);text-transform:uppercase;}
+.badge-admin{background:rgba(255,159,28,.12);color:var(--accent);}
+.badge-user{background:rgba(255,255,255,.06);color:var(--muted);}
+.badge-ativo{background:rgba(54,199,155,.12);color:var(--accent-2);}
+.badge-bloqueado{background:rgba(239,91,91,.12);color:var(--danger);}
+.badge-pendente{background:rgba(255,159,28,.12);color:var(--accent);}
+
 .toast{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   background:var(--surface-2);border:1px solid var(--line);color:var(--text);
   padding:10px 18px;border-radius:8px;font-size:13px;z-index:100;
-  box-shadow:0 6px 24px rgba(0,0,0,.4);
+  box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center;
 }
 </style>
 </head>
@@ -226,12 +266,13 @@ body{
 <!-- ================= LOGIN ================= -->
 <div id="screen-login" class="auth-wrap">
   <div class="auth-card">
-    <div class="brand"><div class="brand-mark">B</div>BATELE<span style="color:var(--accent)">SCANNER</span></div>
+    <div class="brand"><div class="brand-mark">RM</div>Romaneio<span style="color:var(--accent)">Scan</span></div>
     <div class="brand-sub">CONTROLE DE CARGA · ENTRADA / SAÍDA / DEVOLUÇÃO</div>
     <div class="field"><label>E-mail</label><input id="login-email" type="email" placeholder="seu@email.com"></div>
     <div class="field"><label>Senha</label><input id="login-pass" type="password" placeholder="••••••••"></div>
     <button class="btn btn-primary" onclick="App.login()">Entrar</button>
     <div class="err-msg" id="login-err"></div>
+    <div class="switch-link"><a onclick="App.showScreen('recover')">Esqueci minha senha</a></div>
     <div class="switch-link">Não tem conta? <a onclick="App.showScreen('register')">Cadastre-se</a></div>
   </div>
 </div>
@@ -239,7 +280,7 @@ body{
 <!-- ================= REGISTER ================= -->
 <div id="screen-register" class="auth-wrap hidden">
   <div class="auth-card">
-    <div class="brand"><div class="brand-mark">B</div>Criar conta</div>
+    <div class="brand"><div class="brand-mark">RM</div>Criar conta</div>
     <div class="brand-sub">ACESSO AO PAINEL DE OPERAÇÕES</div>
     <div class="field"><label>Nome</label><input id="reg-nome" type="text" placeholder="Seu nome completo"></div>
     <div class="field"><label>E-mail</label><input id="reg-email" type="email" placeholder="seu@email.com"></div>
@@ -250,13 +291,51 @@ body{
   </div>
 </div>
 
+<!-- ================= VERIFY EMAIL ================= -->
+<div id="screen-verify" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">RM</div>Confirmar e-mail</div>
+    <div class="info-msg">Enviamos um código de 6 dígitos para <b id="verify-email-label" style="color:var(--text)"></b>. Digite-o abaixo para ativar sua conta.</div>
+    <div class="field"><label>Código de verificação</label><input id="verify-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000"></div>
+    <button class="btn btn-primary" onclick="App.verifyEmail()">Verificar</button>
+    <div class="err-msg" id="verify-err"></div>
+    <div class="ok-msg" id="verify-ok"></div>
+    <div class="switch-link"><a onclick="App.resendCode()">Reenviar código</a></div>
+    <div class="switch-link"><a onclick="App.showScreen('login')">Voltar ao login</a></div>
+  </div>
+</div>
+
+<!-- ================= RECOVER PASSWORD ================= -->
+<div id="screen-recover" class="auth-wrap hidden">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">RM</div>Recuperar senha</div>
+    <div class="info-msg" id="recover-info">Digite seu e-mail. Se ele estiver cadastrado, enviaremos um código de redefinição.</div>
+
+    <div id="recover-step1">
+      <div class="field"><label>E-mail</label><input id="recover-email" type="email" placeholder="seu@email.com"></div>
+      <button class="btn btn-primary" onclick="App.requestReset()">Enviar código</button>
+    </div>
+
+    <div id="recover-step2" class="hidden">
+      <div class="field"><label>Código recebido por e-mail</label><input id="recover-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000"></div>
+      <div class="field"><label>Nova senha</label><input id="recover-pass" type="password" placeholder="mín. 6 caracteres"></div>
+      <div class="field"><label>Confirmar nova senha</label><input id="recover-pass2" type="password" placeholder="repita a senha"></div>
+      <button class="btn btn-primary" onclick="App.confirmReset()">Redefinir senha</button>
+    </div>
+
+    <div class="err-msg" id="recover-err"></div>
+    <div class="ok-msg" id="recover-ok"></div>
+    <div class="switch-link"><a onclick="App.showScreen('login')">Voltar ao login</a></div>
+  </div>
+</div>
+
 <!-- ================= APP ================= -->
 <div id="screen-app" class="app hidden">
   <div class="topbar">
-    <div class="brand"><div class="brand-mark">B</div>BateleScanner</div>
+    <div class="brand"><div class="brand-mark">RM</div><span class="brand-text">RomaneioScan</span></div>
     <div class="status-row">
       <div class="pill"><span class="dot" id="net-dot"></span><span id="net-label">offline</span></div>
-      <div class="pill"><span id="sync-label">0 pendentes</span></div>
+      <div class="pill" id="sync-pill"><span id="sync-label">0 pendentes</span></div>
       <span class="user-chip" id="user-chip"></span>
       <button class="logout-btn" onclick="App.logout()">sair</button>
     </div>
@@ -264,8 +343,9 @@ body{
 
   <div class="tabs">
     <div class="tab active" data-tab="scanner" onclick="App.switchTab('scanner')">Scanner</div>
-    <div class="tab" data-tab="romaneio" onclick="App.switchTab('romaneio')">Romaneio Atual</div>
+    <div class="tab" data-tab="romaneio" onclick="App.switchTab('romaneio')">Romaneio</div>
     <div class="tab" data-tab="historico" onclick="App.switchTab('historico')">Histórico</div>
+    <div class="tab hidden" id="tab-btn-admin" data-tab="admin" onclick="App.switchTab('admin')">Admin</div>
   </div>
 
   <div class="content">
@@ -311,6 +391,20 @@ body{
 
     <!-- TAB: HISTÓRICO -->
     <div id="tab-historico" class="tabpane hidden">
+      <div class="search-box">
+        <div class="grid2">
+          <div class="field"><label>Código do romaneio</label><input id="search-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+          <div class="field"><label>Data de emissão</label><input id="search-data" type="date"></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label>Empresa remetente</label><input id="search-origem" type="text" placeholder="Buscar remetente"></div>
+          <div class="field"><label>Empresa destinatária</label><input id="search-destino" type="text" placeholder="Buscar destinatário"></div>
+        </div>
+        <div class="search-actions">
+          <button class="btn btn-primary" onclick="App.renderHistorico()">Buscar</button>
+          <button class="btn btn-ghost" onclick="App.limparBusca()">Limpar busca</button>
+        </div>
+      </div>
       <div class="filter-row">
         <div class="filter-chip active" data-f="todos" onclick="App.filterHist('todos')">Todos</div>
         <div class="filter-chip" data-f="pendente" onclick="App.filterHist('pendente')">Pendentes</div>
@@ -320,6 +414,12 @@ body{
       <div id="hist-list"></div>
     </div>
 
+    <!-- TAB: ADMIN -->
+    <div id="tab-admin" class="tabpane hidden">
+      <div class="section-title">Usuários cadastrados</div>
+      <div id="admin-list"></div>
+    </div>
+
   </div>
 </div>
 
@@ -327,7 +427,7 @@ body{
 /* =========================================================
    CONFIGURAÇÃO — cole aqui a URL do seu Apps Script Web App
    ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec";
+const API_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
 
 const App = (() => {
   let html5Qr = null;
@@ -335,9 +435,10 @@ const App = (() => {
   let flashOn = false;
   let currentOp = 'saida';
   let user = null;
+  let pendingVerifyEmail = null;
+  let recoverEmail = null;
 
   const LS_DRAFT = 'rm_draft_itens';
-  const LS_FORM = 'rm_draft_form';
   const LS_ROMANEIOS = 'rm_romaneios';
   const LS_USER = 'rm_user';
 
@@ -346,20 +447,18 @@ const App = (() => {
     let t = document.createElement('div');
     t.className = 'toast'; t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(()=>t.remove(), 2600);
+    setTimeout(()=>t.remove(), 2800);
   }
   function load(key, def){ try{ return JSON.parse(localStorage.getItem(key)) ?? def; }catch(e){ return def; } }
   function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
   function nowISO(){ return new Date().toISOString(); }
-  function fmtDate(iso){
-    const d = new Date(iso);
-    return d.toLocaleString('pt-BR');
-  }
+  function fmtDate(iso){ return new Date(iso).toLocaleString('pt-BR'); }
   function uid(){ return 'RM-' + Date.now().toString(36).toUpperCase(); }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-  // ---------- API (Apps Script - text/plain bypassa preflight CORS) ----------
+  // ---------- API ----------
   async function api(action, payload){
-    if(!API_URL || API_URL.includes('COLE AQUI')) {
+    if(!API_URL || API_URL.includes('COLE_AQUI')) {
       throw new Error('API_URL não configurada');
     }
     const res = await fetch(API_URL, {
@@ -368,17 +467,24 @@ const App = (() => {
       body: JSON.stringify({ action, ...payload })
     });
     const data = await res.json();
-    if(!data.ok) throw new Error(data.error || 'Erro na API');
+    if(!data.ok) throw Object.assign(new Error(data.error || 'Erro na API'), { data });
     return data;
   }
 
-  // ---------- AUTH ----------
+  // ---------- SCREENS ----------
   function showScreen(name){
-    document.getElementById('screen-login').classList.toggle('hidden', name!=='login');
-    document.getElementById('screen-register').classList.toggle('hidden', name!=='register');
-    document.getElementById('screen-app').classList.toggle('hidden', name!=='app');
+    ['login','register','verify','recover','app'].forEach(s=>{
+      document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
+    });
+    if(name==='recover'){
+      document.getElementById('recover-step1').classList.remove('hidden');
+      document.getElementById('recover-step2').classList.add('hidden');
+      document.getElementById('recover-err').textContent='';
+      document.getElementById('recover-ok').textContent='';
+    }
   }
 
+  // ---------- LOGIN ----------
   async function login(){
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
@@ -391,10 +497,17 @@ const App = (() => {
       save(LS_USER, user);
       initApp();
     }catch(e){
-      err.textContent = navigator.onLine ? 'Credenciais inválidas ou erro de conexão.' : 'Sem conexão para validar login.';
+      if(e.data && e.data.needsVerification){
+        pendingVerifyEmail = e.data.email;
+        document.getElementById('verify-email-label').textContent = pendingVerifyEmail;
+        showScreen('verify');
+        return;
+      }
+      err.textContent = e.message || 'Erro ao entrar.';
     }
   }
 
+  // ---------- REGISTER ----------
   async function register(){
     const nome = document.getElementById('reg-nome').value.trim();
     const email = document.getElementById('reg-email').value.trim();
@@ -404,10 +517,76 @@ const App = (() => {
     if(!nome || !email || pass.length<6){ err.textContent='Preencha todos os campos (senha mín. 6 caracteres).'; return; }
     try{
       await api('register', { nome, email, senha: pass });
-      toast('Cadastro realizado! Faça login.');
-      showScreen('login');
+      pendingVerifyEmail = email;
+      document.getElementById('verify-email-label').textContent = email;
+      document.getElementById('verify-ok').textContent='';
+      document.getElementById('verify-err').textContent='';
+      showScreen('verify');
     }catch(e){
       err.textContent = e.message || 'Erro ao cadastrar.';
+    }
+  }
+
+  // ---------- VERIFY EMAIL ----------
+  async function verifyEmail(){
+    const code = document.getElementById('verify-code').value.trim();
+    const err = document.getElementById('verify-err');
+    const ok = document.getElementById('verify-ok');
+    err.textContent=''; ok.textContent='';
+    if(!code){ err.textContent='Digite o código.'; return; }
+    try{
+      await api('verifyEmail', { email: pendingVerifyEmail, code });
+      ok.textContent='Conta verificada! Você já pode fazer login.';
+      setTimeout(()=>showScreen('login'), 1200);
+    }catch(e){
+      err.textContent = e.message || 'Erro ao verificar.';
+    }
+  }
+  async function resendCode(){
+    const err = document.getElementById('verify-err');
+    const ok = document.getElementById('verify-ok');
+    err.textContent=''; ok.textContent='';
+    if(!pendingVerifyEmail){ err.textContent='Faça login ou cadastro novamente.'; return; }
+    try{
+      await api('resendCode', { email: pendingVerifyEmail });
+      ok.textContent='Novo código enviado para ' + pendingVerifyEmail + '.';
+    }catch(e){
+      err.textContent = e.message || 'Erro ao reenviar código.';
+    }
+  }
+
+  // ---------- RECOVER PASSWORD ----------
+  async function requestReset(){
+    const email = document.getElementById('recover-email').value.trim();
+    const err = document.getElementById('recover-err');
+    const ok = document.getElementById('recover-ok');
+    err.textContent=''; ok.textContent='';
+    if(!email){ err.textContent='Digite seu e-mail.'; return; }
+    try{
+      await api('requestPasswordReset', { email });
+      recoverEmail = email;
+      ok.textContent='Se este e-mail estiver cadastrado, um código foi enviado.';
+      document.getElementById('recover-step1').classList.add('hidden');
+      document.getElementById('recover-step2').classList.remove('hidden');
+    }catch(e){
+      err.textContent = e.message || 'Erro ao solicitar recuperação.';
+    }
+  }
+  async function confirmReset(){
+    const code = document.getElementById('recover-code').value.trim();
+    const pass = document.getElementById('recover-pass').value;
+    const pass2 = document.getElementById('recover-pass2').value;
+    const err = document.getElementById('recover-err');
+    const ok = document.getElementById('recover-ok');
+    err.textContent=''; ok.textContent='';
+    if(pass.length<6){ err.textContent='Senha deve ter no mínimo 6 caracteres.'; return; }
+    if(pass!==pass2){ err.textContent='As senhas não coincidem.'; return; }
+    try{
+      await api('resetPassword', { email: recoverEmail, code, novaSenha: pass });
+      ok.textContent='Senha redefinida! Faça login com a nova senha.';
+      setTimeout(()=>showScreen('login'), 1400);
+    }catch(e){
+      err.textContent = e.message || 'Erro ao redefinir senha.';
     }
   }
 
@@ -421,12 +600,14 @@ const App = (() => {
   // ---------- APP INIT ----------
   function initApp(){
     showScreen('app');
-    document.getElementById('user-chip').textContent = user.nome + ' · ' + user.email;
+    document.getElementById('user-chip').textContent = user.nome;
+    document.getElementById('user-chip').title = user.nome + ' · ' + user.email;
     document.getElementById('form-responsavel').value = user.nome;
     document.getElementById('form-data').value = new Date().toISOString().slice(0,10);
+    document.getElementById('tab-btn-admin').classList.toggle('hidden', user.role!=='admin');
     renderItens();
-    renderHistorico();
     updateNetStatus();
+    refreshHistorico();
     syncPending();
   }
 
@@ -437,9 +618,9 @@ const App = (() => {
     if(navigator.onLine){ dot.className='dot on'; label.textContent='online'; }
     else { dot.className='dot off'; label.textContent='offline'; }
     const pend = load(LS_ROMANEIOS, []).filter(r=>!r.synced).length;
-    document.getElementById('sync-label').textContent = pend + ' pendente(s) de sync';
+    document.getElementById('sync-label').textContent = pend + ' pendente(s)';
   }
-  window.addEventListener('online', ()=>{ updateNetStatus(); syncPending(); });
+  window.addEventListener('online', ()=>{ updateNetStatus(); syncPending(); refreshHistorico(); });
   window.addEventListener('offline', updateNetStatus);
 
   // ---------- TABS ----------
@@ -447,7 +628,8 @@ const App = (() => {
     document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
     document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('hidden', p.id !== 'tab-'+name));
     if(name==='romaneio') renderItens();
-    if(name==='historico') renderHistorico();
+    if(name==='historico') refreshHistorico();
+    if(name==='admin') loadAdmin();
   }
 
   // ---------- OPERATION TYPE ----------
@@ -504,7 +686,7 @@ const App = (() => {
   let lastCode = null, lastTime = 0;
   function onScanSuccess(decodedText){
     const now = Date.now();
-    if(decodedText === lastCode && now - lastTime < 1500) return; // debounce duplicado
+    if(decodedText === lastCode && now - lastTime < 1500) return;
     lastCode = decodedText; lastTime = now;
 
     const itens = load(LS_DRAFT, []);
@@ -520,7 +702,7 @@ const App = (() => {
     const itens = load(LS_DRAFT, []);
     document.getElementById('count-itens').textContent = itens.length;
     document.getElementById('count-itens-2').textContent = itens.length;
-    [['item-list'],['item-list-2']].forEach(([id])=>{
+    ['item-list','item-list-2'].forEach(id=>{
       const el = document.getElementById(id);
       if(itens.length===0){
         el.innerHTML = '<div class="empty-state">Nenhum item escaneado ainda.</div>';
@@ -530,7 +712,7 @@ const App = (() => {
         <div class="item-row">
           <div>
             <div class="item-code">${escapeHtml(it.codigo)}</div>
-            <div class="item-meta">${fmtDate(it.datahora)} · ${it.usuario}</div>
+            <div class="item-meta">${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="item-tag tag-${it.tipo}">${it.tipo}</span>
@@ -546,7 +728,6 @@ const App = (() => {
     save(LS_DRAFT, itens);
     renderItens();
   }
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
   function limparRascunho(){
     if(!confirm('Limpar todos os itens lidos e dados do formulário?')) return;
@@ -583,7 +764,6 @@ const App = (() => {
 
     gerarPDF(romaneio);
 
-    // limpa rascunho
     localStorage.removeItem(LS_DRAFT);
     document.getElementById('form-origem').value='';
     document.getElementById('form-destino').value='';
@@ -594,42 +774,77 @@ const App = (() => {
     toast('Romaneio ' + romaneio.id + ' gerado!');
   }
 
-  // ---------- PDF ----------
+  // ---------- PDF (usa PDF_CONFIG de pdf-config.js) ----------
   function gerarPDF(rom){
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    const cfg = (typeof PDF_CONFIG !== 'undefined') ? PDF_CONFIG : {};
+    const cor = cfg.COR_PRIMARIA || [255,159,28];
+    let y = 18;
+    let textX = 14;
+
+    if(cfg.LOGO_BASE64){
+      try{
+        doc.addImage(cfg.LOGO_BASE64, cfg.LOGO_FORMATO || 'PNG', 14, 10, cfg.LOGO_LARGURA || 30, cfg.LOGO_ALTURA || 18);
+        textX = 14 + (cfg.LOGO_LARGURA || 30) + 6;
+      }catch(e){ /* logo inválida, segue sem ela */ }
+    }
+
+    doc.setTextColor(cor[0],cor[1],cor[2]);
     doc.setFont('helvetica','bold');
     doc.setFontSize(16);
-    doc.text('ROMANEIO DE CARGA', 14, 18);
-    doc.setFontSize(10);
+    doc.text(cfg.NOME_EMPRESA || 'ROMANEIO DE CARGA', textX, y);
+    y += 6;
+    doc.setTextColor(90,90,90);
+    doc.setFontSize(9);
     doc.setFont('helvetica','normal');
-    doc.text('Código: ' + rom.id, 14, 28);
-    doc.text('Data de emissão: ' + rom.dataEmissao, 14, 34);
-    doc.text('Responsável: ' + rom.usuario, 14, 40);
-    doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, 48);
-    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, 54);
+    doc.text(cfg.SUBTITULO_EMPRESA || 'Controle de Carga', textX, y);
 
-    let y = 66;
+    y = Math.max(y + 10, 36);
+    doc.setTextColor(0,0,0);
+    doc.setFontSize(10);
+    doc.text('Código: ' + rom.id, 14, y); y += 6;
+    doc.text('Data de emissão: ' + rom.dataEmissao, 14, y); y += 6;
+    doc.text('Responsável: ' + rom.usuario, 14, y); y += 6;
+    doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, y); y += 6;
+    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, y); y += 12;
+
     doc.setFont('helvetica','bold');
+    doc.setTextColor(cor[0],cor[1],cor[2]);
     doc.text('Código', 14, y);
     doc.text('Tipo', 100, y);
     doc.text('Data/Hora', 130, y);
     doc.text('Usuário', 175, y);
+    doc.setTextColor(0,0,0);
     doc.setFont('helvetica','normal');
     y += 4;
+    doc.setDrawColor(cor[0],cor[1],cor[2]);
     doc.line(14, y, 196, y);
     y += 6;
 
     rom.itens.forEach(it=>{
-      if(y > 280){ doc.addPage(); y = 20; }
+      if(y > 270){
+        addFooter(doc, cfg);
+        doc.addPage();
+        y = 20;
+      }
       doc.text(String(it.codigo).slice(0,40), 14, y);
       doc.text(it.tipo, 100, y);
       doc.text(fmtDate(it.datahora), 130, y);
-      doc.text(it.usuario, 175, y);
+      doc.text(String(it.usuario).slice(0,20), 175, y);
       y += 7;
     });
+    addFooter(doc, cfg);
 
     doc.save(rom.id + '.pdf');
+  }
+  function addFooter(doc, cfg){
+    if(!cfg.RODAPE) return;
+    const h = doc.internal.pageSize.getHeight();
+    doc.setFontSize(8);
+    doc.setTextColor(150,150,150);
+    doc.text(cfg.RODAPE, 14, h - 10);
+    doc.setTextColor(0,0,0);
   }
 
   // ---------- HISTÓRICO ----------
@@ -639,9 +854,40 @@ const App = (() => {
     document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
     renderHistorico();
   }
+  function limparBusca(){
+    ['search-codigo','search-data','search-origem','search-destino'].forEach(id=>document.getElementById(id).value='');
+    renderHistorico();
+  }
+  async function refreshHistorico(){
+    if(navigator.onLine){
+      try{
+        const remote = await api('listRomaneios', {});
+        const local = load(LS_ROMANEIOS, []);
+        remote.romaneios.forEach(r=>{
+          const idx = local.findIndex(l=>l.id===r.id);
+          if(idx===-1){ local.push({ ...r, synced:true }); }
+          else if(local[idx].synced){ local[idx] = { ...r, synced:true }; }
+        });
+        save(LS_ROMANEIOS, local);
+        updateNetStatus();
+      }catch(e){ /* mantém dados locais */ }
+    }
+    renderHistorico();
+  }
   function renderHistorico(){
     let all = load(LS_ROMANEIOS, []);
     if(histFilter!=='todos') all = all.filter(r=>r.status===histFilter);
+
+    const codigo = document.getElementById('search-codigo').value.trim().toLowerCase();
+    const data = document.getElementById('search-data').value;
+    const origem = document.getElementById('search-origem').value.trim().toLowerCase();
+    const destino = document.getElementById('search-destino').value.trim().toLowerCase();
+
+    if(codigo) all = all.filter(r=>r.id.toLowerCase().includes(codigo));
+    if(data) all = all.filter(r=>r.dataEmissao===data);
+    if(origem) all = all.filter(r=>(r.empresaOrigem||'').toLowerCase().includes(origem));
+    if(destino) all = all.filter(r=>(r.empresaDestino||'').toLowerCase().includes(destino));
+
     const el = document.getElementById('hist-list');
     if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
     el.innerHTML = all.map(r=>`
@@ -691,19 +937,70 @@ const App = (() => {
     if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); }
   }
 
+  // ---------- ADMIN ----------
+  async function loadAdmin(){
+    const el = document.getElementById('admin-list');
+    if(!navigator.onLine){ el.innerHTML = '<div class="empty-state">Conecte-se à internet para gerenciar usuários.</div>'; return; }
+    el.innerHTML = '<div class="empty-state">Carregando usuários...</div>';
+    try{
+      const data = await api('listUsers', { adminEmail: user.email });
+      if(data.users.length===0){ el.innerHTML = '<div class="empty-state">Nenhum usuário encontrado.</div>'; return; }
+      el.innerHTML = data.users.map(u=>`
+        <div class="user-row">
+          <div class="user-info">
+            <div class="user-name">${escapeHtml(u.nome)} <span class="badge badge-${u.role}">${u.role}</span> <span class="badge badge-${u.status}">${u.status}</span></div>
+            <div class="user-email">${escapeHtml(u.email)}</div>
+          </div>
+          <div class="user-controls">
+            <select onchange="App.changeRole('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
+              <option value="user" ${u.role==='user'?'selected':''}>user</option>
+              <option value="admin" ${u.role==='admin'?'selected':''}>admin</option>
+            </select>
+            <select onchange="App.changeStatus('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
+              <option value="ativo" ${u.status==='ativo'?'selected':''}>ativo</option>
+              <option value="bloqueado" ${u.status==='bloqueado'?'selected':''}>bloqueado</option>
+            </select>
+            <button class="btn btn-danger" style="width:auto;padding:8px 12px;font-size:12px;" ${u.email===user.email?'disabled':''} onclick="App.removeUser('${u.email}')">Excluir</button>
+          </div>
+        </div>
+      `).join('');
+    }catch(e){
+      el.innerHTML = '<div class="empty-state">Erro ao carregar usuários: ' + escapeHtml(e.message) + '</div>';
+    }
+  }
+  async function changeRole(email, role){
+    try{ await api('updateUserRole', { adminEmail: user.email, targetEmail: email, role }); toast('Papel atualizado.'); }
+    catch(e){ toast('Erro: ' + e.message); loadAdmin(); }
+  }
+  async function changeStatus(email, status){
+    try{ await api('updateUserStatus', { adminEmail: user.email, targetEmail: email, status }); toast('Status atualizado.'); }
+    catch(e){ toast('Erro: ' + e.message); loadAdmin(); }
+  }
+  async function removeUser(email){
+    if(!confirm('Excluir o usuário ' + email + '? Esta ação não pode ser desfeita.')) return;
+    try{ await api('deleteUser', { adminEmail: user.email, targetEmail: email }); toast('Usuário excluído.'); loadAdmin(); }
+    catch(e){ toast('Erro: ' + e.message); }
+  }
+
   // ---------- BOOT ----------
   function boot(){
     const savedUser = load(LS_USER, null);
     if(savedUser){ user = savedUser; initApp(); }
     else showScreen('login');
     setInterval(()=>{ if(navigator.onLine) syncPending(); }, 30000);
+
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('sw.js').catch(()=>{});
+    }
   }
 
   return {
     showScreen, login, register, logout,
+    verifyEmail, resendCode, requestReset, confirmReset,
     switchTab, setOp, startScanner, stopScanner, toggleFlash,
     removeItem, limparRascunho, emitirRomaneio,
-    filterHist, reimprimir, cancelarRomaneio,
+    filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
+    changeRole, changeStatus, removeUser,
     boot
   };
 })();
