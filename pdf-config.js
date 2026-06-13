@@ -23,14 +23,14 @@ const PDF_CONFIG = {
   LOGO_ALTURA: 18,
 
   // Nome da empresa que aparece no topo do romaneio
-  NOME_EMPRESA: "RomaneioScan",
+  NOME_EMPRESA: "Batele Scanner",
 
   // Subtítulo / endereço / CNPJ (aparece abaixo do nome da empresa)
-  SUBTITULO_EMPRESA: "Controle de Carga - Entrada / Saída / Devolução",
+  SUBTITULO_EMPRESA: "Controle DE Romaneios - Entrada / Saída / Devolução",
 
   // Cor principal usada nos títulos e linhas (RGB de 0 a 255)
   COR_PRIMARIA: [255, 159, 28],
 
   // Texto que aparece no rodapé de cada página do PDF
-  RODAPE: "Documento gerado automaticamente pelo sistema RomaneioScan"
+  RODAPE: "Documento gerado automaticamente pelo sistesma Batele Scanner"
 };
