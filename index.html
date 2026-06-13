@@ -157,6 +157,24 @@ body{
   font-family:var(--font-mono);font-size:13px;color:var(--accent-2);
   margin-top:10px;min-height:18px;
 }
+/* inserção manual */
+.manual-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:14px;margin-bottom:16px;
+}
+.manual-box .section-label{
+  font-family:var(--font-display);font-weight:700;font-size:12px;
+  text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.manual-row{display:flex;gap:8px;align-items:center;}
+.manual-row input{
+  flex:1;padding:11px 12px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text);font-size:14px;font-family:var(--font-mono);
+}
+.manual-row input:focus{outline:none;border-color:var(--accent);}
+.manual-row .btn{width:auto;padding:11px 18px;font-size:13px;flex-shrink:0;}
 
 /* ---------- ROMANEIO FORM ---------- */
 .section-title{
@@ -394,6 +412,16 @@ body{
         </div>
         <div class="last-scan" id="last-scan"></div>
       </div>
+      <!-- INSERÇÃO MANUAL -->
+      <div class="manual-box">
+        <div class="section-label">✏️ Inserção manual</div>
+        <div class="manual-row">
+          <input id="manual-input" type="text" placeholder="Digite o código ou descrição..."
+            onkeydown="if(event.key==='Enter') App.addManual()">
+          <button class="btn btn-primary" onclick="App.addManual()">Adicionar</button>
+        </div>
+      </div>
+
       <div class="section-title">Itens lidos nesta sessão (<span id="count-itens">0</span>)</div>
       <div class="item-list" id="item-list"></div>
     </div>
@@ -421,7 +449,7 @@ body{
     <div id="tab-historico" class="tabpane hidden">
       <div class="search-box">
         <div class="grid2">
-          <div class="field"><label>Código</label><input id="search-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+          <div class="field"><label>Código / Descrição do romaneio</label><input id="search-codigo" type="text" placeholder="ex: RM-LX2Y3Z ou nome do item"></div>
           <div class="field"><label>Data de emissão</label><input id="search-data" type="date"></div>
         </div>
         <div class="grid2">
@@ -458,7 +486,7 @@ body{
         <div class="search-box">
           <div class="grid2">
             <div class="field"><label>Usuário</label><input id="asearch-usuario" type="text" placeholder="Nome do usuário"></div>
-            <div class="field"><label>Código</label><input id="asearch-codigo" type="text" placeholder="ex: RM-LX2Y3Z"></div>
+            <div class="field"><label>Código / Descrição</label><input id="asearch-codigo" type="text" placeholder="ex: RM-LX2Y3Z ou nome do item"></div>
           </div>
           <div class="grid2">
             <div class="field"><label>Data de emissão</label><input id="asearch-data" type="date"></div>
@@ -801,6 +829,20 @@ const App = (() => {
       `).join('');
     });
   }
+  function addManual(){
+    const input = document.getElementById('manual-input');
+    const val = input.value.trim();
+    if(!val){ toast('Digite um código ou descrição.'); return; }
+    const itens = load(LS_DRAFT, []);
+    itens.push({ codigo: val, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
+    save(LS_DRAFT, itens);
+    document.getElementById('last-scan').textContent = '✓ ' + val + ' (' + currentOp + ') — manual';
+    input.value = '';
+    input.focus();
+    renderItens();
+    if(navigator.vibrate) navigator.vibrate(40);
+  }
+
   function removeItem(i){
     const itens = load(LS_DRAFT, []);
     itens.splice(i,1);
@@ -1152,7 +1194,7 @@ const App = (() => {
   return {
     showScreen, login, register, logout,
     verifyEmail, resendCode, requestReset, confirmReset,
-    switchTab, setOp, startScanner, stopScanner, toggleFlash,
+    switchTab, setOp, startScanner, stopScanner, toggleFlash, addManual,
     removeItem, limparRascunho, emitirRomaneio,
     filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
     changeRole, changeStatus, removeUser,
