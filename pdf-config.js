@@ -30,6 +30,20 @@ LOGO_BASE64: "",
   // Cor principal usada nos títulos e linhas (RGB de 0 a 255)
   COR_PRIMARIA: [23, 145, 194],
 
+  // ---- DADOS DA EMPRESA DESTINATÁRIA NO PDF ----
+  // Mostra (ou esconde) o bloco com CNPJ, endereço e telefone da empresa
+  // destinatária (dados cadastrados na aba "Empresas"). Se a empresa não
+  // tiver algum desses dados cadastrados, a linha correspondente
+  // simplesmente não aparece.
+  MOSTRAR_DADOS_DESTINATARIO: true,
+
+  // Rótulos (textos) usados para identificar a empresa destinatária e seus
+  // dados no PDF. Edite livremente para mudar o texto exibido.
+  LABEL_DESTINATARIO: "Empresa destinatária",
+  LABEL_CNPJ_DESTINATARIO: "CNPJ",
+  LABEL_ENDERECO_DESTINATARIO: "Endereço",
+  LABEL_TELEFONE_DESTINATARIO: "Telefone",
+
   // Texto que aparece no rodapé de cada página do PDF
   RODAPE: "Documento gerado automaticamente pelo sistesma Batele Scanner"
 };

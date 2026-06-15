@@ -40,7 +40,7 @@ body{
 /* ---------- AUTH SCREENS ---------- */
 .auth-wrap{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
-  padding:24px;
+  padding:24px;padding-bottom:calc(var(--rodape-h) + 24px);
   background:
     radial-gradient(circle at 20% 20%, rgba(255,159,28,0.08), transparent 40%),
     radial-gradient(circle at 80% 80%, rgba(54,199,155,0.06), transparent 40%),
@@ -124,14 +124,17 @@ body{
 .tabs{
   display:flex;background:var(--surface);border-bottom:1px solid var(--line);
   position:sticky;top:0;z-index:19;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;
 }
+.tabs::-webkit-scrollbar{height:4px;}
+.tabs::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
 .tab{
-  flex:1;padding:12px 8px;text-align:center;font-family:var(--font-display);
+  flex:0 0 auto;min-width:84px;padding:12px 10px;text-align:center;font-family:var(--font-display);
   font-weight:600;font-size:13px;color:var(--muted);cursor:pointer;
   border-bottom:3px solid transparent;white-space:nowrap;
 }
 .tab.active{color:var(--text);border-color:var(--accent);}
-.content{flex:1;padding:18px;max-width:760px;width:100%;margin:0 auto;}
+.content{flex:1;padding:18px;padding-bottom:calc(var(--rodape-h) + 18px);max-width:760px;width:100%;margin:0 auto;}
 
 /* ---------- SCANNER ---------- */
 .scan-box{
@@ -340,24 +343,20 @@ body{
 .dash-table .num.d{color:var(--accent);}
 .dash-bar-wrap{display:flex;align-items:center;gap:6px;}
 .dash-bar{height:6px;border-radius:3px;background:var(--accent);min-width:2px;transition:width .3s;}
+
+/* ---------- RODAPÉ FIXO (todas as telas) ---------- */
+:root{ --rodape-h:34px; }
+.rodape{
+  position:fixed;left:0;bottom:0;width:100%;
+  background:var(--surface);color:var(--muted);
+  text-align:center;padding:8px 10px;
+  font-size:11px;line-height:1.3;
+  border-top:1px solid var(--line);
+  z-index:30; /* acima do topbar/tabs (19/20), abaixo do toast (100) */
+}
+.rodape p{margin:0;}
 </style>
 </head>
-  <footer class="rodape">
-    <p>© 2026 Coffran - Todos os direitos reservados.</p>
-</footer>
-
-<style>
-.rodape {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #222;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
-</style>
 <body>
 
 <!-- ================= LOGIN ================= -->
@@ -622,6 +621,10 @@ body{
   </div>
 </div>
 
+<footer class="rodape">
+  <p>© 2026 Coffran - Todos os direitos reservados.</p>
+</footer>
+
 <script>
 /* =========================================================
    CONFIGURAÇÃO — cole aqui a URL do seu Apps Script Web App
@@ -831,7 +834,7 @@ const App = (() => {
     if(name==='romaneio'){ renderItens(); popularSelectDestino(); }
     if(name==='historico') refreshHistorico();
     if(name==='admin') loadAdmin();
-    if(name==='empresas') renderEmpresas();
+    if(name==='empresas') carregarEmpresas(true);
     if(name==='dashboard') renderDashboard();
   }
 
@@ -1001,6 +1004,7 @@ const App = (() => {
       dataEmissao: data,
       empresaOrigem: origem,
       empresaDestino: empDest.razaoSocial,
+      empresaDestinoId: destinoId,
       empresaDestinoObj: empDest,
       usuario: user.nome,
       status: 'emitido',
@@ -1059,12 +1063,25 @@ const App = (() => {
     doc.text('Responsável: ' + rom.usuario, 14, y); y += 6;
     doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, y); y += 6;
 
-    // Empresa destinatária com dados completos
-    const ed = rom.empresaDestinoObj || {};
-    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, y); y += 5;
-    if(ed.cnpj){ doc.setFontSize(9); doc.setTextColor(100,100,100); doc.text('CNPJ: ' + ed.cnpj, 14, y); y += 5; }
-    if(ed.endereco){ doc.text('Endereço: ' + ed.endereco, 14, y); y += 5; }
-    if(ed.telefone){ doc.text('Telefone: ' + ed.telefone, 14, y); y += 5; }
+    // Empresa destinatária com dados completos (nome, CNPJ, endereço, telefone)
+    let ed = rom.empresaDestinoObj || {};
+    // Fallback: se os dados não vierem junto do romaneio (ex.: romaneio sincronizado
+    // de outro dispositivo), procura a empresa no cadastro local pelo id ou pelo nome.
+    if(!ed.cnpj && !ed.endereco && !ed.telefone){
+      const empresas = load(LS_EMPRESAS, []);
+      const achada = empresas.find(e=>e.id===rom.empresaDestinoId) ||
+                      empresas.find(e=>e.razaoSocial===rom.empresaDestino);
+      if(achada) ed = achada;
+    }
+
+    const mostrarDados = cfg.MOSTRAR_DADOS_DESTINATARIO !== false;
+    doc.text((cfg.LABEL_DESTINATARIO || 'Empresa destinatária') + ': ' + rom.empresaDestino, 14, y); y += 5;
+    if(mostrarDados){
+      doc.setFontSize(9); doc.setTextColor(100,100,100);
+      if(ed.cnpj)     { doc.text((cfg.LABEL_CNPJ_DESTINATARIO || 'CNPJ') + ': ' + ed.cnpj, 14, y); y += 5; }
+      if(ed.endereco) { doc.text((cfg.LABEL_ENDERECO_DESTINATARIO || 'Endereço') + ': ' + ed.endereco, 14, y); y += 5; }
+      if(ed.telefone) { doc.text((cfg.LABEL_TELEFONE_DESTINATARIO || 'Telefone') + ': ' + ed.telefone, 14, y); y += 5; }
+    }
     doc.setFontSize(10); doc.setTextColor(0,0,0);
     y += 4;
 
@@ -1218,14 +1235,15 @@ const App = (() => {
 
   function uidEmp(){ return 'EMP-' + Date.now().toString(36).toUpperCase(); }
 
-  async function carregarEmpresas(){
+  async function carregarEmpresas(rerender){
     if(navigator.onLine){
       try{
         const remote = await api('listEmpresas', {});
         if(remote.empresas) save(LS_EMPRESAS, remote.empresas);
-      }catch(e){}
+      }catch(e){ /* sem conexão com a planilha: usa cache local */ }
     }
     popularSelectDestino();
+    if(rerender) renderEmpresas();
   }
 
   function popularSelectDestino(){
@@ -1520,7 +1538,13 @@ const App = (() => {
     const savedUser = load(LS_USER, null);
     if(savedUser){ user = savedUser; initApp(); }
     else showScreen('login');
-    setInterval(()=>{ if(navigator.onLine) syncPending(); }, 30000);
+    setInterval(()=>{
+      if(navigator.onLine && user){
+        syncPending();
+        const onEmpresas = !document.getElementById('tab-empresas').classList.contains('hidden');
+        carregarEmpresas(onEmpresas);
+      }
+    }, 30000);
 
     if('serviceWorker' in navigator){
       navigator.serviceWorker.register('sw.js').catch(()=>{});
