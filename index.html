@@ -562,6 +562,22 @@ body{
 
     <!-- TAB: DASHBOARD -->
     <div id="tab-dashboard" class="tabpane hidden">
+      <div class="search-box">
+        <div class="grid2">
+          <div class="field"><label>De</label><input id="dash-data-de" type="date" onchange="App.renderDashboard()"></div>
+          <div class="field"><label>Até</label><input id="dash-data-ate" type="date" onchange="App.renderDashboard()"></div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-chip active" data-dp="todos" onclick="App.filtrarDashboardPeriodo('todos')">Tudo</div>
+          <div class="filter-chip" data-dp="hoje" onclick="App.filtrarDashboardPeriodo('hoje')">Hoje</div>
+          <div class="filter-chip" data-dp="7dias" onclick="App.filtrarDashboardPeriodo('7dias')">7 dias</div>
+          <div class="filter-chip" data-dp="mes" onclick="App.filtrarDashboardPeriodo('mes')">Este mês</div>
+        </div>
+        <div class="search-actions">
+          <button class="btn btn-primary" onclick="App.renderDashboard()">Filtrar</button>
+          <button class="btn btn-ghost" onclick="App.limparFiltroDashboard()">Limpar</button>
+        </div>
+      </div>
       <div class="section-title">Visão geral</div>
       <div class="dash-grid" id="dash-totais"></div>
       <div class="section-title">Movimentação por empresa</div>
@@ -1141,7 +1157,7 @@ const App = (() => {
   let histFilter = 'todos';
   function filterHist(f){
     histFilter = f;
-    document.querySelectorAll('.filter-chip').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
+    document.querySelectorAll('.filter-chip[data-f]').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
     renderHistorico();
   }
   function limparBusca(){
@@ -1364,7 +1380,12 @@ const App = (() => {
 
   // ---------- DASHBOARD ----------
   function renderDashboard(){
-    const roms = load(LS_ROMANEIOS, []).filter(r=>r.status==='emitido');
+    let roms = load(LS_ROMANEIOS, []).filter(r=>r.status==='emitido');
+
+    const de = document.getElementById('dash-data-de').value;
+    const ate = document.getElementById('dash-data-ate').value;
+    if(de)  roms = roms.filter(r=>r.dataEmissao && r.dataEmissao >= de);
+    if(ate) roms = roms.filter(r=>r.dataEmissao && r.dataEmissao <= ate);
 
     let totalSaida=0, totalEntrada=0, totalDev=0;
     const porEmpresa = {};
@@ -1392,7 +1413,7 @@ const App = (() => {
     const maxTotal = sorted.length ? sorted[0][1].saida+sorted[0][1].entrada+sorted[0][1].devolucao : 1;
 
     const tbody = document.getElementById('dash-tabela');
-    if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhum dado ainda.</td></tr>'; return; }
+    if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhum dado para o período selecionado.</td></tr>'; return; }
     tbody.innerHTML = sorted.map(([emp,v])=>{
       const tot = v.saida+v.entrada+v.devolucao;
       const pct = Math.round((tot/maxTotal)*100);
@@ -1409,6 +1430,35 @@ const App = (() => {
         <td class="num">${tot}</td>
       </tr>`;
     }).join('');
+  }
+
+  function fmtDateInput(d){ return d.toISOString().slice(0,10); }
+
+  function filtrarDashboardPeriodo(periodo){
+    document.querySelectorAll('.filter-chip[data-dp]').forEach(c=>c.classList.toggle('active', c.dataset.dp===periodo));
+    const de = document.getElementById('dash-data-de');
+    const ate = document.getElementById('dash-data-ate');
+    const hoje = new Date();
+
+    if(periodo==='todos'){
+      de.value=''; ate.value='';
+    } else if(periodo==='hoje'){
+      de.value = fmtDateInput(hoje); ate.value = fmtDateInput(hoje);
+    } else if(periodo==='7dias'){
+      const inicio = new Date(hoje); inicio.setDate(inicio.getDate()-6);
+      de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje);
+    } else if(periodo==='mes'){
+      const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje);
+    }
+    renderDashboard();
+  }
+
+  function limparFiltroDashboard(){
+    document.getElementById('dash-data-de').value='';
+    document.getElementById('dash-data-ate').value='';
+    document.querySelectorAll('.filter-chip[data-dp]').forEach(c=>c.classList.toggle('active', c.dataset.dp==='todos'));
+    renderDashboard();
   }
 
   // ---------- ADMIN — ROMANEIOS (todos os usuários) ----------
@@ -1560,6 +1610,7 @@ const App = (() => {
     changeRole, changeStatus, removeUser,
     renderEmpresas, abrirFormEmpresa, fecharFormEmpresa, salvarEmpresa, editarEmpresa, excluirEmpresa,
     switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios,
+    renderDashboard, filtrarDashboardPeriodo, limparFiltroDashboard,
     boot
   };
 })();
