@@ -289,6 +289,57 @@ body{
   padding:10px 18px;border-radius:8px;font-size:13px;z-index:100;
   box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center;
 }
+
+/* ---------- EMPRESA CARD ---------- */
+.empresa-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;margin-bottom:10px;
+}
+.empresa-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.empresa-nome{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--text);}
+.empresa-fantasia{font-size:12px;color:var(--accent);font-family:var(--font-mono);}
+.empresa-meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.7;}
+.empresa-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.empresa-actions .btn{width:auto;padding:7px 14px;font-size:12px;}
+
+/* ---------- SELECT ESTILIZADO ---------- */
+.field select{
+  width:100%;padding:11px 12px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text);font-size:14px;font-family:var(--font-body);
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b93a3' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer;
+}
+.field select:focus{outline:none;border-color:var(--accent);}
+.field select option{background:var(--surface-2);color:var(--text);}
+.select-error{border-color:var(--danger) !important;}
+
+/* ---------- DASHBOARD ---------- */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
+.dash-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:16px 14px;text-align:center;
+}
+.dash-card-value{font-family:var(--font-display);font-weight:700;font-size:28px;color:var(--text);}
+.dash-card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:4px;}
+.dash-card.saida .dash-card-value{color:var(--danger);}
+.dash-card.entrada .dash-card-value{color:var(--accent-2);}
+.dash-card.devolucao .dash-card-value{color:var(--accent);}
+.dash-table{width:100%;border-collapse:collapse;font-size:13px;}
+.dash-table th{
+  text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;
+  letter-spacing:.6px;color:var(--muted);border-bottom:1px solid var(--line);
+  font-family:var(--font-display);
+}
+.dash-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table .num{font-family:var(--font-mono);font-weight:600;}
+.dash-table .num.s{color:var(--danger);}
+.dash-table .num.e{color:var(--accent-2);}
+.dash-table .num.d{color:var(--accent);}
+.dash-bar-wrap{display:flex;align-items:center;gap:6px;}
+.dash-bar{height:6px;border-radius:3px;background:var(--accent);min-width:2px;transition:width .3s;}
 </style>
 </head>
   <footer class="rodape">
@@ -391,6 +442,8 @@ body{
     <div class="tab active" data-tab="scanner" onclick="App.switchTab('scanner')">Scanner</div>
     <div class="tab" data-tab="romaneio" onclick="App.switchTab('romaneio')">Romaneio</div>
     <div class="tab" data-tab="historico" onclick="App.switchTab('historico')">Histórico</div>
+    <div class="tab" data-tab="empresas" onclick="App.switchTab('empresas')">Empresas</div>
+    <div class="tab" data-tab="dashboard" onclick="App.switchTab('dashboard')">Dashboard</div>
     <div class="tab hidden" id="tab-btn-admin" data-tab="admin" onclick="App.switchTab('admin')">Admin</div>
   </div>
 
@@ -431,7 +484,13 @@ body{
       <div class="section-title">Dados do romaneio</div>
       <div class="grid2">
         <div class="field"><label>Empresa remetente</label><input id="form-origem" type="text" placeholder="Quem está enviando"></div>
-        <div class="field"><label>Empresa destinatária</label><input id="form-destino" type="text" placeholder="Quem vai receber"></div>
+        <div class="field">
+          <label>Empresa destinatária <span style="color:var(--danger)">*</span></label>
+          <select id="form-destino">
+            <option value="">— Selecione a empresa destinatária —</option>
+          </select>
+          <div class="err-msg" id="form-destino-err" style="font-size:11px;margin-top:4px;"></div>
+        </div>
       </div>
       <div class="grid2">
         <div class="field"><label>Data de emissão</label><input id="form-data" type="date"></div>
@@ -468,6 +527,59 @@ body{
         <div class="filter-chip" data-f="cancelado" onclick="App.filterHist('cancelado')">Cancelados</div>
       </div>
       <div id="hist-list"></div>
+    </div>
+
+
+    <!-- TAB: EMPRESAS -->
+    <div id="tab-empresas" class="tabpane hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div class="section-title" style="margin:0;">Empresas cadastradas</div>
+        <button class="btn btn-primary" style="width:auto;padding:9px 16px;font-size:13px;" onclick="App.abrirFormEmpresa()">+ Nova empresa</button>
+      </div>
+
+      <!-- Formulário cadastro/edição empresa -->
+      <div id="empresa-form-wrap" class="hidden">
+        <div class="search-box" style="margin-bottom:16px;">
+          <div class="section-title" id="empresa-form-title" style="margin-top:0;">Nova empresa</div>
+          <div class="grid2">
+            <div class="field"><label>Razão Social <span style="color:var(--danger)">*</span></label><input id="ef-razao" type="text" placeholder="Razão Social completa"></div>
+            <div class="field"><label>Nome Fantasia</label><input id="ef-fantasia" type="text" placeholder="Nome popular"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label>CNPJ</label><input id="ef-cnpj" type="text" placeholder="00.000.000/0000-00" maxlength="18"></div>
+            <div class="field"><label>Telefone</label><input id="ef-tel" type="text" placeholder="(00) 00000-0000" maxlength="15"></div>
+          </div>
+          <div class="field"><label>Endereço</label><input id="ef-end" type="text" placeholder="Rua, número, bairro, cidade - UF"></div>
+          <div class="err-msg" id="ef-err"></div>
+          <div style="display:flex;gap:8px;margin-top:12px;">
+            <button class="btn btn-primary" onclick="App.salvarEmpresa()">Salvar</button>
+            <button class="btn btn-ghost" onclick="App.fecharFormEmpresa()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="empresa-list"></div>
+    </div>
+
+    <!-- TAB: DASHBOARD -->
+    <div id="tab-dashboard" class="tabpane hidden">
+      <div class="section-title">Visão geral</div>
+      <div class="dash-grid" id="dash-totais"></div>
+      <div class="section-title">Movimentação por empresa</div>
+      <div style="overflow-x:auto;">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Empresa destinatária</th>
+              <th>Saídas</th>
+              <th>Entradas</th>
+              <th>Devoluções</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="dash-tabela"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- TAB: ADMIN -->
@@ -528,6 +640,7 @@ const App = (() => {
   const LS_DRAFT = 'rm_draft_itens';
   const LS_ROMANEIOS = 'rm_romaneios';
   const LS_USER = 'rm_user';
+  const LS_EMPRESAS = 'rm_empresas';
 
   // ---------- HELPERS ----------
   function toast(msg){
@@ -692,6 +805,7 @@ const App = (() => {
     document.getElementById('form-responsavel').value = user.nome;
     document.getElementById('form-data').value = new Date().toISOString().slice(0,10);
     document.getElementById('tab-btn-admin').classList.toggle('hidden', user.role!=='admin');
+    carregarEmpresas();
     renderItens();
     updateNetStatus();
     refreshHistorico();
@@ -714,9 +828,11 @@ const App = (() => {
   function switchTab(name){
     document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
     document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('hidden', p.id !== 'tab-'+name));
-    if(name==='romaneio') renderItens();
+    if(name==='romaneio'){ renderItens(); popularSelectDestino(); }
     if(name==='historico') refreshHistorico();
     if(name==='admin') loadAdmin();
+    if(name==='empresas') renderEmpresas();
+    if(name==='dashboard') renderDashboard();
   }
 
   // ---------- OPERATION TYPE ----------
@@ -855,6 +971,7 @@ const App = (() => {
     localStorage.removeItem(LS_DRAFT);
     document.getElementById('form-origem').value='';
     document.getElementById('form-destino').value='';
+    document.getElementById('form-destino-err').textContent='';
     renderItens();
   }
 
@@ -862,16 +979,29 @@ const App = (() => {
   function emitirRomaneio(){
     const itens = load(LS_DRAFT, []);
     const origem = document.getElementById('form-origem').value.trim();
-    const destino = document.getElementById('form-destino').value.trim();
+    const destinoId = document.getElementById('form-destino').value;
     const data = document.getElementById('form-data').value;
+    const errDestino = document.getElementById('form-destino-err');
+    errDestino.textContent = '';
+
     if(itens.length===0){ toast('Escaneie ao menos um item.'); return; }
-    if(!origem || !destino){ toast('Preencha empresa remetente e destinatária.'); return; }
+    if(!origem){ toast('Preencha a empresa remetente.'); return; }
+    if(!destinoId){
+      errDestino.textContent = '⚠ Selecione a empresa destinatária para continuar.';
+      document.getElementById('form-destino').classList.add('select-error');
+      return;
+    }
+    document.getElementById('form-destino').classList.remove('select-error');
+
+    const empresas = load(LS_EMPRESAS, []);
+    const empDest = empresas.find(e=>e.id===destinoId) || { razaoSocial: destinoId };
 
     const romaneio = {
       id: uid(),
       dataEmissao: data,
       empresaOrigem: origem,
-      empresaDestino: destino,
+      empresaDestino: empDest.razaoSocial,
+      empresaDestinoObj: empDest,
       usuario: user.nome,
       status: 'emitido',
       synced: false,
@@ -888,6 +1018,7 @@ const App = (() => {
     localStorage.removeItem(LS_DRAFT);
     document.getElementById('form-origem').value='';
     document.getElementById('form-destino').value='';
+    document.getElementById('form-destino-err').textContent='';
     renderItens();
     updateNetStatus();
     syncPending();
@@ -927,7 +1058,15 @@ const App = (() => {
     doc.text('Data de emissão: ' + rom.dataEmissao, 14, y); y += 6;
     doc.text('Responsável: ' + rom.usuario, 14, y); y += 6;
     doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, y); y += 6;
-    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, y); y += 12;
+
+    // Empresa destinatária com dados completos
+    const ed = rom.empresaDestinoObj || {};
+    doc.text('Empresa destinatária: ' + rom.empresaDestino, 14, y); y += 5;
+    if(ed.cnpj){ doc.setFontSize(9); doc.setTextColor(100,100,100); doc.text('CNPJ: ' + ed.cnpj, 14, y); y += 5; }
+    if(ed.endereco){ doc.text('Endereço: ' + ed.endereco, 14, y); y += 5; }
+    if(ed.telefone){ doc.text('Telefone: ' + ed.telefone, 14, y); y += 5; }
+    doc.setFontSize(10); doc.setTextColor(0,0,0);
+    y += 4;
 
     doc.setFont('helvetica','bold');
     doc.setTextColor(cor[0],cor[1],cor[2]);
@@ -959,11 +1098,25 @@ const App = (() => {
     doc.save(rom.id + '.pdf');
   }
   function addFooter(doc, cfg){
-    if(!cfg.RODAPE) return;
     const h = doc.internal.pageSize.getHeight();
-    doc.setFontSize(8);
-    doc.setTextColor(150,150,150);
-    doc.text(cfg.RODAPE, 14, h - 10);
+    const cor = cfg.COR_PRIMARIA || [23,145,194];
+
+    // Linha e campo de assinatura
+    doc.setDrawColor(cor[0],cor[1],cor[2]);
+    doc.line(14, h - 28, 100, h - 28);
+    doc.setFontSize(9);
+    doc.setTextColor(80,80,80);
+    doc.text('Assinatura do conferente', 14, h - 22);
+
+    doc.line(110, h - 28, 196, h - 28);
+    doc.text('Data / Hora de conferência', 110, h - 22);
+
+    // Rodapé
+    if(cfg.RODAPE){
+      doc.setFontSize(8);
+      doc.setTextColor(150,150,150);
+      doc.text(cfg.RODAPE, 14, h - 10);
+    }
     doc.setTextColor(0,0,0);
   }
 
@@ -996,6 +1149,8 @@ const App = (() => {
   }
   function renderHistorico(){
     let all = load(LS_ROMANEIOS, []);
+    // usuário comum vê apenas seus próprios romaneios
+    if(user.role !== 'admin') all = all.filter(r=>r.usuario === user.nome);
     if(histFilter!=='todos') all = all.filter(r=>r.status===histFilter);
 
     const codigo = document.getElementById('search-codigo').value.trim().toLowerCase();
@@ -1055,6 +1210,187 @@ const App = (() => {
       }catch(e){ /* mantém pendente */ }
     }
     if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); }
+  }
+
+
+  // ---------- EMPRESAS ----------
+  let editandoEmpresaId = null;
+
+  function uidEmp(){ return 'EMP-' + Date.now().toString(36).toUpperCase(); }
+
+  async function carregarEmpresas(){
+    if(navigator.onLine){
+      try{
+        const remote = await api('listEmpresas', {});
+        if(remote.empresas) save(LS_EMPRESAS, remote.empresas);
+      }catch(e){}
+    }
+    popularSelectDestino();
+  }
+
+  function popularSelectDestino(){
+    const sel = document.getElementById('form-destino');
+    if(!sel) return;
+    const empresas = load(LS_EMPRESAS, []);
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— Selecione a empresa destinatária —</option>';
+    empresas.forEach(e=>{
+      const opt = document.createElement('option');
+      opt.value = e.id;
+      opt.textContent = e.razaoSocial + (e.nomeFantasia ? ' (' + e.nomeFantasia + ')' : '');
+      sel.appendChild(opt);
+    });
+    if(cur) sel.value = cur;
+  }
+
+  function renderEmpresas(){
+    const empresas = load(LS_EMPRESAS, []);
+    const el = document.getElementById('empresa-list');
+    if(empresas.length===0){
+      el.innerHTML = '<div class="empty-state">Nenhuma empresa cadastrada ainda.</div>';
+      return;
+    }
+    el.innerHTML = empresas.map(e=>`
+      <div class="empresa-card">
+        <div class="empresa-card-head">
+          <div>
+            <div class="empresa-nome">${escapeHtml(e.razaoSocial)}</div>
+            ${e.nomeFantasia ? '<div class="empresa-fantasia">' + escapeHtml(e.nomeFantasia) + '</div>' : ''}
+          </div>
+        </div>
+        <div class="empresa-meta">
+          ${e.cnpj ? '🪪 ' + escapeHtml(e.cnpj) + '<br>' : ''}
+          ${e.endereco ? '📍 ' + escapeHtml(e.endereco) + '<br>' : ''}
+          ${e.telefone ? '📞 ' + escapeHtml(e.telefone) : ''}
+        </div>
+        ${user.role==='admin' ? `
+        <div class="empresa-actions">
+          <button class="btn btn-outline-accent" onclick="App.editarEmpresa('${e.id}')">Editar</button>
+          <button class="btn btn-danger" onclick="App.excluirEmpresa('${e.id}')">Excluir</button>
+        </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  function abrirFormEmpresa(id){
+    editandoEmpresaId = id || null;
+    const wrap = document.getElementById('empresa-form-wrap');
+    const title = document.getElementById('empresa-form-title');
+    wrap.classList.remove('hidden');
+    if(id){
+      const emp = load(LS_EMPRESAS, []).find(e=>e.id===id);
+      title.textContent = 'Editar empresa';
+      document.getElementById('ef-razao').value = emp.razaoSocial || '';
+      document.getElementById('ef-fantasia').value = emp.nomeFantasia || '';
+      document.getElementById('ef-cnpj').value = emp.cnpj || '';
+      document.getElementById('ef-tel').value = emp.telefone || '';
+      document.getElementById('ef-end').value = emp.endereco || '';
+    } else {
+      title.textContent = 'Nova empresa';
+      ['ef-razao','ef-fantasia','ef-cnpj','ef-tel','ef-end'].forEach(id=>document.getElementById(id).value='');
+    }
+    document.getElementById('ef-err').textContent='';
+    document.getElementById('ef-razao').focus();
+    wrap.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function fecharFormEmpresa(){
+    document.getElementById('empresa-form-wrap').classList.add('hidden');
+    editandoEmpresaId = null;
+  }
+
+  async function salvarEmpresa(){
+    const razao = document.getElementById('ef-razao').value.trim();
+    const err = document.getElementById('ef-err');
+    err.textContent='';
+    if(!razao){ err.textContent='A Razão Social é obrigatória.'; return; }
+
+    const emp = {
+      id: editandoEmpresaId || uidEmp(),
+      razaoSocial: razao,
+      nomeFantasia: document.getElementById('ef-fantasia').value.trim(),
+      cnpj: document.getElementById('ef-cnpj').value.trim(),
+      telefone: document.getElementById('ef-tel').value.trim(),
+      endereco: document.getElementById('ef-end').value.trim(),
+    };
+
+    const all = load(LS_EMPRESAS, []);
+    const idx = all.findIndex(e=>e.id===emp.id);
+    if(idx>=0) all[idx]=emp; else all.push(emp);
+    save(LS_EMPRESAS, all);
+
+    try{
+      if(navigator.onLine) await api('saveEmpresa', { empresa: emp });
+    }catch(e){ toast('Salvo localmente (sem conexão).'); }
+
+    fecharFormEmpresa();
+    renderEmpresas();
+    popularSelectDestino();
+    toast('Empresa salva!');
+  }
+
+  function editarEmpresa(id){ abrirFormEmpresa(id); }
+
+  async function excluirEmpresa(id){
+    if(!confirm('Excluir esta empresa? Esta ação não pode ser desfeita.')) return;
+    const all = load(LS_EMPRESAS, []).filter(e=>e.id!==id);
+    save(LS_EMPRESAS, all);
+    try{
+      if(navigator.onLine) await api('deleteEmpresa', { id });
+    }catch(e){}
+    renderEmpresas();
+    popularSelectDestino();
+    toast('Empresa excluída.');
+  }
+
+
+  // ---------- DASHBOARD ----------
+  function renderDashboard(){
+    const roms = load(LS_ROMANEIOS, []).filter(r=>r.status==='emitido');
+
+    let totalSaida=0, totalEntrada=0, totalDev=0;
+    const porEmpresa = {};
+
+    roms.forEach(r=>{
+      const dest = r.empresaDestino || 'Não informada';
+      if(!porEmpresa[dest]) porEmpresa[dest]={saida:0,entrada:0,devolucao:0};
+      r.itens.forEach(it=>{
+        if(it.tipo==='saida')     { totalSaida++;      porEmpresa[dest].saida++; }
+        if(it.tipo==='entrada')   { totalEntrada++;    porEmpresa[dest].entrada++; }
+        if(it.tipo==='devolucao') { totalDev++;        porEmpresa[dest].devolucao++; }
+      });
+    });
+
+    const totalGeral = totalSaida + totalEntrada + totalDev;
+
+    document.getElementById('dash-totais').innerHTML = `
+      <div class="dash-card"><div class="dash-card-value">${totalGeral}</div><div class="dash-card-label">Total de itens</div></div>
+      <div class="dash-card saida"><div class="dash-card-value">${totalSaida}</div><div class="dash-card-label">Saídas</div></div>
+      <div class="dash-card entrada"><div class="dash-card-value">${totalEntrada}</div><div class="dash-card-label">Entradas</div></div>
+      <div class="dash-card devolucao"><div class="dash-card-value">${totalDev}</div><div class="dash-card-label">Devoluções</div></div>
+    `;
+
+    const sorted = Object.entries(porEmpresa).sort((a,b)=>(b[1].saida+b[1].entrada+b[1].devolucao)-(a[1].saida+a[1].entrada+a[1].devolucao));
+    const maxTotal = sorted.length ? sorted[0][1].saida+sorted[0][1].entrada+sorted[0][1].devolucao : 1;
+
+    const tbody = document.getElementById('dash-tabela');
+    if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhum dado ainda.</td></tr>'; return; }
+    tbody.innerHTML = sorted.map(([emp,v])=>{
+      const tot = v.saida+v.entrada+v.devolucao;
+      const pct = Math.round((tot/maxTotal)*100);
+      return `<tr>
+        <td>
+          <div class="dash-bar-wrap">
+            <div class="dash-bar" style="width:${pct}px;max-width:80px;"></div>
+            <span>${escapeHtml(emp)}</span>
+          </div>
+        </td>
+        <td class="num s">${v.saida}</td>
+        <td class="num e">${v.entrada}</td>
+        <td class="num d">${v.devolucao}</td>
+        <td class="num">${tot}</td>
+      </tr>`;
+    }).join('');
   }
 
   // ---------- ADMIN — ROMANEIOS (todos os usuários) ----------
@@ -1198,6 +1534,7 @@ const App = (() => {
     removeItem, limparRascunho, emitirRomaneio,
     filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
     changeRole, changeStatus, removeUser,
+    renderEmpresas, abrirFormEmpresa, fecharFormEmpresa, salvarEmpresa, editarEmpresa, excluirEmpresa,
     switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios,
     boot
   };
