@@ -22,7 +22,7 @@ LOGO_BASE64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAATmCAIAAAAKnjl9
   LOGO_ALTURA: 20,
 
   // Nome da empresa que aparece no topo do romaneio
-  NOME_EMPRESA: "Batele Scanner",
+  NOME_EMPRESA: "Batele Vidros e Esquadrias Ltda",
 
   // Subtítulo / endereço / CNPJ (aparece abaixo do nome da empresa)
   SUBTITULO_EMPRESA: "R. Ver. Raimundo Lima, 65 - Jaçanã, Itabuna - BA, 45608-475 / 37.640.848/0001-95 / (73) 3041-0000",
@@ -45,5 +45,5 @@ LOGO_BASE64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABOYAAATmCAIAAAAKnjl9
   LABEL_TELEFONE_DESTINATARIO: "Telefone",
 
   // Texto que aparece no rodapé de cada página do PDF
-  RODAPE: "Documento gerado automaticamente pelo sistesma Batele Scanner"
+  RODAPE: "Documento gerado automaticamente pelo sistema Batele Romaneios"
 };
