@@ -973,7 +973,7 @@ const App = (() => {
     // Motorista começa na aba de entregas; outros na aba scanner
     if(user.role==='motorista'){
       // Oculta abas que motorista não usa
-      ['scanner','romaneio','dashboard','empresas'].forEach(t=>{
+      ['scanner','romaneio','historico','dashboard','empresas'].forEach(t=>{
         const btn = document.querySelector(`.tab[data-tab="${t}"]`);
         if(btn) btn.classList.add('hidden');
       });
@@ -1211,6 +1211,7 @@ const App = (() => {
       empresaDestinoId: destinoId,
       empresaDestinoObj: empDest,
       usuario: user.nome,
+      usuarioEmail: user.email,
       status: 'emitido',
       synced: false,
       criadoEm: nowISO(),
@@ -1381,7 +1382,7 @@ const App = (() => {
   async function refreshHistorico(){
     if(navigator.onLine){
       try{
-        const remote = await api('listRomaneios', {});
+        const remote = await api('listRomaneios', { email: user.email });
         const local = load(LS_ROMANEIOS, []);
         remote.romaneios.forEach(r=>{
           const idx = local.findIndex(l=>l.id===r.id);
@@ -1455,7 +1456,7 @@ const App = (() => {
     for(const r of all){
       if(r.synced) continue;
       try{
-        await api('saveRomaneio', { romaneio: r });
+        await api('saveRomaneio', { romaneio: r, email: user.email });
         r.synced = true;
         changed = true;
       }catch(e){ /* mantém pendente */ }
@@ -1997,6 +1998,7 @@ const App = (() => {
     const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
     if(!r || !r.comprovacao){ toast('Comprovação não encontrada.'); return; }
     const c = r.comprovacao;
+    const fotoSrc = c.foto || r.fotoUrl || '';
     document.getElementById('ver-comp-content').innerHTML = `
       <div class="comprovacao-box">
         <div style="font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.7;">
@@ -2005,7 +2007,7 @@ const App = (() => {
           <b style="color:var(--text);">Motorista:</b> ${escapeHtml(c.motorista)}<br>
           <b style="color:var(--text);">Data/Hora:</b> ${fmtDate(c.dataHora)}
         </div>
-        ${c.foto ? `<img src="${c.foto}" alt="Foto do romaneio">` : '<div style="color:var(--muted);font-size:13px;">Sem foto disponível.</div>'}
+        ${fotoSrc ? `<img src="${fotoSrc}" alt="Foto do romaneio">` : '<div style="color:var(--muted);font-size:13px;">Sem foto disponível.</div>'}
       </div>`;
     document.getElementById('modal-ver-comp').classList.remove('hidden');
   }
