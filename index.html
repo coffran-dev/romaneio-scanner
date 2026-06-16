@@ -1472,7 +1472,7 @@ const App = (() => {
   async function carregarEmpresas(rerender){
     if(navigator.onLine){
       try{
-        const remote = await api('listEmpresas', {});
+        const remote = await api('listEmpresas', { email: user.email });
         if(remote.empresas) save(LS_EMPRESAS, remote.empresas);
       }catch(e){ /* sem conexão com a planilha: usa cache local */ }
     }
@@ -1825,7 +1825,7 @@ const App = (() => {
   async function renderMotorista(){
     if(navigator.onLine){
       try{
-        const remote = await api('listRomaneios', {});
+        const remote = await api('listRomaneios', { email: user.email })
         const local = load(LS_ROMANEIOS, []);
         remote.romaneios.forEach(r=>{
           const idx = local.findIndex(l=>l.id===r.id);
