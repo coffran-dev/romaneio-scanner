@@ -270,9 +270,53 @@ body{
 .badge{font-size:10px;padding:2px 8px;border-radius:5px;font-family:var(--font-mono);text-transform:uppercase;}
 .badge-admin{background:rgba(255,159,28,.12);color:var(--accent);}
 .badge-user{background:rgba(255,255,255,.06);color:var(--muted);}
+.badge-motorista{background:rgba(23,145,194,.12);color:var(--accent);}
 .badge-ativo{background:rgba(54,199,155,.12);color:var(--accent-2);}
 .badge-bloqueado{background:rgba(239,91,91,.12);color:var(--danger);}
 .badge-pendente{background:rgba(255,159,28,.12);color:var(--accent);}
+.status-entregue{background:rgba(54,199,155,.18);color:var(--accent-2);}
+.status-liberado{background:rgba(23,145,194,.14);color:var(--accent);}
+
+/* ---------- MODAL ---------- */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.modal-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;
+  width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:24px;
+}
+.modal-title{font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:16px;}
+.modal-actions{display:flex;gap:10px;margin-top:18px;}
+.modal-actions .btn{flex:1;}
+.photo-preview{
+  width:100%;border-radius:10px;margin-top:10px;border:1px solid var(--line);
+  display:none;max-height:240px;object-fit:cover;
+}
+.photo-preview.visible{display:block;}
+.comprovacao-box{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:10px;
+  padding:12px;margin-top:10px;
+}
+.comprovacao-box img{width:100%;border-radius:8px;margin-top:8px;max-height:200px;object-fit:cover;}
+
+/* ---------- QTD INPUT ---------- */
+.qty-modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.qty-modal-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  width:100%;max-width:340px;padding:22px;
+}
+.qty-code-label{font-family:var(--font-mono);font-size:13px;color:var(--accent);margin-bottom:12px;word-break:break-all;}
+.qty-input{
+  width:100%;padding:14px 12px;border-radius:8px;font-size:22px;font-family:var(--font-mono);
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text);text-align:center;
+}
+.qty-input:focus{outline:none;border-color:var(--accent);}
+.qty-actions{display:flex;gap:10px;margin-top:14px;}
+.qty-actions .btn{flex:1;}
 
 /* admin sub-tabs */
 .admin-subtabs{
@@ -381,6 +425,13 @@ body{
     <div class="field"><label>Nome</label><input id="reg-nome" type="text" placeholder="Seu nome completo"></div>
     <div class="field"><label>E-mail</label><input id="reg-email" type="email" placeholder="seu@email.com"></div>
     <div class="field"><label>Senha</label><input id="reg-pass" type="password" placeholder="mín. 6 caracteres"></div>
+    <div class="field">
+      <label>Tipo de acesso</label>
+      <select id="reg-role">
+        <option value="user">Operador (padrão)</option>
+        <option value="motorista">Motorista</option>
+      </select>
+    </div>
     <button class="btn btn-primary" onclick="App.register()">Cadastrar</button>
     <div class="err-msg" id="reg-err"></div>
     <div class="switch-link">Já tem conta? <a onclick="App.showScreen('login')">Entrar</a></div>
@@ -444,6 +495,7 @@ body{
     <div class="tab" data-tab="empresas" onclick="App.switchTab('empresas')">Empresas</div>
     <div class="tab" data-tab="dashboard" onclick="App.switchTab('dashboard')">Dashboard</div>
     <div class="tab hidden" id="tab-btn-admin" data-tab="admin" onclick="App.switchTab('admin')">Admin</div>
+    <div class="tab hidden" id="tab-btn-motorista" data-tab="motorista" onclick="App.switchTab('motorista')">Entregas</div>
   </div>
 
   <div class="content">
@@ -474,8 +526,30 @@ body{
         </div>
       </div>
 
+      <!-- OBSERVAÇÃO DO ROMANEIO -->
+      <div class="manual-box">
+        <div class="section-label">📝 Observação do romaneio</div>
+        <textarea id="obs-romaneio" rows="2"
+          style="width:100%;padding:11px 12px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--text);font-size:14px;font-family:var(--font-body);resize:vertical;"
+          placeholder="Observações gerais que aparecerão no PDF..."></textarea>
+      </div>
+
       <div class="section-title">Itens lidos nesta sessão (<span id="count-itens">0</span>)</div>
       <div class="item-list" id="item-list"></div>
+    </div>
+
+    <!-- MODAL QUANTIDADE -->
+    <div id="qty-modal" class="qty-modal-overlay hidden">
+      <div class="qty-modal-box">
+        <div class="modal-title">Quantidade</div>
+        <div class="qty-code-label" id="qty-code-display"></div>
+        <input id="qty-value" class="qty-input" type="number" min="1" value="1"
+          onkeydown="if(event.key==='Enter') App.confirmQty()">
+        <div class="qty-actions">
+          <button class="btn btn-primary" onclick="App.confirmQty()">Confirmar</button>
+          <button class="btn btn-ghost" onclick="App.skipQty()">Pular (qtd 1)</button>
+        </div>
+      </div>
     </div>
 
     <!-- TAB: ROMANEIO ATUAL -->
@@ -629,11 +703,80 @@ body{
           <div class="filter-chip" data-af="pendente" onclick="App.filterAdminHist('pendente')">Pendentes</div>
           <div class="filter-chip" data-af="emitido" onclick="App.filterAdminHist('emitido')">Emitidos</div>
           <div class="filter-chip" data-af="cancelado" onclick="App.filterAdminHist('cancelado')">Cancelados</div>
+          <div class="filter-chip" data-af="liberado" onclick="App.filterAdminHist('liberado')">Liberados</div>
+          <div class="filter-chip" data-af="entregue" onclick="App.filterAdminHist('entregue')">Entregues</div>
         </div>
         <div id="admin-rom-list"></div>
       </div>
     </div>
 
+    <!-- TAB: MOTORISTA -->
+    <div id="tab-motorista" class="tabpane hidden">
+      <div class="section-title">Minhas entregas</div>
+      <div class="filter-row">
+        <div class="filter-chip active" data-mf="todos" onclick="App.filterMotorista('todos')">Todos</div>
+        <div class="filter-chip" data-mf="liberado" onclick="App.filterMotorista('liberado')">Pendentes</div>
+        <div class="filter-chip" data-mf="entregue" onclick="App.filterMotorista('entregue')">Entregues</div>
+      </div>
+      <div id="motorista-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: COMPROVAÇÃO DE ENTREGA -->
+<div id="modal-comprovacao" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">📦 Comprovar entrega</div>
+    <div id="comp-rom-info" style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;"></div>
+    <div class="field">
+      <label>Quem assinou o recebimento</label>
+      <input id="comp-assinatura" type="text" placeholder="Nome do recebedor">
+    </div>
+    <div class="field">
+      <label>Foto do romaneio assinado</label>
+      <input id="comp-foto-input" type="file" accept="image/*" capture="environment"
+        style="display:none;" onchange="App.onFotoSelecionada(event)">
+      <button class="btn btn-ghost" style="margin-top:6px;" onclick="document.getElementById('comp-foto-input').click()">
+        📷 Tirar / selecionar foto
+      </button>
+      <img id="comp-foto-preview" class="photo-preview" alt="Preview da foto">
+    </div>
+    <div class="err-msg" id="comp-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="App.confirmarEntrega()">Confirmar entrega</button>
+      <button class="btn btn-ghost" onclick="App.fecharModalComp()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: VER COMPROVAÇÃO -->
+<div id="modal-ver-comp" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">✅ Comprovação de entrega</div>
+    <div id="ver-comp-content"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="App.fecharVerComp()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LIBERAR PARA MOTORISTA -->
+<div id="modal-liberar" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">🚚 Liberar para motorista</div>
+    <div id="liberar-rom-info" style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;"></div>
+    <div class="field">
+      <label>Selecione o motorista</label>
+      <select id="liberar-motorista-sel">
+        <option value="">— Selecione —</option>
+      </select>
+    </div>
+    <div class="err-msg" id="liberar-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="App.confirmarLiberar()">Liberar</button>
+      <button class="btn btn-ghost" onclick="App.fecharModalLiberar()">Cancelar</button>
+    </div>
   </div>
 </div>
 
@@ -731,11 +874,12 @@ const App = (() => {
     const nome = document.getElementById('reg-nome').value.trim();
     const email = document.getElementById('reg-email').value.trim();
     const pass = document.getElementById('reg-pass').value;
+    const roleDesejado = document.getElementById('reg-role').value;
     const err = document.getElementById('reg-err');
     err.textContent='';
     if(!nome || !email || pass.length<6){ err.textContent='Preencha todos os campos (senha mín. 6 caracteres).'; return; }
     try{
-      await api('register', { nome, email, senha: pass });
+      await api('register', { nome, email, senha: pass, roleDesejado });
       pendingVerifyEmail = email;
       document.getElementById('verify-email-label').textContent = email;
       document.getElementById('verify-ok').textContent='';
@@ -824,8 +968,20 @@ const App = (() => {
     document.getElementById('form-responsavel').value = user.nome;
     document.getElementById('form-data').value = new Date().toISOString().slice(0,10);
     document.getElementById('tab-btn-admin').classList.toggle('hidden', user.role!=='admin');
-    carregarEmpresas();
-    renderItens();
+    // Aba motorista: visível para motoristas e admins
+    document.getElementById('tab-btn-motorista').classList.toggle('hidden', user.role!=='motorista' && user.role!=='admin');
+    // Motorista começa na aba de entregas; outros na aba scanner
+    if(user.role==='motorista'){
+      // Oculta abas que motorista não usa
+      ['scanner','romaneio','dashboard','empresas'].forEach(t=>{
+        const btn = document.querySelector(`.tab[data-tab="${t}"]`);
+        if(btn) btn.classList.add('hidden');
+      });
+      switchTab('motorista');
+    } else {
+      carregarEmpresas();
+      renderItens();
+    }
     updateNetStatus();
     refreshHistorico();
     syncPending();
@@ -852,6 +1008,7 @@ const App = (() => {
     if(name==='admin') loadAdmin();
     if(name==='empresas') carregarEmpresas(true);
     if(name==='dashboard') renderDashboard();
+    if(name==='motorista') renderMotorista();
   }
 
   // ---------- OPERATION TYPE ----------
@@ -924,19 +1081,48 @@ const App = (() => {
     }catch(e){ /* fallback silencioso */ }
   }
 
+  // ---------- MODAL DE QUANTIDADE ----------
+  let _qtyPendingCode = null;
+  let _qtyPendingCallback = null;
+
+  function abrirQtyModal(codigo, callback){
+    _qtyPendingCode = codigo;
+    _qtyPendingCallback = callback;
+    document.getElementById('qty-code-display').textContent = codigo;
+    document.getElementById('qty-value').value = '1';
+    document.getElementById('qty-modal').classList.remove('hidden');
+    setTimeout(()=>document.getElementById('qty-value').focus(), 100);
+  }
+
+  function confirmQty(){
+    const val = parseInt(document.getElementById('qty-value').value, 10);
+    const qty = (isNaN(val) || val < 1) ? 1 : val;
+    document.getElementById('qty-modal').classList.add('hidden');
+    if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, qty);
+  }
+
+  function skipQty(){
+    document.getElementById('qty-modal').classList.add('hidden');
+    if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, 1);
+  }
+
+  function adicionarItem(codigo, quantidade){
+    const itens = load(LS_DRAFT, []);
+    itens.push({ codigo, quantidade: quantidade || 1, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
+    save(LS_DRAFT, itens);
+    document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + (quantidade||1) + ' (' + currentOp + ')';
+    renderItens();
+    beepScan();
+    if(navigator.vibrate) navigator.vibrate([60, 30, 60]);
+  }
+
   let lastCode = null, lastTime = 0;
   function onScanSuccess(decodedText){
     const now = Date.now();
     if(decodedText === lastCode && now - lastTime < 1500) return;
     lastCode = decodedText; lastTime = now;
-
-    const itens = load(LS_DRAFT, []);
-    itens.push({ codigo: decodedText, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
-    save(LS_DRAFT, itens);
-    document.getElementById('last-scan').textContent = '✓ ' + decodedText + ' (' + currentOp + ')';
-    renderItens();
-    beepScan();
-    if(navigator.vibrate) navigator.vibrate([60, 30, 60]);
+    // Para o scanner brevemente enquanto usuário digita a quantidade
+    abrirQtyModal(decodedText, adicionarItem);
   }
 
   // ---------- ITEM LIST (draft) ----------
@@ -954,7 +1140,7 @@ const App = (() => {
         <div class="item-row">
           <div>
             <div class="item-code">${escapeHtml(it.codigo)}</div>
-            <div class="item-meta"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;">Cód./Desc.</span> · ${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
+            <div class="item-meta"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;">Cód./Desc.</span> · Qtd: <b style="color:var(--text)">${it.quantidade||1}</b> · ${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="item-tag tag-${it.tipo}">${it.tipo}</span>
@@ -968,14 +1154,13 @@ const App = (() => {
     const input = document.getElementById('manual-input');
     const val = input.value.trim();
     if(!val){ toast('Digite um código ou descrição.'); return; }
-    const itens = load(LS_DRAFT, []);
-    itens.push({ codigo: val, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
-    save(LS_DRAFT, itens);
-    document.getElementById('last-scan').textContent = '✓ ' + val + ' (' + currentOp + ') — manual';
     input.value = '';
     input.focus();
-    renderItens();
-    if(navigator.vibrate) navigator.vibrate(40);
+    abrirQtyModal(val, (codigo, qty)=>{
+      adicionarItem(codigo, qty);
+      document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + qty + ' (' + currentOp + ') — manual';
+      if(navigator.vibrate) navigator.vibrate(40);
+    });
   }
 
   function removeItem(i){
@@ -991,6 +1176,8 @@ const App = (() => {
     document.getElementById('form-origem').value='';
     document.getElementById('form-destino').value='';
     document.getElementById('form-destino-err').textContent='';
+    const obsEl = document.getElementById('obs-romaneio');
+    if(obsEl) obsEl.value='';
     renderItens();
   }
 
@@ -1000,6 +1187,7 @@ const App = (() => {
     const origem = document.getElementById('form-origem').value.trim();
     const destinoId = document.getElementById('form-destino').value;
     const data = document.getElementById('form-data').value;
+    const obs = (document.getElementById('obs-romaneio') || {}).value || '';
     const errDestino = document.getElementById('form-destino-err');
     errDestino.textContent = '';
 
@@ -1026,6 +1214,7 @@ const App = (() => {
       status: 'emitido',
       synced: false,
       criadoEm: nowISO(),
+      observacao: obs.trim(),
       itens: itens
     };
 
@@ -1039,6 +1228,8 @@ const App = (() => {
     document.getElementById('form-origem').value='';
     document.getElementById('form-destino').value='';
     document.getElementById('form-destino-err').textContent='';
+    const obsEl = document.getElementById('obs-romaneio');
+    if(obsEl) obsEl.value='';
     renderItens();
     updateNetStatus();
     syncPending();
@@ -1104,8 +1295,9 @@ const App = (() => {
     doc.setFont('helvetica','bold');
     doc.setTextColor(cor[0],cor[1],cor[2]);
     doc.text('Código / Descrição', 14, y);
-    doc.text('Tipo', 100, y);
-    doc.text('Data/Hora', 130, y);
+    doc.text('Qtd', 92, y);
+    doc.text('Tipo', 108, y);
+    doc.text('Data/Hora', 132, y);
     doc.text('Usuário', 175, y);
     doc.setTextColor(0,0,0);
     doc.setFont('helvetica','normal');
@@ -1120,12 +1312,34 @@ const App = (() => {
         doc.addPage();
         y = 20;
       }
-      doc.text(String(it.codigo).slice(0,40), 14, y);
-      doc.text(it.tipo, 100, y);
-      doc.text(fmtDate(it.datahora), 130, y);
-      doc.text(String(it.usuario).slice(0,20), 175, y);
+      doc.text(String(it.codigo).slice(0,38), 14, y);
+      doc.text(String(it.quantidade || 1), 92, y);
+      doc.text(it.tipo, 108, y);
+      doc.text(fmtDate(it.datahora), 132, y);
+      doc.text(String(it.usuario).slice(0,18), 175, y);
       y += 7;
     });
+
+    // Observação
+    if(rom.observacao && rom.observacao.trim()){
+      y += 6;
+      if(y > 260){ addFooter(doc, cfg); doc.addPage(); y = 20; }
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(10);
+      doc.setTextColor(cor[0],cor[1],cor[2]);
+      doc.text('Observações:', 14, y);
+      y += 5;
+      doc.setFont('helvetica','normal');
+      doc.setTextColor(60,60,60);
+      doc.setFontSize(9);
+      const linhasObs = doc.splitTextToSize(rom.observacao, 180);
+      linhasObs.forEach(linha=>{
+        if(y > 265){ addFooter(doc, cfg); doc.addPage(); y = 20; }
+        doc.text(linha, 14, y);
+        y += 5;
+      });
+    }
+
     addFooter(doc, cfg);
 
     doc.save(rom.id + '.pdf');
@@ -1204,15 +1418,19 @@ const App = (() => {
         <div class="ticket-body">
           <div class="ticket-head">
             <span class="ticket-id">${r.id}</span>
-            <span class="ticket-status status-${r.status}">${r.status}${r.synced ? '' : ' · local'}</span>
+            <span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span>
           </div>
           <div class="ticket-meta">
             <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
             Emitido em ${r.dataEmissao} por ${escapeHtml(r.usuario)} · ${r.itens.length} item(ns)
+            ${r.motoristaNome ? `<br>🚚 Motorista: <b style="color:var(--accent)">${escapeHtml(r.motoristaNome)}</b>` : ''}
+            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}
           </div>
           <div class="ticket-actions">
             <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
-            ${r.status!=='cancelado' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
+            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
+            ${(user.role==='admin' || user.role==='user') && r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}
+            ${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
           </div>
         </div>
       </div>
@@ -1523,15 +1741,19 @@ const App = (() => {
         <div class="ticket-body">
           <div class="ticket-head">
             <span class="ticket-id">${r.id}</span>
-            <span class="ticket-status status-${r.status}">${r.status}${r.synced ? '' : ' · local'}</span>
+            <span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span>
           </div>
           <div class="ticket-meta">
             <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
             Emitido em ${r.dataEmissao} por <b style="color:var(--accent)">${escapeHtml(r.usuario)}</b> · ${r.itens.length} item(ns)
+            ${r.motoristaNome ? `<br>🚚 Motorista: <b>${escapeHtml(r.motoristaNome)}</b>` : ''}
+            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}
           </div>
           <div class="ticket-actions">
             <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
-            ${r.status!=='cancelado' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
+            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
+            ${r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}
+            ${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
           </div>
         </div>
       </div>
@@ -1556,6 +1778,7 @@ const App = (() => {
             <select onchange="App.changeRole('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
               <option value="user" ${u.role==='user'?'selected':''}>user</option>
               <option value="admin" ${u.role==='admin'?'selected':''}>admin</option>
+              <option value="motorista" ${u.role==='motorista'?'selected':''}>motorista</option>
             </select>
             <select onchange="App.changeStatus('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
               <option value="ativo" ${u.status==='ativo'?'selected':''}>ativo</option>
@@ -1583,6 +1806,214 @@ const App = (() => {
     catch(e){ toast('Erro: ' + e.message); }
   }
 
+  // ---------- HELPERS DE STATUS ----------
+  function labelStatus(r){
+    if(r.status==='entregue') return 'entregue';
+    if(r.status==='liberado') return 'liberado';
+    return r.status;
+  }
+
+  // ---------- MOTORISTA ----------
+  let motoristaFilter = 'todos';
+
+  function filterMotorista(f){
+    motoristaFilter = f;
+    document.querySelectorAll('.filter-chip[data-mf]').forEach(c=>c.classList.toggle('active', c.dataset.mf===f));
+    renderMotorista();
+  }
+
+  async function renderMotorista(){
+    if(navigator.onLine){
+      try{
+        const remote = await api('listRomaneios', {});
+        const local = load(LS_ROMANEIOS, []);
+        remote.romaneios.forEach(r=>{
+          const idx = local.findIndex(l=>l.id===r.id);
+          if(idx===-1) local.push({ ...r, synced:true });
+          else { const comp = local[idx].comprovacao; local[idx] = { ...r, synced:true }; if(comp) local[idx].comprovacao = comp; }
+        });
+        save(LS_ROMANEIOS, local);
+      }catch(e){}
+    }
+
+    let all = load(LS_ROMANEIOS, []);
+    // Motorista vê apenas os romaneios atribuídos a ele; admin vê todos liberados/entregues
+    if(user.role==='motorista'){
+      all = all.filter(r=>r.motoristaEmail === user.email);
+    } else {
+      all = all.filter(r=>r.status==='liberado' || r.status==='entregue');
+    }
+    if(motoristaFilter !== 'todos') all = all.filter(r=>r.status===motoristaFilter);
+
+    const el = document.getElementById('motorista-list');
+    if(!el) return;
+    if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio para exibir.</div>'; return; }
+    el.innerHTML = all.map(r=>`
+      <div class="ticket">
+        <div class="ticket-stripe" style="background:repeating-linear-gradient(90deg,var(--accent-2) 0 10px,var(--surface) 10px 16px);"></div>
+        <div class="ticket-body">
+          <div class="ticket-head">
+            <span class="ticket-id">${r.id}</span>
+            <span class="ticket-status status-${r.status}">${labelStatus(r)}</span>
+          </div>
+          <div class="ticket-meta">
+            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
+            Emitido em ${r.dataEmissao} · ${r.itens.length} item(ns)
+            ${r.motoristaNome ? `<br>🚚 <b>${escapeHtml(r.motoristaNome)}</b>` : ''}
+            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b> em ${fmtDate(r.comprovacao.dataHora)}` : ''}
+          </div>
+          <div class="ticket-actions">
+            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
+            ${r.status==='liberado' && (user.role==='motorista' || user.role==='admin') ? `<button class="btn btn-primary" onclick="App.abrirModalComp('${r.id}')">📷 Comprovar entrega</button>` : ''}
+            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ---------- MODAL LIBERAR PARA MOTORISTA ----------
+  let _liberarRomaneioId = null;
+
+  async function abrirModalLiberar(id){
+    _liberarRomaneioId = id;
+    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
+    document.getElementById('liberar-rom-info').innerHTML =
+      `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`;
+    document.getElementById('liberar-err').textContent = '';
+
+    // Carregar lista de motoristas
+    const sel = document.getElementById('liberar-motorista-sel');
+    sel.innerHTML = '<option value="">Carregando...</option>';
+    try{
+      if(navigator.onLine){
+        const data = await api('listUsers', { adminEmail: user.email });
+        const motoristas = data.users.filter(u=>u.role==='motorista' && u.status==='ativo');
+        if(motoristas.length===0){
+          sel.innerHTML = '<option value="">Nenhum motorista cadastrado.</option>';
+        } else {
+          sel.innerHTML = '<option value="">— Selecione —</option>' +
+            motoristas.map(m=>`<option value="${escapeHtml(m.email)}" data-nome="${escapeHtml(m.nome)}">${escapeHtml(m.nome)}</option>`).join('');
+        }
+      } else {
+        sel.innerHTML = '<option value="">Sem conexão para carregar motoristas.</option>';
+      }
+    }catch(e){
+      sel.innerHTML = '<option value="">Erro ao carregar.</option>';
+    }
+    document.getElementById('modal-liberar').classList.remove('hidden');
+  }
+
+  function fecharModalLiberar(){
+    document.getElementById('modal-liberar').classList.add('hidden');
+    _liberarRomaneioId = null;
+  }
+
+  async function confirmarLiberar(){
+    const sel = document.getElementById('liberar-motorista-sel');
+    const motEmail = sel.value;
+    const motNome = sel.options[sel.selectedIndex]?.dataset?.nome || '';
+    const errEl = document.getElementById('liberar-err');
+    if(!motEmail){ errEl.textContent='Selecione um motorista.'; return; }
+
+    const all = load(LS_ROMANEIOS, []);
+    const r = all.find(x=>x.id===_liberarRomaneioId);
+    if(!r){ fecharModalLiberar(); return; }
+    r.status = 'liberado';
+    r.motoristaEmail = motEmail;
+    r.motoristaNome = motNome;
+    r.synced = false;
+    save(LS_ROMANEIOS, all);
+    syncPending();
+    fecharModalLiberar();
+    renderHistorico();
+    renderAdminRomaneios();
+    toast('Romaneio liberado para ' + motNome);
+  }
+
+  // ---------- MODAL COMPROVAÇÃO DE ENTREGA ----------
+  let _compRomaneioId = null;
+  let _compFotoBase64 = null;
+
+  function abrirModalComp(id){
+    _compRomaneioId = id;
+    _compFotoBase64 = null;
+    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
+    document.getElementById('comp-rom-info').innerHTML =
+      `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`;
+    document.getElementById('comp-assinatura').value = '';
+    document.getElementById('comp-err').textContent = '';
+    document.getElementById('comp-foto-preview').classList.remove('visible');
+    document.getElementById('comp-foto-preview').src = '';
+    document.getElementById('modal-comprovacao').classList.remove('hidden');
+  }
+
+  function fecharModalComp(){
+    document.getElementById('modal-comprovacao').classList.add('hidden');
+    _compRomaneioId = null;
+    _compFotoBase64 = null;
+  }
+
+  function onFotoSelecionada(event){
+    const file = event.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      _compFotoBase64 = e.target.result;
+      const preview = document.getElementById('comp-foto-preview');
+      preview.src = _compFotoBase64;
+      preview.classList.add('visible');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function confirmarEntrega(){
+    const assinatura = document.getElementById('comp-assinatura').value.trim();
+    const errEl = document.getElementById('comp-err');
+    if(!assinatura){ errEl.textContent='Informe quem assinou o recebimento.'; return; }
+    if(!_compFotoBase64){ errEl.textContent='Tire ou selecione uma foto do romaneio assinado.'; return; }
+
+    const all = load(LS_ROMANEIOS, []);
+    const r = all.find(x=>x.id===_compRomaneioId);
+    if(!r){ fecharModalComp(); return; }
+    r.status = 'entregue';
+    r.synced = false;
+    r.comprovacao = {
+      assinatura,
+      foto: _compFotoBase64,
+      dataHora: nowISO(),
+      motorista: user.nome,
+      motoristaEmail: user.email
+    };
+    save(LS_ROMANEIOS, all);
+    syncPending();
+    fecharModalComp();
+    renderMotorista();
+    renderHistorico();
+    toast('Entrega comprovada! ✅');
+  }
+
+  function verComprovacao(id){
+    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
+    if(!r || !r.comprovacao){ toast('Comprovação não encontrada.'); return; }
+    const c = r.comprovacao;
+    document.getElementById('ver-comp-content').innerHTML = `
+      <div class="comprovacao-box">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.7;">
+          <b style="color:var(--text);">Romaneio:</b> ${escapeHtml(r.id)}<br>
+          <b style="color:var(--text);">Assinado por:</b> ${escapeHtml(c.assinatura)}<br>
+          <b style="color:var(--text);">Motorista:</b> ${escapeHtml(c.motorista)}<br>
+          <b style="color:var(--text);">Data/Hora:</b> ${fmtDate(c.dataHora)}
+        </div>
+        ${c.foto ? `<img src="${c.foto}" alt="Foto do romaneio">` : '<div style="color:var(--muted);font-size:13px;">Sem foto disponível.</div>'}
+      </div>`;
+    document.getElementById('modal-ver-comp').classList.remove('hidden');
+  }
+
+  function fecharVerComp(){
+    document.getElementById('modal-ver-comp').classList.add('hidden');
+  }
+
   // ---------- BOOT ----------
   function boot(){
     const savedUser = load(LS_USER, null);
@@ -1605,12 +2036,16 @@ const App = (() => {
     showScreen, login, register, logout,
     verifyEmail, resendCode, requestReset, confirmReset,
     switchTab, setOp, startScanner, stopScanner, toggleFlash, addManual,
+    confirmQty, skipQty,
     removeItem, limparRascunho, emitirRomaneio,
     filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
     changeRole, changeStatus, removeUser,
     renderEmpresas, abrirFormEmpresa, fecharFormEmpresa, salvarEmpresa, editarEmpresa, excluirEmpresa,
     switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios,
     renderDashboard, filtrarDashboardPeriodo, limparFiltroDashboard,
+    filterMotorista, renderMotorista,
+    abrirModalLiberar, fecharModalLiberar, confirmarLiberar,
+    abrirModalComp, fecharModalComp, onFotoSelecionada, confirmarEntrega, verComprovacao, fecharVerComp,
     boot
   };
 })();
