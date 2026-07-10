@@ -1240,7 +1240,7 @@ const App = (() => {
   // ---------- PDF (usa PDF_CONFIG de pdf-config.js) ----------
   function gerarPDF(rom){
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF('landscape');
     const cfg = (typeof PDF_CONFIG !== 'undefined') ? PDF_CONFIG : {};
     const cor = cfg.COR_PRIMARIA || [255,159,28];
     let y = 18;
