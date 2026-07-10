@@ -160,7 +160,6 @@ body{
   font-family:var(--font-mono);font-size:13px;color:var(--accent-2);
   margin-top:10px;min-height:18px;
 }
-/* ção manual */
 .manual-box{
   background:var(--surface);border:1px solid var(--line);border-radius:14px;
   padding:14px;margin-bottom:16px;
@@ -179,7 +178,6 @@ body{
 .manual-row input:focus{outline:none;border-color:var(--accent);}
 .manual-row .btn{width:auto;padding:11px 18px;font-size:13px;flex-shrink:0;}
 
-/* ---------- ROMANEIO FORM ---------- */
 .section-title{
   font-family:var(--font-display);font-weight:700;font-size:14px;
   text-transform:uppercase;letter-spacing:1px;color:var(--muted);
@@ -189,7 +187,6 @@ body{
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 @media (max-width:520px){.grid2{grid-template-columns:1fr;}}
 
-/* Manifest ticket */
 .ticket{
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
   overflow:hidden;margin-bottom:14px;position:relative;
@@ -213,7 +210,6 @@ body{
 .ticket-actions{display:flex;gap:8px;margin-top:12px;}
 .ticket-actions .btn{flex:1;padding:9px;font-size:12px;}
 
-/* item list */
 .item-list{margin-top:8px;}
 .item-row{
   display:flex;justify-content:space-between;align-items:center;
@@ -236,7 +232,6 @@ body{
   border:1px dashed var(--line);border-radius:10px;
 }
 
-/* histórico filters */
 .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
 .filter-chip{
   padding:7px 14px;border-radius:20px;border:1px solid var(--line);
@@ -245,7 +240,6 @@ body{
 }
 .filter-chip.active{border-color:var(--accent);color:var(--accent);}
 
-/* search box */
 .search-box{
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
   padding:14px;margin-bottom:16px;
@@ -254,7 +248,6 @@ body{
 .search-actions{display:flex;gap:8px;}
 .search-actions .btn{flex:1;padding:10px;font-size:12.5px;}
 
-/* admin table */
 .user-row{
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
   padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;
@@ -277,7 +270,6 @@ body{
 .status-entregue{background:rgba(54,199,155,.18);color:var(--accent-2);}
 .status-liberado{background:rgba(23,145,194,.14);color:var(--accent);}
 
-/* ---------- MODAL ---------- */
 .modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:200;
   display:flex;align-items:center;justify-content:center;padding:20px;
@@ -300,7 +292,6 @@ body{
 }
 .comprovacao-box img{width:100%;border-radius:8px;margin-top:8px;max-height:200px;object-fit:cover;}
 
-/* ---------- QTD INPUT ---------- */
 .qty-modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;
   display:flex;align-items:center;justify-content:center;padding:20px;
@@ -318,7 +309,6 @@ body{
 .qty-actions{display:flex;gap:10px;margin-top:14px;}
 .qty-actions .btn{flex:1;}
 
-/* admin sub-tabs */
 .admin-subtabs{
   display:flex;gap:0;margin-bottom:18px;
   background:var(--surface-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;
@@ -337,7 +327,6 @@ body{
   box-shadow:0 6px 24px rgba(0,0,0,.4);max-width:90vw;text-align:center;
 }
 
-/* ---------- EMPRESA CARD ---------- */
 .empresa-card{
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
   padding:14px 16px;margin-bottom:10px;
@@ -349,7 +338,6 @@ body{
 .empresa-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
 .empresa-actions .btn{width:auto;padding:7px 14px;font-size:12px;}
 
-/* ---------- SELECT ESTILIZADO ---------- */
 .field select{
   width:100%;padding:11px 12px;border-radius:8px;
   background:var(--surface-2);border:1px solid var(--line);
@@ -362,7 +350,6 @@ body{
 .field select option{background:var(--surface-2);color:var(--text);}
 .select-error{border-color:var(--danger) !important;}
 
-/* ---------- DASHBOARD ---------- */
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
 .dash-card{
   background:var(--surface);border:1px solid var(--line);border-radius:12px;
@@ -388,7 +375,6 @@ body{
 .dash-bar-wrap{display:flex;align-items:center;gap:6px;}
 .dash-bar{height:6px;border-radius:3px;background:var(--accent);min-width:2px;transition:width .3s;}
 
-/* ---------- RODAPÉ FIXO (todas as telas) ---------- */
 :root{ --rodape-h:34px; }
 .rodape{
   position:fixed;left:0;bottom:0;width:100%;
@@ -396,7 +382,7 @@ body{
   text-align:center;padding:8px 10px;
   font-size:11px;line-height:1.3;
   border-top:1px solid var(--line);
-  z-index:30; /* acima do topbar/tabs (19/20), abaixo do toast (100) */
+  z-index:30;
 }
 .rodape p{margin:0;}
 </style>
@@ -457,19 +443,16 @@ body{
   <div class="auth-card">
     <div class="brand"><div class="brand-mark">BT</div>Recuperar senha</div>
     <div class="info-msg" id="recover-info">Digite seu e-mail. Se ele estiver cadastrado, enviaremos um código de redefinição.</div>
-
     <div id="recover-step1">
       <div class="field"><label>E-mail</label><input id="recover-email" type="email" placeholder="seu@email.com"></div>
       <button class="btn btn-primary" onclick="App.requestReset()">Enviar código</button>
     </div>
-
     <div id="recover-step2" class="hidden">
       <div class="field"><label>Código recebido por e-mail</label><input id="recover-code" type="text" inputmode="numeric" maxlength="6" placeholder="000000"></div>
       <div class="field"><label>Nova senha</label><input id="recover-pass" type="password" placeholder="mín. 6 caracteres"></div>
       <div class="field"><label>Confirmar nova senha</label><input id="recover-pass2" type="password" placeholder="repita a senha"></div>
       <button class="btn btn-primary" onclick="App.confirmReset()">Redefinir senha</button>
     </div>
-
     <div class="err-msg" id="recover-err"></div>
     <div class="ok-msg" id="recover-ok"></div>
     <div class="switch-link"><a onclick="App.showScreen('login')">Voltar ao login</a></div>
@@ -499,8 +482,6 @@ body{
   </div>
 
   <div class="content">
-
-    <!-- TAB: SCANNER -->
     <div id="tab-scanner" class="tabpane">
       <div class="op-select-row">
         <div class="op-btn active saida" data-op="saida" onclick="App.setOp('saida')">Saída</div>
@@ -516,35 +497,26 @@ body{
         </div>
         <div class="last-scan" id="last-scan"></div>
       </div>
-      <!-- INSERÇÃO MANUAL -->
       <div class="manual-box">
         <div class="section-label"> Inserir manualmente</div>
         <div class="manual-row">
-          <input id="manual-input" type="text" placeholder="Digite o código ou descrição..."
-            onkeydown="if(event.key==='Enter') App.addManual()">
+          <input id="manual-input" type="text" placeholder="Digite o código ou descrição..." onkeydown="if(event.key==='Enter') App.addManual()">
           <button class="btn btn-primary" onclick="App.addManual()">Adicionar</button>
         </div>
       </div>
-
-      <!-- OBSERVAÇÃO DO ROMANEIO -->
       <div class="manual-box">
         <div class="section-label">📝 Observação do romaneio</div>
-        <textarea id="obs-romaneio" rows="2"
-          style="width:100%;padding:11px 12px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--text);font-size:14px;font-family:var(--font-body);resize:vertical;"
-          placeholder="Observações gerais que aparecerão no PDF..."></textarea>
+        <textarea id="obs-romaneio" rows="2" style="width:100%;padding:11px 12px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--text);font-size:14px;font-family:var(--font-body);resize:vertical;" placeholder="Observações gerais que aparecerão no PDF..."></textarea>
       </div>
-
       <div class="section-title">Itens lidos nesta sessão (<span id="count-itens">0</span>)</div>
       <div class="item-list" id="item-list"></div>
     </div>
 
-    <!-- MODAL QUANTIDADE -->
     <div id="qty-modal" class="qty-modal-overlay hidden">
       <div class="qty-modal-box">
         <div class="modal-title">Quantidade</div>
         <div class="qty-code-label" id="qty-code-display"></div>
-        <input id="qty-value" class="qty-input" type="number" min="1" value="1"
-          onkeydown="if(event.key==='Enter') App.confirmQty()">
+        <input id="qty-value" class="qty-input" type="number" min="1" value="1" onkeydown="if(event.key==='Enter') App.confirmQty()">
         <div class="qty-actions">
           <button class="btn btn-primary" onclick="App.confirmQty()">Confirmar</button>
           <button class="btn btn-ghost" onclick="App.skipQty()">Pular (qtd 1)</button>
@@ -552,18 +524,11 @@ body{
       </div>
     </div>
 
-    <!-- TAB: ROMANEIO ATUAL -->
     <div id="tab-romaneio" class="tabpane hidden">
       <div class="section-title">Dados do romaneio</div>
       <div class="grid2">
         <div class="field"><label>Empresa remetente</label><input id="form-origem" type="text" placeholder="Quem está enviando"></div>
-        <div class="field">
-          <label>Empresa destinatária <span style="color:var(--danger)">*</span></label>
-          <select id="form-destino">
-            <option value="">— Selecione a empresa destinatária —</option>
-          </select>
-          <div class="err-msg" id="form-destino-err" style="font-size:11px;margin-top:4px;"></div>
-        </div>
+        <div class="field"><label>Empresa destinatária <span style="color:var(--danger)">*</span></label><select id="form-destino"><option value="">— Selecione a empresa destinatária —</option></select><div class="err-msg" id="form-destino-err" style="font-size:11px;margin-top:4px;"></div></div>
       </div>
       <div class="grid2">
         <div class="field"><label>Data de emissão</label><input id="form-data" type="date"></div>
@@ -577,7 +542,6 @@ body{
       </div>
     </div>
 
-    <!-- TAB: HISTÓRICO -->
     <div id="tab-historico" class="tabpane hidden">
       <div class="search-box">
         <div class="grid2">
@@ -602,15 +566,11 @@ body{
       <div id="hist-list"></div>
     </div>
 
-
-    <!-- TAB: EMPRESAS -->
     <div id="tab-empresas" class="tabpane hidden">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
         <div class="section-title" style="margin:0;">Empresas cadastradas</div>
         <button class="btn btn-primary" style="width:auto;padding:9px 16px;font-size:13px;" onclick="App.abrirFormEmpresa()">+ Nova empresa</button>
       </div>
-
-      <!-- Formulário cadastro/edição empresa -->
       <div id="empresa-form-wrap" class="hidden">
         <div class="search-box" style="margin-bottom:16px;">
           <div class="section-title" id="empresa-form-title" style="margin-top:0;">Nova empresa</div>
@@ -630,11 +590,9 @@ body{
           </div>
         </div>
       </div>
-
       <div id="empresa-list"></div>
     </div>
 
-    <!-- TAB: DASHBOARD -->
     <div id="tab-dashboard" class="tabpane hidden">
       <div class="search-box">
         <div class="grid2">
@@ -656,33 +614,19 @@ body{
       <div class="dash-grid" id="dash-totais"></div>
       <div class="section-title">Movimentação por empresa</div>
       <div style="overflow-x:auto;">
-        <table class="dash-table">
-          <thead>
-            <tr>
-              <th>Empresa destinatária</th>
-              <th>Saídas</th>
-              <th>Entradas</th>
-              <th>Devoluções</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="dash-tabela"></tbody>
-        </table>
+        <table class="dash-table"><thead><tr><th>Empresa destinatária</th><th>Saídas</th><th>Entradas</th><th>Devoluções</th><th>Total</th></tr></thead><tbody id="dash-tabela"></tbody></table>
       </div>
     </div>
 
-    <!-- TAB: ADMIN -->
     <div id="tab-admin" class="tabpane hidden">
       <div class="admin-subtabs">
         <div class="admin-subtab active" data-stab="usuarios" onclick="App.switchAdminTab('usuarios')">Usuários</div>
         <div class="admin-subtab" data-stab="romaneios-admin" onclick="App.switchAdminTab('romaneios-admin')">Todos os Romaneios</div>
       </div>
-
       <div id="admin-stab-usuarios">
         <div class="section-title">Usuários cadastrados</div>
         <div id="admin-list"></div>
       </div>
-
       <div id="admin-stab-romaneios-admin" class="hidden">
         <div class="search-box">
           <div class="grid2">
@@ -710,7 +654,6 @@ body{
       </div>
     </div>
 
-    <!-- TAB: MOTORISTA -->
     <div id="tab-motorista" class="tabpane hidden">
       <div class="section-title">Minhas entregas</div>
       <div class="filter-row">
@@ -720,28 +663,15 @@ body{
       </div>
       <div id="motorista-list"></div>
     </div>
-
   </div>
 </div>
 
-<!-- MODAL: COMPROVAÇÃO DE ENTREGA -->
 <div id="modal-comprovacao" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-title">📦 Comprovar entrega</div>
     <div id="comp-rom-info" style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;"></div>
-    <div class="field">
-      <label>Quem assinou o recebimento</label>
-      <input id="comp-assinatura" type="text" placeholder="Nome do recebedor">
-    </div>
-    <div class="field">
-      <label>Foto do romaneio assinado</label>
-      <input id="comp-foto-input" type="file" accept="image/*" capture="environment"
-        style="display:none;" onchange="App.onFotoSelecionada(event)">
-      <button class="btn btn-ghost" style="margin-top:6px;" onclick="document.getElementById('comp-foto-input').click()">
-        📷 Tirar / selecionar foto
-      </button>
-      <img id="comp-foto-preview" class="photo-preview" alt="Preview da foto">
-    </div>
+    <div class="field"><label>Quem assinou o recebimento</label><input id="comp-assinatura" type="text" placeholder="Nome do recebedor"></div>
+    <div class="field"><label>Foto do romaneio assinado</label><input id="comp-foto-input" type="file" accept="image/*" capture="environment" style="display:none;" onchange="App.onFotoSelecionada(event)"><button class="btn btn-ghost" style="margin-top:6px;" onclick="document.getElementById('comp-foto-input').click()">📷 Tirar / selecionar foto</button><img id="comp-foto-preview" class="photo-preview" alt="Preview da foto"></div>
     <div class="err-msg" id="comp-err"></div>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="App.confirmarEntrega()">Confirmar entrega</button>
@@ -750,28 +680,19 @@ body{
   </div>
 </div>
 
-<!-- MODAL: VER COMPROVAÇÃO -->
 <div id="modal-ver-comp" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-title">✅ Comprovação de entrega</div>
     <div id="ver-comp-content"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="App.fecharVerComp()">Fechar</button>
-    </div>
+    <div class="modal-actions"><button class="btn btn-ghost" onclick="App.fecharVerComp()">Fechar</button></div>
   </div>
 </div>
 
-<!-- MODAL: LIBERAR PARA MOTORISTA -->
 <div id="modal-liberar" class="modal-overlay hidden">
   <div class="modal-box">
     <div class="modal-title">🚚 Liberar para motorista</div>
     <div id="liberar-rom-info" style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6;"></div>
-    <div class="field">
-      <label>Selecione o motorista</label>
-      <select id="liberar-motorista-sel">
-        <option value="">— Selecione —</option>
-      </select>
-    </div>
+    <div class="field"><label>Selecione o motorista</label><select id="liberar-motorista-sel"><option value="">— Selecione —</option></select></div>
     <div class="err-msg" id="liberar-err"></div>
     <div class="modal-actions">
       <button class="btn btn-primary" onclick="App.confirmarLiberar()">Liberar</button>
@@ -785,9 +706,6 @@ body{
 </footer>
 
 <script>
-/* =========================================================
-   CONFIGURAÇÃO — cole aqui a  do seu Apps Script Web App
-   ========================================================= */
 const API_URL = "https://script.google.com/macros/s/AKfycbxdGseDywxwMr7KdOMSMnGxBJYltqiNlend-VVQ_2vYwgsMWz5xkOYBQ8lYlynCFUIX/exec";
 
 const App = (() => {
@@ -804,7 +722,6 @@ const App = (() => {
   const LS_USER = 'rm_user';
   const LS_EMPRESAS = 'rm_empresas';
 
-  // ---------- HELPERS ----------
   function toast(msg){
     let t = document.createElement('div');
     t.className = 'toast'; t.textContent = msg;
@@ -818,35 +735,19 @@ const App = (() => {
   function uid(){ return 'RM-' + Date.now().toString(36).toUpperCase(); }
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-  // ---------- API ----------
   async function api(action, payload){
-    if(!API_URL || API_URL.includes('COLE_AQUI')) {
-      throw new Error('API_URL não configurada');
-    }
-    const res = await fetch(API_URL, {
-      method:'POST',
-      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action, ...payload })
-    });
+    if(!API_URL || API_URL.includes('COLE_AQUI')) { throw new Error('API_URL não configurada'); }
+    const res = await fetch(API_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify({ action, ...payload }) });
     const data = await res.json();
     if(!data.ok) throw Object.assign(new Error(data.error || 'Erro na API'), { data });
     return data;
   }
 
-  // ---------- SCREENS ----------
   function showScreen(name){
-    ['login','register','verify','recover','app'].forEach(s=>{
-      document.getElementById('screen-'+s).classList.toggle('hidden', s!==name);
-    });
-    if(name==='recover'){
-      document.getElementById('recover-step1').classList.remove('hidden');
-      document.getElementById('recover-step2').classList.add('hidden');
-      document.getElementById('recover-err').textContent='';
-      document.getElementById('recover-ok').textContent='';
-    }
+    ['login','register','verify','recover','app'].forEach(s=>{ document.getElementById('screen-'+s).classList.toggle('hidden', s!==name); });
+    if(name==='recover'){ document.getElementById('recover-step1').classList.remove('hidden'); document.getElementById('recover-step2').classList.add('hidden'); document.getElementById('recover-err').textContent=''; document.getElementById('recover-ok').textContent=''; }
   }
 
-  // ---------- LOGIN ----------
   async function login(){
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-pass').value;
@@ -859,17 +760,11 @@ const App = (() => {
       save(LS_USER, user);
       initApp();
     }catch(e){
-      if(e.data && e.data.needsVerification){
-        pendingVerifyEmail = e.data.email;
-        document.getElementById('verify-email-label').textContent = pendingVerifyEmail;
-        showScreen('verify');
-        return;
-      }
+      if(e.data && e.data.needsVerification){ pendingVerifyEmail = e.data.email; document.getElementById('verify-email-label').textContent = pendingVerifyEmail; showScreen('verify'); return; }
       err.textContent = e.message || 'Erro ao entrar.';
     }
   }
 
-  // ---------- REGISTER ----------
   async function register(){
     const nome = document.getElementById('reg-nome').value.trim();
     const email = document.getElementById('reg-email').value.trim();
@@ -885,55 +780,35 @@ const App = (() => {
       document.getElementById('verify-ok').textContent='';
       document.getElementById('verify-err').textContent='';
       showScreen('verify');
-    }catch(e){
-      err.textContent = e.message || 'Erro ao cadastrar.';
-    }
+    }catch(e){ err.textContent = e.message || 'Erro ao cadastrar.'; }
   }
 
-  // ---------- VERIFY EMAIL ----------
   async function verifyEmail(){
     const code = document.getElementById('verify-code').value.trim();
     const err = document.getElementById('verify-err');
     const ok = document.getElementById('verify-ok');
     err.textContent=''; ok.textContent='';
     if(!code){ err.textContent='Digite o código.'; return; }
-    try{
-      await api('verifyEmail', { email: pendingVerifyEmail, code });
-      ok.textContent='Conta verificada! Você já pode fazer login.';
-      setTimeout(()=>showScreen('login'), 1200);
-    }catch(e){
-      err.textContent = e.message || 'Erro ao verificar.';
-    }
+    try{ await api('verifyEmail', { email: pendingVerifyEmail, code }); ok.textContent='Conta verificada! Você já pode fazer login.'; setTimeout(()=>showScreen('login'), 1200); }
+    catch(e){ err.textContent = e.message || 'Erro ao verificar.'; }
   }
   async function resendCode(){
     const err = document.getElementById('verify-err');
     const ok = document.getElementById('verify-ok');
     err.textContent=''; ok.textContent='';
     if(!pendingVerifyEmail){ err.textContent='Faça login ou cadastro novamente.'; return; }
-    try{
-      await api('resendCode', { email: pendingVerifyEmail });
-      ok.textContent='Novo código enviado para ' + pendingVerifyEmail + '.';
-    }catch(e){
-      err.textContent = e.message || 'Erro ao reenviar código.';
-    }
+    try{ await api('resendCode', { email: pendingVerifyEmail }); ok.textContent='Novo código enviado para ' + pendingVerifyEmail + '.'; }
+    catch(e){ err.textContent = e.message || 'Erro ao reenviar código.'; }
   }
 
-  // ---------- RECOVER PASSWORD ----------
   async function requestReset(){
     const email = document.getElementById('recover-email').value.trim();
     const err = document.getElementById('recover-err');
     const ok = document.getElementById('recover-ok');
     err.textContent=''; ok.textContent='';
     if(!email){ err.textContent='Digite seu e-mail.'; return; }
-    try{
-      await api('requestPasswordReset', { email });
-      recoverEmail = email;
-      ok.textContent='Se este e-mail estiver cadastrado, um código foi enviado.';
-      document.getElementById('recover-step1').classList.add('hidden');
-      document.getElementById('recover-step2').classList.remove('hidden');
-    }catch(e){
-      err.textContent = e.message || 'Erro ao solicitar recuperação.';
-    }
+    try{ await api('requestPasswordReset', { email }); recoverEmail = email; ok.textContent='Se este e-mail estiver cadastrado, um código foi enviado.'; document.getElementById('recover-step1').classList.add('hidden'); document.getElementById('recover-step2').classList.remove('hidden'); }
+    catch(e){ err.textContent = e.message || 'Erro ao solicitar recuperação.'; }
   }
   async function confirmReset(){
     const code = document.getElementById('recover-code').value.trim();
@@ -944,23 +819,12 @@ const App = (() => {
     err.textContent=''; ok.textContent='';
     if(pass.length<6){ err.textContent='Senha deve ter no mínimo 6 caracteres.'; return; }
     if(pass!==pass2){ err.textContent='As senhas não coincidem.'; return; }
-    try{
-      await api('resetPassword', { email: recoverEmail, code, novaSenha: pass });
-      ok.textContent='Senha redefinida! Faça login com a nova senha.';
-      setTimeout(()=>showScreen('login'), 1400);
-    }catch(e){
-      err.textContent = e.message || 'Erro ao redefinir senha.';
-    }
+    try{ await api('resetPassword', { email: recoverEmail, code, novaSenha: pass }); ok.textContent='Senha redefinida! Faça login com a nova senha.'; setTimeout(()=>showScreen('login'), 1400); }
+    catch(e){ err.textContent = e.message || 'Erro ao redefinir senha.'; }
   }
 
-  function logout(){
-    user = null;
-    localStorage.removeItem(LS_USER);
-    stopScanner();
-    showScreen('login');
-  }
+  function logout(){ user = null; localStorage.removeItem(LS_USER); stopScanner(); showScreen('login'); }
 
-  // ---------- APP INIT ----------
   function initApp(){
     showScreen('app');
     document.getElementById('user-chip').textContent = user.nome;
@@ -968,26 +832,14 @@ const App = (() => {
     document.getElementById('form-responsavel').value = user.nome;
     document.getElementById('form-data').value = new Date().toISOString().slice(0,10);
     document.getElementById('tab-btn-admin').classList.toggle('hidden', user.role!=='admin');
-    // Aba motorista: visível para motoristas e admins
     document.getElementById('tab-btn-motorista').classList.toggle('hidden', user.role!=='motorista' && user.role!=='admin');
-    // Motorista começa na aba de entregas; outros na aba scanner
     if(user.role==='motorista'){
-      // Oculta abas que motorista não usa
-      ['scanner','romaneio','historico','dashboard','empresas'].forEach(t=>{
-        const btn = document.querySelector(`.tab[data-tab="${t}"]`);
-        if(btn) btn.classList.add('hidden');
-      });
+      ['scanner','romaneio','historico','dashboard','empresas'].forEach(t=>{ const btn = document.querySelector(`.tab[data-tab="${t}"]`); if(btn) btn.classList.add('hidden'); });
       switchTab('motorista');
-    } else {
-      carregarEmpresas();
-      renderItens();
-    }
-    updateNetStatus();
-    refreshHistorico();
-    syncPending();
+    } else { carregarEmpresas(); renderItens(); }
+    updateNetStatus(); refreshHistorico(); syncPending();
   }
 
-  // ---------- NETWORK STATUS ----------
   function updateNetStatus(){
     const dot = document.getElementById('net-dot');
     const label = document.getElementById('net-label');
@@ -999,7 +851,6 @@ const App = (() => {
   window.addEventListener('online', ()=>{ updateNetStatus(); syncPending(); refreshHistorico(); });
   window.addEventListener('offline', updateNetStatus);
 
-  // ---------- TABS ----------
   function switchTab(name){
     document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
     document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('hidden', p.id !== 'tab-'+name));
@@ -1011,279 +862,108 @@ const App = (() => {
     if(name==='motorista') renderMotorista();
   }
 
-  // ---------- OPERATION TYPE ----------
-  function setOp(op){
-    currentOp = op;
-    document.querySelectorAll('.op-btn').forEach(b=>{
-      b.classList.toggle('active', b.dataset.op===op);
-    });
-  }
+  function setOp(op){ currentOp = op; document.querySelectorAll('.op-btn').forEach(b=>{ b.classList.toggle('active', b.dataset.op===op); }); }
 
-  // ---------- SCANNER ----------
   function startScanner(){
     if(scanning) return;
     html5Qr = new Html5Qrcode("reader");
-    const config = {
-      fps: 12,
-      qrbox: { width: 250, height: 150 },
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.QR_CODE,
-        Html5QrcodeSupportedFormats.EAN_13,
-        Html5QrcodeSupportedFormats.EAN_8,
-        Html5QrcodeSupportedFormats.CODE_128,
-        Html5QrcodeSupportedFormats.CODE_39,
-        Html5QrcodeSupportedFormats.CODE_93,
-        Html5QrcodeSupportedFormats.UPC_A,
-        Html5QrcodeSupportedFormats.UPC_E,
-        Html5QrcodeSupportedFormats.ITF,
-        Html5QrcodeSupportedFormats.CODABAR,
-        Html5QrcodeSupportedFormats.DATA_MATRIX,
-        Html5QrcodeSupportedFormats.PDF_417,
-        Html5QrcodeSupportedFormats.AZTEC
-      ]
-    };
-    html5Qr.start({ facingMode: "environment" }, config, onScanSuccess)
-      .then(()=>{ scanning = true; })
-      .catch(err=>{ toast('Erro ao acessar câmera: ' + err); });
+    const config = { fps: 12, qrbox: { width: 250, height: 150 }, formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE, Html5QrcodeSupportedFormats.EAN_13, Html5QrcodeSupportedFormats.EAN_8, Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.CODE_39, Html5QrcodeSupportedFormats.CODE_93, Html5QrcodeSupportedFormats.UPC_A, Html5QrcodeSupportedFormats.UPC_E, Html5QrcodeSupportedFormats.ITF, Html5QrcodeSupportedFormats.CODABAR, Html5QrcodeSupportedFormats.DATA_MATRIX, Html5QrcodeSupportedFormats.PDF_417, Html5QrcodeSupportedFormats.AZTEC ] };
+    html5Qr.start({ facingMode: "environment" }, config, onScanSuccess).then(()=>{ scanning = true; }).catch(err=>{ toast('Erro ao acessar câmera: ' + err); });
   }
 
-  function stopScanner(){
-    if(html5Qr && scanning){
-      html5Qr.stop().then(()=>html5Qr.clear()).catch(()=>{});
-      scanning = false;
-      flashOn = false;
-    }
-  }
+  function stopScanner(){ if(html5Qr && scanning){ html5Qr.stop().then(()=>html5Qr.clear()).catch(()=>{}); scanning = false; flashOn = false; } }
 
-  function toggleFlash(){
-    if(!html5Qr || !scanning){ toast('Inicie o scanner primeiro.'); return; }
-    flashOn = !flashOn;
-    html5Qr.applyVideoConstraints({ advanced: [{ torch: flashOn }] })
-      .catch(()=>toast('Flash não suportado neste dispositivo.'));
-  }
+  function toggleFlash(){ if(!html5Qr || !scanning){ toast('Inicie o scanner primeiro.'); return; } flashOn = !flashOn; html5Qr.applyVideoConstraints({ advanced: [{ torch: flashOn }] }).catch(()=>toast('Flash não suportado neste dispositivo.')); }
 
-  // ---------- BIP DO SCANNER ----------
   let _audioCtx = null;
   function beepScan(){
     try{
       if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = _audioCtx.createOscillator();
-      const gain = _audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(_audioCtx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(1480, _audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, _audioCtx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.4, _audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, _audioCtx.currentTime + 0.15);
-      osc.start(_audioCtx.currentTime);
-      osc.stop(_audioCtx.currentTime + 0.15);
-    }catch(e){ /* fallback silencioso */ }
+      const osc = _audioCtx.createOscillator(), gain = _audioCtx.createGain();
+      osc.connect(gain); gain.connect(_audioCtx.destination);
+      osc.type = 'sine'; osc.frequency.setValueAtTime(1480, _audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(880, _audioCtx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.4, _audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, _audioCtx.currentTime + 0.15);
+      osc.start(_audioCtx.currentTime); osc.stop(_audioCtx.currentTime + 0.15);
+    }catch(e){}
   }
 
-  // ---------- MODAL DE QUANTIDADE ----------
-  let _qtyPendingCode = null;
-  let _qtyPendingCallback = null;
-
-  function abrirQtyModal(codigo, callback){
-    _qtyPendingCode = codigo;
-    _qtyPendingCallback = callback;
-    document.getElementById('qty-code-display').textContent = codigo;
-    document.getElementById('qty-value').value = '1';
-    document.getElementById('qty-modal').classList.remove('hidden');
-    setTimeout(()=>document.getElementById('qty-value').focus(), 100);
-  }
-
-  function confirmQty(){
-    const val = parseInt(document.getElementById('qty-value').value, 10);
-    const qty = (isNaN(val) || val < 1) ? 1 : val;
-    document.getElementById('qty-modal').classList.add('hidden');
-    if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, qty);
-  }
-
-  function skipQty(){
-    document.getElementById('qty-modal').classList.add('hidden');
-    if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, 1);
-  }
+  let _qtyPendingCode = null, _qtyPendingCallback = null;
+  function abrirQtyModal(codigo, callback){ _qtyPendingCode = codigo; _qtyPendingCallback = callback; document.getElementById('qty-code-display').textContent = codigo; document.getElementById('qty-value').value = '1'; document.getElementById('qty-modal').classList.remove('hidden'); setTimeout(()=>document.getElementById('qty-value').focus(), 100); }
+  function confirmQty(){ const val = parseInt(document.getElementById('qty-value').value, 10); const qty = (isNaN(val) || val < 1) ? 1 : val; document.getElementById('qty-modal').classList.add('hidden'); if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, qty); }
+  function skipQty(){ document.getElementById('qty-modal').classList.add('hidden'); if(_qtyPendingCallback) _qtyPendingCallback(_qtyPendingCode, 1); }
 
   function adicionarItem(codigo, quantidade){
-    const itens = load(LS_DRAFT, []);
-    itens.push({ codigo, quantidade: quantidade || 1, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
-    save(LS_DRAFT, itens);
-    document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + (quantidade||1) + ' (' + currentOp + ')';
-    renderItens();
-    beepScan();
-    if(navigator.vibrate) navigator.vibrate([60, 30, 60]);
+    const itens = load(LS_DRAFT, []); itens.push({ codigo, quantidade: quantidade || 1, datahora: nowISO(), tipo: currentOp, usuario: user.nome });
+    save(LS_DRAFT, itens); document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + (quantidade||1) + ' (' + currentOp + ')';
+    renderItens(); beepScan(); if(navigator.vibrate) navigator.vibrate([60, 30, 60]);
   }
 
   let lastCode = null, lastTime = 0;
-  function onScanSuccess(decodedText){
-    const now = Date.now();
-    if(decodedText === lastCode && now - lastTime < 1500) return;
-    lastCode = decodedText; lastTime = now;
-    // Para o scanner brevemente enquanto usuário digita a quantidade
-    abrirQtyModal(decodedText, adicionarItem);
-  }
+  function onScanSuccess(decodedText){ const now = Date.now(); if(decodedText === lastCode && now - lastTime < 1500) return; lastCode = decodedText; lastTime = now; abrirQtyModal(decodedText, adicionarItem); }
 
-  // ---------- ITEM LIST (draft) ----------
   function renderItens(){
-    const itens = load(LS_DRAFT, []);
-    document.getElementById('count-itens').textContent = itens.length;
-    document.getElementById('count-itens-2').textContent = itens.length;
+    const itens = load(LS_DRAFT, []); document.getElementById('count-itens').textContent = itens.length; document.getElementById('count-itens-2').textContent = itens.length;
     ['item-list','item-list-2'].forEach(id=>{
       const el = document.getElementById(id);
-      if(itens.length===0){
-        el.innerHTML = '<div class="empty-state">Nenhum item escaneado ainda.</div>';
-        return;
-      }
-      el.innerHTML = itens.map((it,i)=>`
-        <div class="item-row">
-          <div>
-            <div class="item-code">${escapeHtml(it.codigo)}</div>
-            <div class="item-meta"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;">Cód./Desc.</span> · Qtd: <b style="color:var(--text)">${it.quantidade||1}</b> · ${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="item-tag tag-${it.tipo}">${it.tipo}</span>
-            <button class="item-del" onclick="App.removeItem(${i})">✕</button>
-          </div>
-        </div>
-      `).join('');
+      if(itens.length===0){ el.innerHTML = '<div class="empty-state">Nenhum item escaneado ainda.</div>'; return; }
+      el.innerHTML = itens.map((it,i)=>`<div class="item-row"><div><div class="item-code">${escapeHtml(it.codigo)}</div><div class="item-meta"><span style="color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;">Cód./Desc.</span> · Qtd: <b style="color:var(--text)">${it.quantidade||1}</b> · ${fmtDate(it.datahora)} · ${escapeHtml(it.usuario)}</div></div><div style="display:flex;align-items:center;gap:8px;"><span class="item-tag tag-${it.tipo}">${it.tipo}</span><button class="item-del" onclick="App.removeItem(${i})">✕</button></div></div>`).join('');
     });
   }
-  function addManual(){
-    const input = document.getElementById('manual-input');
-    const val = input.value.trim();
-    if(!val){ toast('Digite um código ou descrição.'); return; }
-    input.value = '';
-    input.focus();
-    abrirQtyModal(val, (codigo, qty)=>{
-      adicionarItem(codigo, qty);
-      document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + qty + ' (' + currentOp + ') — manual';
-      if(navigator.vibrate) navigator.vibrate(40);
-    });
-  }
+  function addManual(){ const input = document.getElementById('manual-input'); const val = input.value.trim(); if(!val){ toast('Digite um código ou descrição.'); return; } input.value = ''; input.focus(); abrirQtyModal(val, (codigo, qty)=>{ adicionarItem(codigo, qty); document.getElementById('last-scan').textContent = '✓ ' + codigo + ' · qtd: ' + qty + ' (' + currentOp + ') — manual'; if(navigator.vibrate) navigator.vibrate(40); }); }
+  function removeItem(i){ const itens = load(LS_DRAFT, []); itens.splice(i,1); save(LS_DRAFT, itens); renderItens(); }
+  function limparRascunho(){ if(!confirm('Limpar todos os itens lidos e dados do formulário?')) return; localStorage.removeItem(LS_DRAFT); document.getElementById('form-origem').value=''; document.getElementById('form-destino').value=''; document.getElementById('form-destino-err').textContent=''; const obsEl = document.getElementById('obs-romaneio'); if(obsEl) obsEl.value=''; renderItens(); }
 
-  function removeItem(i){
-    const itens = load(LS_DRAFT, []);
-    itens.splice(i,1);
-    save(LS_DRAFT, itens);
-    renderItens();
-  }
-
-  function limparRascunho(){
-    if(!confirm('Limpar todos os itens lidos e dados do formulário?')) return;
-    localStorage.removeItem(LS_DRAFT);
-    document.getElementById('form-origem').value='';
-    document.getElementById('form-destino').value='';
-    document.getElementById('form-destino-err').textContent='';
-    const obsEl = document.getElementById('obs-romaneio');
-    if(obsEl) obsEl.value='';
-    renderItens();
-  }
-
-  // ---------- EMITIR ROMANEIO ----------
   function emitirRomaneio(){
-    const itens = load(LS_DRAFT, []);
-    const origem = document.getElementById('form-origem').value.trim();
-    const destinoId = document.getElementById('form-destino').value;
-    const data = document.getElementById('form-data').value;
-    const obs = (document.getElementById('obs-romaneio') || {}).value || '';
-    const errDestino = document.getElementById('form-destino-err');
-    errDestino.textContent = '';
-
+    const itens = load(LS_DRAFT, []); const origem = document.getElementById('form-origem').value.trim(); const destinoId = document.getElementById('form-destino').value; const data = document.getElementById('form-data').value; const obs = (document.getElementById('obs-romaneio') || {}).value || ''; const errDestino = document.getElementById('form-destino-err'); errDestino.textContent = '';
     if(itens.length===0){ toast('Escaneie ao menos um item.'); return; }
     if(!origem){ toast('Preencha a empresa remetente.'); return; }
-    if(!destinoId){
-      errDestino.textContent = '⚠ Selecione a empresa destinatária para continuar.';
-      document.getElementById('form-destino').classList.add('select-error');
-      return;
-    }
+    if(!destinoId){ errDestino.textContent = '⚠ Selecione a empresa destinatária para continuar.'; document.getElementById('form-destino').classList.add('select-error'); return; }
     document.getElementById('form-destino').classList.remove('select-error');
-
-    const empresas = load(LS_EMPRESAS, []);
-    const empDest = empresas.find(e=>e.id===destinoId) || { razaoSocial: destinoId };
-
-    const romaneio = {
-      id: uid(),
-      dataEmissao: data,
-      empresaOrigem: origem,
-      empresaDestino: empDest.razaoSocial,
-      empresaDestinoId: destinoId,
-      empresaDestinoObj: empDest,
-      usuario: user.nome,
-      usuarioEmail: user.email,
-      status: 'emitido',
-      synced: false,
-      criadoEm: nowISO(),
-      observacao: obs.trim(),
-      itens: itens
-    };
-
-    const all = load(LS_ROMANEIOS, []);
-    all.unshift(romaneio);
-    save(LS_ROMANEIOS, all);
-
+    const empresas = load(LS_EMPRESAS, []); const empDest = empresas.find(e=>e.id===destinoId) || { razaoSocial: destinoId };
+    const romaneio = { id: uid(), dataEmissao: data, empresaOrigem: origem, empresaDestino: empDest.razaoSocial, empresaDestinoId: destinoId, empresaDestinoObj: empDest, usuario: user.nome, usuarioEmail: user.email, status: 'emitido', synced: false, criadoEm: nowISO(), observacao: obs.trim(), itens: itens };
+    const all = load(LS_ROMANEIOS, []); all.unshift(romaneio); save(LS_ROMANEIOS, all);
     gerarPDF(romaneio);
-
-    localStorage.removeItem(LS_DRAFT);
-    document.getElementById('form-origem').value='';
-    document.getElementById('form-destino').value='';
-    document.getElementById('form-destino-err').textContent='';
-    const obsEl = document.getElementById('obs-romaneio');
-    if(obsEl) obsEl.value='';
-    renderItens();
-    updateNetStatus();
-    syncPending();
-    switchTab('historico');
-    toast('Romaneio ' + romaneio.id + ' gerado!');
+    localStorage.removeItem(LS_DRAFT); document.getElementById('form-origem').value=''; document.getElementById('form-destino').value=''; document.getElementById('form-destino-err').textContent=''; const obsEl = document.getElementById('obs-romaneio'); if(obsEl) obsEl.value=''; renderItens(); updateNetStatus(); syncPending(); switchTab('historico'); toast('Romaneio ' + romaneio.id + ' gerado!');
   }
-  // ---------- PDF (usa PDF_CONFIG de pdf-config.js) ----------
+
+  // ========== FUNÇÃO GERAR PDF ATUALIZADA ==========
   function gerarPDF(rom){
+    if(!rom.dataEmissao) rom.dataEmissao = rom.criadoEm ? rom.criadoEm.slice(0,10) : new Date().toISOString().slice(0,10);
+    if(!rom.itens || !Array.isArray(rom.itens)) rom.itens = [];
+    rom.itens = rom.itens.map(it => ({ ...it, datahora: it.datahora || rom.criadoEm || new Date().toISOString(), quantidade: it.quantidade || 1, tipo: it.tipo || 'saida', usuario: it.usuario || rom.usuario || 'N/A' }));
+
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
     const cfg = (typeof PDF_CONFIG !== 'undefined') ? PDF_CONFIG : {};
-    const cor = cfg.COR_PRIMARIA || [255,159,28];
+    const cor = cfg.COR_PRIMARIA || [23,145,194];
     let y = 18;
     let textX = 14;
 
     if(cfg.LOGO_BASE64){
-      try{
-        doc.addImage(cfg.LOGO_BASE64, cfg.LOGO_FORMATO || 'PNG', 14, 10, cfg.LOGO_LARGURA || 30, cfg.LOGO_ALTURA || 18);
-        textX = 14 + (cfg.LOGO_LARGURA || 30) + 6;
-      }catch(e){ /* logo inválida, segue sem ela */ }
+      try{ doc.addImage(cfg.LOGO_BASE64, cfg.LOGO_FORMATO || 'PNG', 14, 10, cfg.LOGO_LARGURA || 30, cfg.LOGO_ALTURA || 18); textX = 14 + (cfg.LOGO_LARGURA || 30) + 6; }catch(e){}
     }
 
-    doc.setTextColor(cor[0],cor[1],cor[2]);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(16);
-    doc.text(cfg.NOME_EMPRESA || 'ROMANEIO DE CARGA', textX, y);
-    y += 6;
-    doc.setTextColor(90,90,90);
-    doc.setFontSize(9);
-    doc.setFont('helvetica','normal');
+    doc.setTextColor(cor[0],cor[1],cor[2]); doc.setFont('helvetica','bold'); doc.setFontSize(16);
+    doc.text(cfg.NOME_EMPRESA || 'ROMANEIO DE CARGA', textX, y); y += 6;
+    doc.setTextColor(90,90,90); doc.setFontSize(9); doc.setFont('helvetica','normal');
     doc.text(cfg.SUBTITULO_EMPRESA || 'Controle de Carga', textX, y);
 
     y = Math.max(y + 10, 36);
-    doc.setTextColor(0,0,0);
-    doc.setFontSize(10);
-    doc.text('Código: ' + rom.id, 14, y); y += 6;
+    doc.setTextColor(0,0,0); doc.setFontSize(10);
+    doc.text('Código: ' + (rom.id || 'N/A'), 14, y); y += 6;
     doc.text('Data de emissão: ' + rom.dataEmissao, 14, y); y += 6;
-    doc.text('Responsável: ' + rom.usuario, 14, y); y += 6;
-    doc.text('Empresa remetente: ' + rom.empresaOrigem, 14, y); y += 6;
+    doc.text('Responsável: ' + (rom.usuario || 'N/A'), 14, y); y += 6;
+    doc.text('Empresa remetente: ' + (rom.empresaOrigem || 'N/A'), 14, y); y += 6;
 
-    // Empresa destinatária com dados completos (nome, CNPJ, endereço, telefone)
     let ed = rom.empresaDestinoObj || {};
-    // Fallback: se os dados não vierem junto do romaneio (ex.: romaneio sincronizado
-    // de outro dispositivo), procura a empresa no cadastro local pelo id ou pelo nome.
     if(!ed.cnpj && !ed.endereco && !ed.telefone){
       const empresas = load(LS_EMPRESAS, []);
-      const achada = empresas.find(e=>e.id===rom.empresaDestinoId) ||
-                      empresas.find(e=>e.razaoSocial===rom.empresaDestino);
+      const achada = empresas.find(e=>e.id===rom.empresaDestinoId) || empresas.find(e=>e.razaoSocial===rom.empresaDestino);
       if(achada) ed = achada;
     }
 
     const mostrarDados = cfg.MOSTRAR_DADOS_DESTINATARIO !== false;
-    doc.text((cfg.LABEL_DESTINATARIO || 'Empresa destinatária') + ': ' + rom.empresaDestino, 14, y); y += 5;
+    doc.text((cfg.LABEL_DESTINATARIO || 'Empresa destinatária') + ': ' + (rom.empresaDestino || 'N/A'), 14, y); y += 5;
     if(mostrarDados){
       doc.setFontSize(9); doc.setTextColor(100,100,100);
       if(ed.cnpj)     { doc.text((cfg.LABEL_CNPJ_DESTINATARIO || 'CNPJ') + ': ' + ed.cnpj, 14, y); y += 5; }
@@ -1293,763 +973,182 @@ const App = (() => {
     doc.setFontSize(10); doc.setTextColor(0,0,0);
     y += 4;
 
-    doc.setFont('helvetica','bold');
-    doc.setTextColor(cor[0],cor[1],cor[2]);
+    // Cabeçalho da tabela com descrição AMPLIADA
+    doc.setFont('helvetica','bold'); doc.setTextColor(cor[0],cor[1],cor[2]);
     doc.text('Código / Descrição', 14, y);
-    doc.text('Qtd', 92, y);
-    doc.text('Tipo', 108, y);
-    doc.text('Data/Hora', 132, y);
-    doc.text('Usuário', 175, y);
-    doc.setTextColor(0,0,0);
-    doc.setFont('helvetica','normal');
+    doc.text('Qtd', 170, y);
+    doc.text('Tipo', 190, y);
+    doc.text('Data/Hora', 215, y);
+    doc.text('Usuário', 250, y);
+    doc.setTextColor(0,0,0); doc.setFont('helvetica','normal');
     y += 4;
     doc.setDrawColor(cor[0],cor[1],cor[2]);
-    doc.line(14, y, 196, y);
+    doc.line(14, y, 280, y);
     y += 6;
 
+    // Linhas de dados com descrição AMPLIADA
     rom.itens.forEach(it=>{
-      if(y > 270){
-        addFooter(doc, cfg);
-        doc.addPage();
-        y = 20;
-      }
-      doc.text(String(it.codigo).slice(0,38), 14, y);
-      doc.text(String(it.quantidade || 1), 92, y);
-      doc.text(it.tipo, 108, y);
-      doc.text(fmtDate(it.datahora), 132, y);
-      doc.text(String(it.usuario).slice(0,18), 175, y);
+      if(y > 190){ addFooter(doc, cfg); doc.addPage(); y = 20; }
+      doc.text(String(it.codigo || '').slice(0,70), 14, y);
+      doc.text(String(it.quantidade || 1), 170, y);
+      doc.text(it.tipo || 'N/A', 190, y);
+      doc.text(fmtDate(it.datahora), 215, y);
+      doc.text(String(it.usuario || '').slice(0,15), 250, y);
       y += 7;
     });
 
-    // Observação
     if(rom.observacao && rom.observacao.trim()){
       y += 6;
-      if(y > 260){ addFooter(doc, cfg); doc.addPage(); y = 20; }
-      doc.setFont('helvetica','bold');
-      doc.setFontSize(10);
-      doc.setTextColor(cor[0],cor[1],cor[2]);
-      doc.text('Observações:', 14, y);
-      y += 5;
-      doc.setFont('helvetica','normal');
-      doc.setTextColor(60,60,60);
-      doc.setFontSize(9);
-      const linhasObs = doc.splitTextToSize(rom.observacao, 180);
-      linhasObs.forEach(linha=>{
-        if(y > 265){ addFooter(doc, cfg); doc.addPage(); y = 20; }
-        doc.text(linha, 14, y);
-        y += 5;
-      });
+      if(y > 180){ addFooter(doc, cfg); doc.addPage(); y = 20; }
+      doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(cor[0],cor[1],cor[2]);
+      doc.text('Observações:', 14, y); y += 5;
+      doc.setFont('helvetica','normal'); doc.setTextColor(60,60,60); doc.setFontSize(9);
+      const linhasObs = doc.splitTextToSize(rom.observacao, 260);
+      linhasObs.forEach(linha=>{ if(y > 185){ addFooter(doc, cfg); doc.addPage(); y = 20; } doc.text(linha, 14, y); y += 5; });
     }
 
     addFooter(doc, cfg);
 
-    doc.save(rom.id + '.pdf');
+    try { doc.save((rom.id || 'romaneio') + '.pdf'); }
+    catch(e1) {
+      try { const blob = doc.output('blob'); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = (rom.id || 'romaneio') + '.pdf'; a.click(); URL.revokeObjectURL(url); }
+      catch(e2) { toast('Erro ao gerar PDF. Verifique o console (F12).'); console.error('Erro PDF:', e2); }
+    }
   }
+
   function addFooter(doc, cfg){
     const h = doc.internal.pageSize.getHeight();
     const cor = cfg.COR_PRIMARIA || [23,145,194];
-
-    // Linha e campo de assinatura
     doc.setDrawColor(cor[0],cor[1],cor[2]);
-    doc.line(14, h - 28, 100, h - 28);
-    doc.setFontSize(9);
-    doc.setTextColor(80,80,80);
-    doc.text('Assinatura do conferente', 14, h - 22);
-
-    doc.line(110, h - 28, 196, h - 28);
-    doc.text('Data / Hora de conferência', 110, h - 22);
-
-    // Rodapé
-    if(cfg.RODAPE){
-      doc.setFontSize(8);
-      doc.setTextColor(150,150,150);
-      doc.text(cfg.RODAPE, 14, h - 10);
-    }
+    doc.line(14, h - 28, 100, h - 28); doc.setFontSize(9); doc.setTextColor(80,80,80); doc.text('Assinatura do conferente', 14, h - 22);
+    doc.line(110, h - 28, 196, h - 28); doc.text('Data / Hora de conferência', 110, h - 22);
+    if(cfg.RODAPE){ doc.setFontSize(8); doc.setTextColor(150,150,150); doc.text(cfg.RODAPE, 14, h - 10); }
     doc.setTextColor(0,0,0);
   }
 
-  // ---------- HISTÓRICO ----------
+  // HISTÓRICO
   let histFilter = 'todos';
-  function filterHist(f){
-    histFilter = f;
-    document.querySelectorAll('.filter-chip[data-f]').forEach(c=>c.classList.toggle('active', c.dataset.f===f));
-    renderHistorico();
-  }
-  function limparBusca(){
-    ['search-codigo','search-data','search-origem','search-destino'].forEach(id=>document.getElementById(id).value='');
-    renderHistorico();
-  }
+  function filterHist(f){ histFilter = f; document.querySelectorAll('.filter-chip[data-f]').forEach(c=>c.classList.toggle('active', c.dataset.f===f)); renderHistorico(); }
+  function limparBusca(){ ['search-codigo','search-data','search-origem','search-destino'].forEach(id=>document.getElementById(id).value=''); renderHistorico(); }
   async function refreshHistorico(){
-    if(navigator.onLine){
-      try{
-        const remote = await api('listRomaneios', { email: user.email });
-        const local = load(LS_ROMANEIOS, []);
-        remote.romaneios.forEach(r=>{
-          const idx = local.findIndex(l=>l.id===r.id);
-          if(idx===-1){ local.push({ ...r, synced:true }); }
-          else if(local[idx].synced){ local[idx] = { ...r, synced:true }; }
-        });
-        save(LS_ROMANEIOS, local);
-        updateNetStatus();
-      }catch(e){ /* mantém dados locais */ }
-    }
+    if(navigator.onLine){ try{ const remote = await api('listRomaneios', { email: user.email }); const local = load(LS_ROMANEIOS, []); remote.romaneios.forEach(r=>{ const idx = local.findIndex(l=>l.id===r.id); if(idx===-1){ local.push({ ...r, synced:true }); } else if(local[idx].synced){ local[idx] = { ...r, synced:true }; } }); save(LS_ROMANEIOS, local); updateNetStatus(); }catch(e){} }
     renderHistorico();
   }
   function renderHistorico(){
     let all = load(LS_ROMANEIOS, []);
-    // usuário comum vê apenas seus próprios romaneios
     if(user.role !== 'admin') all = all.filter(r=>r.usuario === user.nome);
     if(histFilter!=='todos') all = all.filter(r=>r.status===histFilter);
-
     const codigo = document.getElementById('search-codigo').value.trim().toLowerCase();
     const data = document.getElementById('search-data').value;
     const origem = document.getElementById('search-origem').value.trim().toLowerCase();
     const destino = document.getElementById('search-destino').value.trim().toLowerCase();
-
     if(codigo) all = all.filter(r=>r.id.toLowerCase().includes(codigo));
     if(data) all = all.filter(r=>r.dataEmissao===data);
     if(origem) all = all.filter(r=>(r.empresaOrigem||'').toLowerCase().includes(origem));
     if(destino) all = all.filter(r=>(r.empresaDestino||'').toLowerCase().includes(destino));
-
     const el = document.getElementById('hist-list');
     if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
-    el.innerHTML = all.map(r=>`
-      <div class="ticket">
-        <div class="ticket-stripe"></div>
-        <div class="ticket-body">
-          <div class="ticket-head">
-            <span class="ticket-id">${r.id}</span>
-            <span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span>
-          </div>
-          <div class="ticket-meta">
-            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
-            Emitido em ${r.dataEmissao} por ${escapeHtml(r.usuario)} · ${r.itens.length} item(ns)
-            ${r.motoristaNome ? `<br>🚚 Motorista: <b style="color:var(--accent)">${escapeHtml(r.motoristaNome)}</b>` : ''}
-            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}
-          </div>
-          <div class="ticket-actions">
-            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
-            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
-            ${(user.role==='admin' || user.role==='user') && r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}
-            ${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
+    el.innerHTML = all.map(r=>`<div class="ticket"><div class="ticket-stripe"></div><div class="ticket-body"><div class="ticket-head"><span class="ticket-id">${r.id}</span><span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span></div><div class="ticket-meta"><b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>Emitido em ${r.dataEmissao} por ${escapeHtml(r.usuario)} · ${r.itens.length} item(ns)${r.motoristaNome ? `<br>🚚 Motorista: <b style="color:var(--accent)">${escapeHtml(r.motoristaNome)}</b>` : ''}${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}</div><div class="ticket-actions"><button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}${(user.role==='admin' || user.role==='user') && r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}</div></div></div>`).join('');
   }
-  function reimprimir(id){
-    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
-    if(r) gerarPDF(r);
-  }
-  function cancelarRomaneio(id){
-    if(!confirm('Cancelar este romaneio?')) return;
-    const all = load(LS_ROMANEIOS, []);
-    const r = all.find(x=>x.id===id);
-    if(r){ r.status='cancelado'; r.synced=false; save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); syncPending(); }
-  }
+  function reimprimir(id){ const r = load(LS_ROMANEIOS, []).find(x=>x.id===id); if(r) gerarPDF(r); }
+  function cancelarRomaneio(id){ if(!confirm('Cancelar este romaneio?')) return; const all = load(LS_ROMANEIOS, []); const r = all.find(x=>x.id===id); if(r){ r.status='cancelado'; r.synced=false; save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); syncPending(); } }
 
-  // ---------- SYNC ----------
-  async function syncPending(){
-    if(!navigator.onLine) return;
-    const all = load(LS_ROMANEIOS, []);
-    let changed = false;
-    for(const r of all){
-      if(r.synced) continue;
-      try{
-        await api('saveRomaneio', { romaneio: r, email: user.email });
-        r.synced = true;
-        changed = true;
-      }catch(e){ /* mantém pendente */ }
-    }
-    if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); }
-  }
+  async function syncPending(){ if(!navigator.onLine) return; const all = load(LS_ROMANEIOS, []); let changed = false; for(const r of all){ if(r.synced) continue; try{ await api('saveRomaneio', { romaneio: r, email: user.email }); r.synced = true; changed = true; }catch(e){} } if(changed){ save(LS_ROMANEIOS, all); renderHistorico(); updateNetStatus(); } }
 
-
-  // ---------- EMPRESAS ----------
+  // EMPRESAS
   let editandoEmpresaId = null;
-
   function uidEmp(){ return 'EMP-' + Date.now().toString(36).toUpperCase(); }
-
-  async function carregarEmpresas(rerender){
-    if(navigator.onLine){
-      try{
-        const remote = await api('listEmpresas', { email: user.email });
-        if(remote.empresas) save(LS_EMPRESAS, remote.empresas);
-      }catch(e){ /* sem conexão com a planilha: usa cache local */ }
-    }
-    popularSelectDestino();
-    if(rerender) renderEmpresas();
-  }
-
-  function popularSelectDestino(){
-    const sel = document.getElementById('form-destino');
-    if(!sel) return;
-    const empresas = load(LS_EMPRESAS, []);
-    const cur = sel.value;
-    sel.innerHTML = '<option value="">— Selecione a empresa destinatária —</option>';
-    empresas.forEach(e=>{
-      const opt = document.createElement('option');
-      opt.value = e.id;
-      opt.textContent = e.razaoSocial + (e.nomeFantasia ? ' (' + e.nomeFantasia + ')' : '');
-      sel.appendChild(opt);
-    });
-    if(cur) sel.value = cur;
-  }
-
-  function renderEmpresas(){
-    const empresas = load(LS_EMPRESAS, []);
-    const el = document.getElementById('empresa-list');
-    if(empresas.length===0){
-      el.innerHTML = '<div class="empty-state">Nenhuma empresa cadastrada ainda.</div>';
-      return;
-    }
-    el.innerHTML = empresas.map(e=>`
-      <div class="empresa-card">
-        <div class="empresa-card-head">
-          <div>
-            <div class="empresa-nome">${escapeHtml(e.razaoSocial)}</div>
-            ${e.nomeFantasia ? '<div class="empresa-fantasia">' + escapeHtml(e.nomeFantasia) + '</div>' : ''}
-          </div>
-        </div>
-        <div class="empresa-meta">
-          ${e.cnpj ? '🪪 ' + escapeHtml(e.cnpj) + '<br>' : ''}
-          ${e.endereco ? '📍 ' + escapeHtml(e.endereco) + '<br>' : ''}
-          ${e.telefone ? '📞 ' + escapeHtml(e.telefone) : ''}
-        </div>
-        ${user.role==='admin' ? `
-        <div class="empresa-actions">
-          <button class="btn btn-outline-accent" onclick="App.editarEmpresa('${e.id}')">Editar</button>
-          <button class="btn btn-danger" onclick="App.excluirEmpresa('${e.id}')">Excluir</button>
-        </div>` : ''}
-      </div>
-    `).join('');
-  }
-
-  function abrirFormEmpresa(id){
-    editandoEmpresaId = id || null;
-    const wrap = document.getElementById('empresa-form-wrap');
-    const title = document.getElementById('empresa-form-title');
-    wrap.classList.remove('hidden');
-    if(id){
-      const emp = load(LS_EMPRESAS, []).find(e=>e.id===id);
-      title.textContent = 'Editar empresa';
-      document.getElementById('ef-razao').value = emp.razaoSocial || '';
-      document.getElementById('ef-fantasia').value = emp.nomeFantasia || '';
-      document.getElementById('ef-cnpj').value = emp.cnpj || '';
-      document.getElementById('ef-tel').value = emp.telefone || '';
-      document.getElementById('ef-end').value = emp.endereco || '';
-    } else {
-      title.textContent = 'Nova empresa';
-      ['ef-razao','ef-fantasia','ef-cnpj','ef-tel','ef-end'].forEach(id=>document.getElementById(id).value='');
-    }
-    document.getElementById('ef-err').textContent='';
-    document.getElementById('ef-razao').focus();
-    wrap.scrollIntoView({ behavior:'smooth', block:'start' });
-  }
-
-  function fecharFormEmpresa(){
-    document.getElementById('empresa-form-wrap').classList.add('hidden');
-    editandoEmpresaId = null;
-  }
-
-  async function salvarEmpresa(){
-    const razao = document.getElementById('ef-razao').value.trim();
-    const err = document.getElementById('ef-err');
-    err.textContent='';
-    if(!razao){ err.textContent='A Razão Social é obrigatória.'; return; }
-
-    const emp = {
-      id: editandoEmpresaId || uidEmp(),
-      razaoSocial: razao,
-      nomeFantasia: document.getElementById('ef-fantasia').value.trim(),
-      cnpj: document.getElementById('ef-cnpj').value.trim(),
-      telefone: document.getElementById('ef-tel').value.trim(),
-      endereco: document.getElementById('ef-end').value.trim(),
-    };
-
-    const all = load(LS_EMPRESAS, []);
-    const idx = all.findIndex(e=>e.id===emp.id);
-    if(idx>=0) all[idx]=emp; else all.push(emp);
-    save(LS_EMPRESAS, all);
-
-    try{
-      if(navigator.onLine) await api('saveEmpresa', { empresa: emp });
-    }catch(e){ toast('Salvo localmente (sem conexão).'); }
-
-    fecharFormEmpresa();
-    renderEmpresas();
-    popularSelectDestino();
-    toast('Empresa salva!');
-  }
-
+  async function carregarEmpresas(rerender){ if(navigator.onLine){ try{ const remote = await api('listEmpresas', { email: user.email }); if(remote.empresas) save(LS_EMPRESAS, remote.empresas); }catch(e){} } popularSelectDestino(); if(rerender) renderEmpresas(); }
+  function popularSelectDestino(){ const sel = document.getElementById('form-destino'); if(!sel) return; const empresas = load(LS_EMPRESAS, []); const cur = sel.value; sel.innerHTML = '<option value="">— Selecione a empresa destinatária —</option>'; empresas.forEach(e=>{ const opt = document.createElement('option'); opt.value = e.id; opt.textContent = e.razaoSocial + (e.nomeFantasia ? ' (' + e.nomeFantasia + ')' : ''); sel.appendChild(opt); }); if(cur) sel.value = cur; }
+  function renderEmpresas(){ const empresas = load(LS_EMPRESAS, []); const el = document.getElementById('empresa-list'); if(empresas.length===0){ el.innerHTML = '<div class="empty-state">Nenhuma empresa cadastrada ainda.</div>'; return; } el.innerHTML = empresas.map(e=>`<div class="empresa-card"><div class="empresa-card-head"><div><div class="empresa-nome">${escapeHtml(e.razaoSocial)}</div>${e.nomeFantasia ? '<div class="empresa-fantasia">' + escapeHtml(e.nomeFantasia) + '</div>' : ''}</div></div><div class="empresa-meta">${e.cnpj ? '🪪 ' + escapeHtml(e.cnpj) + '<br>' : ''}${e.endereco ? '📍 ' + escapeHtml(e.endereco) + '<br>' : ''}${e.telefone ? '📞 ' + escapeHtml(e.telefone) : ''}</div>${user.role==='admin' ? `<div class="empresa-actions"><button class="btn btn-outline-accent" onclick="App.editarEmpresa('${e.id}')">Editar</button><button class="btn btn-danger" onclick="App.excluirEmpresa('${e.id}')">Excluir</button></div>` : ''}</div>`).join(''); }
+  function abrirFormEmpresa(id){ editandoEmpresaId = id || null; const wrap = document.getElementById('empresa-form-wrap'); const title = document.getElementById('empresa-form-title'); wrap.classList.remove('hidden'); if(id){ const emp = load(LS_EMPRESAS, []).find(e=>e.id===id); title.textContent = 'Editar empresa'; document.getElementById('ef-razao').value = emp.razaoSocial || ''; document.getElementById('ef-fantasia').value = emp.nomeFantasia || ''; document.getElementById('ef-cnpj').value = emp.cnpj || ''; document.getElementById('ef-tel').value = emp.telefone || ''; document.getElementById('ef-end').value = emp.endereco || ''; } else { title.textContent = 'Nova empresa'; ['ef-razao','ef-fantasia','ef-cnpj','ef-tel','ef-end'].forEach(id=>document.getElementById(id).value=''); } document.getElementById('ef-err').textContent=''; document.getElementById('ef-razao').focus(); wrap.scrollIntoView({ behavior:'smooth', block:'start' }); }
+  function fecharFormEmpresa(){ document.getElementById('empresa-form-wrap').classList.add('hidden'); editandoEmpresaId = null; }
+  async function salvarEmpresa(){ const razao = document.getElementById('ef-razao').value.trim(); const err = document.getElementById('ef-err'); err.textContent=''; if(!razao){ err.textContent='A Razão Social é obrigatória.'; return; } const emp = { id: editandoEmpresaId || uidEmp(), razaoSocial: razao, nomeFantasia: document.getElementById('ef-fantasia').value.trim(), cnpj: document.getElementById('ef-cnpj').value.trim(), telefone: document.getElementById('ef-tel').value.trim(), endereco: document.getElementById('ef-end').value.trim() }; const all = load(LS_EMPRESAS, []); const idx = all.findIndex(e=>e.id===emp.id); if(idx>=0) all[idx]=emp; else all.push(emp); save(LS_EMPRESAS, all); try{ if(navigator.onLine) await api('saveEmpresa', { empresa: emp }); }catch(e){ toast('Salvo localmente (sem conexão).'); } fecharFormEmpresa(); renderEmpresas(); popularSelectDestino(); toast('Empresa salva!'); }
   function editarEmpresa(id){ abrirFormEmpresa(id); }
+  async function excluirEmpresa(id){ if(!confirm('Excluir esta empresa? Esta ação não pode ser desfeita.')) return; const all = load(LS_EMPRESAS, []).filter(e=>e.id!==id); save(LS_EMPRESAS, all); try{ if(navigator.onLine) await api('deleteEmpresa', { id }); }catch(e){} renderEmpresas(); popularSelectDestino(); toast('Empresa excluída.'); }
 
-  async function excluirEmpresa(id){
-    if(!confirm('Excluir esta empresa? Esta ação não pode ser desfeita.')) return;
-    const all = load(LS_EMPRESAS, []).filter(e=>e.id!==id);
-    save(LS_EMPRESAS, all);
-    try{
-      if(navigator.onLine) await api('deleteEmpresa', { id });
-    }catch(e){}
-    renderEmpresas();
-    popularSelectDestino();
-    toast('Empresa excluída.');
-  }
-
-
-  // ---------- DASHBOARD ----------
+  // DASHBOARD
   function renderDashboard(){
     let roms = load(LS_ROMANEIOS, []).filter(r=>r.status==='emitido');
-
-    const de = document.getElementById('dash-data-de').value;
-    const ate = document.getElementById('dash-data-ate').value;
-    if(de)  roms = roms.filter(r=>r.dataEmissao && r.dataEmissao >= de);
+    const de = document.getElementById('dash-data-de').value; const ate = document.getElementById('dash-data-ate').value;
+    if(de) roms = roms.filter(r=>r.dataEmissao && r.dataEmissao >= de);
     if(ate) roms = roms.filter(r=>r.dataEmissao && r.dataEmissao <= ate);
-
-    let totalSaida=0, totalEntrada=0, totalDev=0;
-    const porEmpresa = {};
-
-    roms.forEach(r=>{
-      const dest = r.empresaDestino || 'Não informada';
-      if(!porEmpresa[dest]) porEmpresa[dest]={saida:0,entrada:0,devolucao:0};
-      r.itens.forEach(it=>{
-        if(it.tipo==='saida')     { totalSaida++;      porEmpresa[dest].saida++; }
-        if(it.tipo==='entrada')   { totalEntrada++;    porEmpresa[dest].entrada++; }
-        if(it.tipo==='devolucao') { totalDev++;        porEmpresa[dest].devolucao++; }
-      });
-    });
-
+    let totalSaida=0, totalEntrada=0, totalDev=0; const porEmpresa = {};
+    roms.forEach(r=>{ const dest = r.empresaDestino || 'Não informada'; if(!porEmpresa[dest]) porEmpresa[dest]={saida:0,entrada:0,devolucao:0}; r.itens.forEach(it=>{ if(it.tipo==='saida'){ totalSaida++; porEmpresa[dest].saida++; } if(it.tipo==='entrada'){ totalEntrada++; porEmpresa[dest].entrada++; } if(it.tipo==='devolucao'){ totalDev++; porEmpresa[dest].devolucao++; } }); });
     const totalGeral = totalSaida + totalEntrada + totalDev;
-
-    document.getElementById('dash-totais').innerHTML = `
-      <div class="dash-card"><div class="dash-card-value">${totalGeral}</div><div class="dash-card-label">Total de itens</div></div>
-      <div class="dash-card saida"><div class="dash-card-value">${totalSaida}</div><div class="dash-card-label">Saídas</div></div>
-      <div class="dash-card entrada"><div class="dash-card-value">${totalEntrada}</div><div class="dash-card-label">Entradas</div></div>
-      <div class="dash-card devolucao"><div class="dash-card-value">${totalDev}</div><div class="dash-card-label">Devoluções</div></div>
-    `;
-
+    document.getElementById('dash-totais').innerHTML = `<div class="dash-card"><div class="dash-card-value">${totalGeral}</div><div class="dash-card-label">Total de itens</div></div><div class="dash-card saida"><div class="dash-card-value">${totalSaida}</div><div class="dash-card-label">Saídas</div></div><div class="dash-card entrada"><div class="dash-card-value">${totalEntrada}</div><div class="dash-card-label">Entradas</div></div><div class="dash-card devolucao"><div class="dash-card-value">${totalDev}</div><div class="dash-card-label">Devoluções</div></div>`;
     const sorted = Object.entries(porEmpresa).sort((a,b)=>(b[1].saida+b[1].entrada+b[1].devolucao)-(a[1].saida+a[1].entrada+a[1].devolucao));
     const maxTotal = sorted.length ? sorted[0][1].saida+sorted[0][1].entrada+sorted[0][1].devolucao : 1;
-
     const tbody = document.getElementById('dash-tabela');
     if(sorted.length===0){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Nenhum dado para o período selecionado.</td></tr>'; return; }
-    tbody.innerHTML = sorted.map(([emp,v])=>{
-      const tot = v.saida+v.entrada+v.devolucao;
-      const pct = Math.round((tot/maxTotal)*100);
-      return `<tr>
-        <td>
-          <div class="dash-bar-wrap">
-            <div class="dash-bar" style="width:${pct}px;max-width:80px;"></div>
-            <span>${escapeHtml(emp)}</span>
-          </div>
-        </td>
-        <td class="num s">${v.saida}</td>
-        <td class="num e">${v.entrada}</td>
-        <td class="num d">${v.devolucao}</td>
-        <td class="num">${tot}</td>
-      </tr>`;
-    }).join('');
+    tbody.innerHTML = sorted.map(([emp,v])=>{ const tot = v.saida+v.entrada+v.devolucao; const pct = Math.round((tot/maxTotal)*100); return `<tr><td><div class="dash-bar-wrap"><div class="dash-bar" style="width:${pct}px;max-width:80px;"></div><span>${escapeHtml(emp)}</span></div></td><td class="num s">${v.saida}</td><td class="num e">${v.entrada}</td><td class="num d">${v.devolucao}</td><td class="num">${tot}</td></tr>`; }).join('');
   }
-
   function fmtDateInput(d){ return d.toISOString().slice(0,10); }
-
   function filtrarDashboardPeriodo(periodo){
     document.querySelectorAll('.filter-chip[data-dp]').forEach(c=>c.classList.toggle('active', c.dataset.dp===periodo));
-    const de = document.getElementById('dash-data-de');
-    const ate = document.getElementById('dash-data-ate');
-    const hoje = new Date();
-
-    if(periodo==='todos'){
-      de.value=''; ate.value='';
-    } else if(periodo==='hoje'){
-      de.value = fmtDateInput(hoje); ate.value = fmtDateInput(hoje);
-    } else if(periodo==='7dias'){
-      const inicio = new Date(hoje); inicio.setDate(inicio.getDate()-6);
-      de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje);
-    } else if(periodo==='mes'){
-      const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-      de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje);
-    }
+    const de = document.getElementById('dash-data-de'), ate = document.getElementById('dash-data-ate'), hoje = new Date();
+    if(periodo==='todos'){ de.value=''; ate.value=''; }
+    else if(periodo==='hoje'){ de.value = fmtDateInput(hoje); ate.value = fmtDateInput(hoje); }
+    else if(periodo==='7dias'){ const inicio = new Date(hoje); inicio.setDate(inicio.getDate()-6); de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje); }
+    else if(periodo==='mes'){ const inicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1); de.value = fmtDateInput(inicio); ate.value = fmtDateInput(hoje); }
     renderDashboard();
   }
+  function limparFiltroDashboard(){ document.getElementById('dash-data-de').value=''; document.getElementById('dash-data-ate').value=''; document.querySelectorAll('.filter-chip[data-dp]').forEach(c=>c.classList.toggle('active', c.dataset.dp==='todos')); renderDashboard(); }
 
-  function limparFiltroDashboard(){
-    document.getElementById('dash-data-de').value='';
-    document.getElementById('dash-data-ate').value='';
-    document.querySelectorAll('.filter-chip[data-dp]').forEach(c=>c.classList.toggle('active', c.dataset.dp==='todos'));
-    renderDashboard();
-  }
-
-  // ---------- ADMIN — ROMANEIOS (todos os usuários) ----------
+  // ADMIN
   let adminHistFilter = 'todos';
-  function switchAdminTab(name){
-    document.querySelectorAll('.admin-subtab').forEach(t=>t.classList.toggle('active', t.dataset.stab===name));
-    document.getElementById('admin-stab-usuarios').classList.toggle('hidden', name!=='usuarios');
-    document.getElementById('admin-stab-romaneios-admin').classList.toggle('hidden', name!=='romaneios-admin');
-    if(name==='romaneios-admin') loadAdminRomaneios();
-    if(name==='usuarios') loadAdmin();
-  }
-  async function loadAdminRomaneios(){
-    if(navigator.onLine){
-      try{
-        const remote = await api('listAllRomaneios', { adminEmail: user.email });
-        if(remote.romaneios){
-          const local = load(LS_ROMANEIOS, []);
-          remote.romaneios.forEach(r=>{
-            const idx = local.findIndex(l=>l.id===r.id);
-            if(idx===-1) local.push({ ...r, synced:true });
-            else local[idx] = { ...r, synced:true };
-          });
-          save(LS_ROMANEIOS, local);
-        }
-      }catch(e){ /* usa dados locais */ }
-    }
-    renderAdminRomaneios();
-  }
-  function filterAdminHist(f){
-    adminHistFilter = f;
-    document.querySelectorAll('.filter-chip[data-af]').forEach(c=>c.classList.toggle('active', c.dataset.af===f));
-    renderAdminRomaneios();
-  }
-  function limparBuscaAdmin(){
-    ['asearch-usuario','asearch-codigo','asearch-data','asearch-empresa'].forEach(id=>{
-      document.getElementById(id).value='';
-    });
-    renderAdminRomaneios();
-  }
+  function switchAdminTab(name){ document.querySelectorAll('.admin-subtab').forEach(t=>t.classList.toggle('active', t.dataset.stab===name)); document.getElementById('admin-stab-usuarios').classList.toggle('hidden', name!=='usuarios'); document.getElementById('admin-stab-romaneios-admin').classList.toggle('hidden', name!=='romaneios-admin'); if(name==='romaneios-admin') loadAdminRomaneios(); if(name==='usuarios') loadAdmin(); }
+  async function loadAdminRomaneios(){ if(navigator.onLine){ try{ const remote = await api('listAllRomaneios', { adminEmail: user.email }); if(remote.romaneios){ const local = load(LS_ROMANEIOS, []); remote.romaneios.forEach(r=>{ const idx = local.findIndex(l=>l.id===r.id); if(idx===-1) local.push({ ...r, synced:true }); else local[idx] = { ...r, synced:true }; }); save(LS_ROMANEIOS, local); } }catch(e){} } renderAdminRomaneios(); }
+  function filterAdminHist(f){ adminHistFilter = f; document.querySelectorAll('.filter-chip[data-af]').forEach(c=>c.classList.toggle('active', c.dataset.af===f)); renderAdminRomaneios(); }
+  function limparBuscaAdmin(){ ['asearch-usuario','asearch-codigo','asearch-data','asearch-empresa'].forEach(id=>{ document.getElementById(id).value=''; }); renderAdminRomaneios(); }
   function renderAdminRomaneios(){
-    let all = load(LS_ROMANEIOS, []);
-    if(adminHistFilter!=='todos') all = all.filter(r=>r.status===adminHistFilter);
-
-    const usuario = document.getElementById('asearch-usuario').value.trim().toLowerCase();
-    const codigo  = document.getElementById('asearch-codigo').value.trim().toLowerCase();
-    const data    = document.getElementById('asearch-data').value;
-    const empresa = document.getElementById('asearch-empresa').value.trim().toLowerCase();
-
-    if(usuario) all = all.filter(r=>(r.usuario||'').toLowerCase().includes(usuario));
-    if(codigo)  all = all.filter(r=>r.id.toLowerCase().includes(codigo));
-    if(data)    all = all.filter(r=>r.dataEmissao===data);
-    if(empresa) all = all.filter(r=>
-      (r.empresaOrigem||'').toLowerCase().includes(empresa) ||
-      (r.empresaDestino||'').toLowerCase().includes(empresa)
-    );
-
-    const el = document.getElementById('admin-rom-list');
-    if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
-    el.innerHTML = all.map(r=>`
-      <div class="ticket">
-        <div class="ticket-stripe"></div>
-        <div class="ticket-body">
-          <div class="ticket-head">
-            <span class="ticket-id">${r.id}</span>
-            <span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span>
-          </div>
-          <div class="ticket-meta">
-            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
-            Emitido em ${r.dataEmissao} por <b style="color:var(--accent)">${escapeHtml(r.usuario)}</b> · ${r.itens.length} item(ns)
-            ${r.motoristaNome ? `<br>🚚 Motorista: <b>${escapeHtml(r.motoristaNome)}</b>` : ''}
-            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}
-          </div>
-          <div class="ticket-actions">
-            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
-            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
-            ${r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}
-            ${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
+    let all = load(LS_ROMANEIOS, []); if(adminHistFilter!=='todos') all = all.filter(r=>r.status===adminHistFilter);
+    const usuario = document.getElementById('asearch-usuario').value.trim().toLowerCase(), codigo = document.getElementById('asearch-codigo').value.trim().toLowerCase(), data = document.getElementById('asearch-data').value, empresa = document.getElementById('asearch-empresa').value.trim().toLowerCase();
+    if(usuario) all = all.filter(r=>(r.usuario||'').toLowerCase().includes(usuario)); if(codigo) all = all.filter(r=>r.id.toLowerCase().includes(codigo)); if(data) all = all.filter(r=>r.dataEmissao===data); if(empresa) all = all.filter(r=>(r.empresaOrigem||'').toLowerCase().includes(empresa) || (r.empresaDestino||'').toLowerCase().includes(empresa));
+    const el = document.getElementById('admin-rom-list'); if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio encontrado.</div>'; return; }
+    el.innerHTML = all.map(r=>`<div class="ticket"><div class="ticket-stripe"></div><div class="ticket-body"><div class="ticket-head"><span class="ticket-id">${r.id}</span><span class="ticket-status status-${r.status}">${labelStatus(r)}${r.synced ? '' : ' · local'}</span></div><div class="ticket-meta"><b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>Emitido em ${r.dataEmissao} por <b style="color:var(--accent)">${escapeHtml(r.usuario)}</b> · ${r.itens.length} item(ns)${r.motoristaNome ? `<br>🚚 Motorista: <b>${escapeHtml(r.motoristaNome)}</b>` : ''}${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b>` : ''}</div><div class="ticket-actions"><button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}${r.status==='emitido' ? `<button class="btn btn-ghost" onclick="App.abrirModalLiberar('${r.id}')">🚚 Liberar</button>` : ''}${r.status!=='cancelado' && r.status!=='entregue' ? `<button class="btn btn-danger" onclick="App.cancelarRomaneio('${r.id}')">Cancelar</button>` : ''}</div></div></div>`).join('');
   }
+  async function loadAdmin(){ const el = document.getElementById('admin-list'); if(!navigator.onLine){ el.innerHTML = '<div class="empty-state">Conecte-se à internet para gerenciar usuários.</div>'; return; } el.innerHTML = '<div class="empty-state">Carregando usuários...</div>'; try{ const data = await api('listUsers', { adminEmail: user.email }); if(data.users.length===0){ el.innerHTML = '<div class="empty-state">Nenhum usuário encontrado.</div>'; return; } el.innerHTML = data.users.map(u=>`<div class="user-row"><div class="user-info"><div class="user-name">${escapeHtml(u.nome)} <span class="badge badge-${u.role}">${u.role}</span> <span class="badge badge-${u.status}">${u.status}</span></div><div class="user-email">${escapeHtml(u.email)}</div></div><div class="user-controls"><select onchange="App.changeRole('${u.email}', this.value)" ${u.email===user.email?'disabled':''}><option value="user" ${u.role==='user'?'selected':''}>user</option><option value="admin" ${u.role==='admin'?'selected':''}>admin</option><option value="motorista" ${u.role==='motorista'?'selected':''}>motorista</option></select><select onchange="App.changeStatus('${u.email}', this.value)" ${u.email===user.email?'disabled':''}><option value="ativo" ${u.status==='ativo'?'selected':''}>ativo</option><option value="bloqueado" ${u.status==='bloqueado'?'selected':''}>bloqueado</option></select><button class="btn btn-danger" style="width:auto;padding:8px 12px;font-size:12px;" ${u.email===user.email?'disabled':''} onclick="App.removeUser('${u.email}')">Excluir</button></div></div>`).join(''); }catch(e){ el.innerHTML = '<div class="empty-state">Erro ao carregar usuários: ' + escapeHtml(e.message) + '</div>'; } }
+  async function changeRole(email, role){ try{ await api('updateUserRole', { adminEmail: user.email, targetEmail: email, role }); toast('Papel atualizado.'); } catch(e){ toast('Erro: ' + e.message); loadAdmin(); } }
+  async function changeStatus(email, status){ try{ await api('updateUserStatus', { adminEmail: user.email, targetEmail: email, status }); toast('Status atualizado.'); } catch(e){ toast('Erro: ' + e.message); loadAdmin(); } }
+  async function removeUser(email){ if(!confirm('Excluir o usuário ' + email + '? Esta ação não pode ser desfeita.')) return; try{ await api('deleteUser', { adminEmail: user.email, targetEmail: email }); toast('Usuário excluído.'); loadAdmin(); } catch(e){ toast('Erro: ' + e.message); } }
 
-  // ---------- ADMIN ----------
-  async function loadAdmin(){
-    const el = document.getElementById('admin-list');
-    if(!navigator.onLine){ el.innerHTML = '<div class="empty-state">Conecte-se à internet para gerenciar usuários.</div>'; return; }
-    el.innerHTML = '<div class="empty-state">Carregando usuários...</div>';
-    try{
-      const data = await api('listUsers', { adminEmail: user.email });
-      if(data.users.length===0){ el.innerHTML = '<div class="empty-state">Nenhum usuário encontrado.</div>'; return; }
-      el.innerHTML = data.users.map(u=>`
-        <div class="user-row">
-          <div class="user-info">
-            <div class="user-name">${escapeHtml(u.nome)} <span class="badge badge-${u.role}">${u.role}</span> <span class="badge badge-${u.status}">${u.status}</span></div>
-            <div class="user-email">${escapeHtml(u.email)}</div>
-          </div>
-          <div class="user-controls">
-            <select onchange="App.changeRole('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
-              <option value="user" ${u.role==='user'?'selected':''}>user</option>
-              <option value="admin" ${u.role==='admin'?'selected':''}>admin</option>
-              <option value="motorista" ${u.role==='motorista'?'selected':''}>motorista</option>
-            </select>
-            <select onchange="App.changeStatus('${u.email}', this.value)" ${u.email===user.email?'disabled':''}>
-              <option value="ativo" ${u.status==='ativo'?'selected':''}>ativo</option>
-              <option value="bloqueado" ${u.status==='bloqueado'?'selected':''}>bloqueado</option>
-            </select>
-            <button class="btn btn-danger" style="width:auto;padding:8px 12px;font-size:12px;" ${u.email===user.email?'disabled':''} onclick="App.removeUser('${u.email}')">Excluir</button>
-          </div>
-        </div>
-      `).join('');
-    }catch(e){
-      el.innerHTML = '<div class="empty-state">Erro ao carregar usuários: ' + escapeHtml(e.message) + '</div>';
-    }
-  }
-  async function changeRole(email, role){
-    try{ await api('updateUserRole', { adminEmail: user.email, targetEmail: email, role }); toast('Papel atualizado.'); }
-    catch(e){ toast('Erro: ' + e.message); loadAdmin(); }
-  }
-  async function changeStatus(email, status){
-    try{ await api('updateUserStatus', { adminEmail: user.email, targetEmail: email, status }); toast('Status atualizado.'); }
-    catch(e){ toast('Erro: ' + e.message); loadAdmin(); }
-  }
-  async function removeUser(email){
-    if(!confirm('Excluir o usuário ' + email + '? Esta ação não pode ser desfeita.')) return;
-    try{ await api('deleteUser', { adminEmail: user.email, targetEmail: email }); toast('Usuário excluído.'); loadAdmin(); }
-    catch(e){ toast('Erro: ' + e.message); }
-  }
+  function labelStatus(r){ if(r.status==='entregue') return 'entregue'; if(r.status==='liberado') return 'liberado'; return r.status; }
 
-  // ---------- HELPERS DE STATUS ----------
-  function labelStatus(r){
-    if(r.status==='entregue') return 'entregue';
-    if(r.status==='liberado') return 'liberado';
-    return r.status;
-  }
-
-  // ---------- MOTORISTA ----------
+  // MOTORISTA
   let motoristaFilter = 'todos';
-
-  function filterMotorista(f){
-    motoristaFilter = f;
-    document.querySelectorAll('.filter-chip[data-mf]').forEach(c=>c.classList.toggle('active', c.dataset.mf===f));
-    renderMotorista();
-  }
-
+  function filterMotorista(f){ motoristaFilter = f; document.querySelectorAll('.filter-chip[data-mf]').forEach(c=>c.classList.toggle('active', c.dataset.mf===f)); renderMotorista(); }
   async function renderMotorista(){
-    if(navigator.onLine){
-      try{
-        const remote = await api('listRomaneios', { email: user.email })
-        const local = load(LS_ROMANEIOS, []);
-        remote.romaneios.forEach(r=>{
-          const idx = local.findIndex(l=>l.id===r.id);
-          if(idx===-1) local.push({ ...r, synced:true });
-          else { const comp = local[idx].comprovacao; local[idx] = { ...r, synced:true }; if(comp) local[idx].comprovacao = comp; }
-        });
-        save(LS_ROMANEIOS, local);
-      }catch(e){}
-    }
-
-    let all = load(LS_ROMANEIOS, []);
-    // Motorista vê apenas os romaneios atribuídos a ele; admin vê todos liberados/entregues
-    if(user.role==='motorista'){
-      all = all.filter(r=>r.motoristaEmail === user.email);
-    } else {
-      all = all.filter(r=>r.status==='liberado' || r.status==='entregue');
-    }
-    if(motoristaFilter !== 'todos') all = all.filter(r=>r.status===motoristaFilter);
-
-    const el = document.getElementById('motorista-list');
-    if(!el) return;
-    if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio para exibir.</div>'; return; }
-    el.innerHTML = all.map(r=>`
-      <div class="ticket">
-        <div class="ticket-stripe" style="background:repeating-linear-gradient(90deg,var(--accent-2) 0 10px,var(--surface) 10px 16px);"></div>
-        <div class="ticket-body">
-          <div class="ticket-head">
-            <span class="ticket-id">${r.id}</span>
-            <span class="ticket-status status-${r.status}">${labelStatus(r)}</span>
-          </div>
-          <div class="ticket-meta">
-            <b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>
-            Emitido em ${r.dataEmissao} · ${r.itens.length} item(ns)
-            ${r.motoristaNome ? `<br>🚚 <b>${escapeHtml(r.motoristaNome)}</b>` : ''}
-            ${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b> em ${fmtDate(r.comprovacao.dataHora)}` : ''}
-          </div>
-          <div class="ticket-actions">
-            <button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>
-            ${r.status==='liberado' && (user.role==='motorista' || user.role==='admin') ? `<button class="btn btn-primary" onclick="App.abrirModalComp('${r.id}')">📷 Comprovar entrega</button>` : ''}
-            ${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
+    if(navigator.onLine){ try{ const remote = await api('listRomaneios', { email: user.email }); const local = load(LS_ROMANEIOS, []); remote.romaneios.forEach(r=>{ const idx = local.findIndex(l=>l.id===r.id); if(idx===-1) local.push({ ...r, synced:true }); else { const comp = local[idx].comprovacao; local[idx] = { ...r, synced:true }; if(comp) local[idx].comprovacao = comp; } }); save(LS_ROMANEIOS, local); }catch(e){} }
+    let all = load(LS_ROMANEIOS, []); if(user.role==='motorista'){ all = all.filter(r=>r.motoristaEmail === user.email); } else { all = all.filter(r=>r.status==='liberado' || r.status==='entregue'); } if(motoristaFilter !== 'todos') all = all.filter(r=>r.status===motoristaFilter);
+    const el = document.getElementById('motorista-list'); if(!el) return; if(all.length===0){ el.innerHTML = '<div class="empty-state">Nenhum romaneio para exibir.</div>'; return; }
+    el.innerHTML = all.map(r=>`<div class="ticket"><div class="ticket-stripe" style="background:repeating-linear-gradient(90deg,var(--accent-2) 0 10px,var(--surface) 10px 16px);"></div><div class="ticket-body"><div class="ticket-head"><span class="ticket-id">${r.id}</span><span class="ticket-status status-${r.status}">${labelStatus(r)}</span></div><div class="ticket-meta"><b>${escapeHtml(r.empresaOrigem)}</b> → <b>${escapeHtml(r.empresaDestino)}</b><br>Emitido em ${r.dataEmissao} · ${r.itens.length} item(ns)${r.motoristaNome ? `<br>🚚 <b>${escapeHtml(r.motoristaNome)}</b>` : ''}${r.comprovacao ? `<br>✅ Entregue por: <b>${escapeHtml(r.comprovacao.assinatura)}</b> em ${fmtDate(r.comprovacao.dataHora)}` : ''}</div><div class="ticket-actions"><button class="btn btn-outline-accent" onclick="App.reimprimir('${r.id}')">PDF</button>${r.status==='liberado' && (user.role==='motorista' || user.role==='admin') ? `<button class="btn btn-primary" onclick="App.abrirModalComp('${r.id}')">📷 Comprovar entrega</button>` : ''}${r.comprovacao ? `<button class="btn btn-ghost" onclick="App.verComprovacao('${r.id}')">Ver entrega</button>` : ''}</div></div></div>`).join('');
   }
 
-  // ---------- MODAL LIBERAR PARA MOTORISTA ----------
+  // MODAL LIBERAR
   let _liberarRomaneioId = null;
+  async function abrirModalLiberar(id){ _liberarRomaneioId = id; const r = load(LS_ROMANEIOS, []).find(x=>x.id===id); document.getElementById('liberar-rom-info').innerHTML = `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`; document.getElementById('liberar-err').textContent = ''; const sel = document.getElementById('liberar-motorista-sel'); sel.innerHTML = '<option value="">Carregando...</option>'; try{ if(navigator.onLine){ const data = await api('listUsers', { adminEmail: user.email }); const motoristas = data.users.filter(u=>u.role==='motorista' && u.status==='ativo'); if(motoristas.length===0){ sel.innerHTML = '<option value="">Nenhum motorista cadastrado.</option>'; } else { sel.innerHTML = '<option value="">— Selecione —</option>' + motoristas.map(m=>`<option value="${escapeHtml(m.email)}" data-nome="${escapeHtml(m.nome)}">${escapeHtml(m.nome)}</option>`).join(''); } } else { sel.innerHTML = '<option value="">Sem conexão para carregar motoristas.</option>'; } }catch(e){ sel.innerHTML = '<option value="">Erro ao carregar.</option>'; } document.getElementById('modal-liberar').classList.remove('hidden'); }
+  function fecharModalLiberar(){ document.getElementById('modal-liberar').classList.add('hidden'); _liberarRomaneioId = null; }
+  async function confirmarLiberar(){ const sel = document.getElementById('liberar-motorista-sel'); const motEmail = sel.value; const motNome = sel.options[sel.selectedIndex]?.dataset?.nome || ''; const errEl = document.getElementById('liberar-err'); if(!motEmail){ errEl.textContent='Selecione um motorista.'; return; } const all = load(LS_ROMANEIOS, []); const r = all.find(x=>x.id===_liberarRomaneioId); if(!r){ fecharModalLiberar(); return; } r.status = 'liberado'; r.motoristaEmail = motEmail; r.motoristaNome = motNome; r.synced = false; save(LS_ROMANEIOS, all); syncPending(); fecharModalLiberar(); renderHistorico(); renderAdminRomaneios(); toast('Romaneio liberado para ' + motNome); }
 
-  async function abrirModalLiberar(id){
-    _liberarRomaneioId = id;
-    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
-    document.getElementById('liberar-rom-info').innerHTML =
-      `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`;
-    document.getElementById('liberar-err').textContent = '';
+  // MODAL COMPROVAÇÃO
+  let _compRomaneioId = null; let _compFotoBase64 = null;
+  function abrirModalComp(id){ _compRomaneioId = id; _compFotoBase64 = null; const r = load(LS_ROMANEIOS, []).find(x=>x.id===id); document.getElementById('comp-rom-info').innerHTML = `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`; document.getElementById('comp-assinatura').value = ''; document.getElementById('comp-err').textContent = ''; document.getElementById('comp-foto-preview').classList.remove('visible'); document.getElementById('comp-foto-preview').src = ''; document.getElementById('modal-comprovacao').classList.remove('hidden'); }
+  function fecharModalComp(){ document.getElementById('modal-comprovacao').classList.add('hidden'); _compRomaneioId = null; _compFotoBase64 = null; }
+  function onFotoSelecionada(event){ const file = event.target.files[0]; if(!file) return; const reader = new FileReader(); reader.onload = (e)=>{ _compFotoBase64 = e.target.result; const preview = document.getElementById('comp-foto-preview'); preview.src = _compFotoBase64; preview.classList.add('visible'); }; reader.readAsDataURL(file); }
+  async function confirmarEntrega(){ const assinatura = document.getElementById('comp-assinatura').value.trim(); const errEl = document.getElementById('comp-err'); if(!assinatura){ errEl.textContent='Informe quem assinou o recebimento.'; return; } if(!_compFotoBase64){ errEl.textContent='Tire ou selecione uma foto do romaneio assinado.'; return; } const all = load(LS_ROMANEIOS, []); const r = all.find(x=>x.id===_compRomaneioId); if(!r){ fecharModalComp(); return; } r.status = 'entregue'; r.synced = false; r.comprovacao = { assinatura, foto: _compFotoBase64, dataHora: nowISO(), motorista: user.nome, motoristaEmail: user.email }; save(LS_ROMANEIOS, all); syncPending(); fecharModalComp(); renderMotorista(); renderHistorico(); toast('Entrega comprovada! ✅'); }
+  function verComprovacao(id){ const r = load(LS_ROMANEIOS, []).find(x=>x.id===id); if(!r || !r.comprovacao){ toast('Comprovação não encontrada.'); return; } const c = r.comprovacao; const fotoSrc = c.foto || r.fotoUrl || ''; document.getElementById('ver-comp-content').innerHTML = `<div class="comprovacao-box"><div style="font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.7;"><b style="color:var(--text);">Romaneio:</b> ${escapeHtml(r.id)}<br><b style="color:var(--text);">Assinado por:</b> ${escapeHtml(c.assinatura)}<br><b style="color:var(--text);">Motorista:</b> ${escapeHtml(c.motorista)}<br><b style="color:var(--text);">Data/Hora:</b> ${fmtDate(c.dataHora)}</div>${fotoSrc ? `<img src="${fotoSrc}" alt="Foto do romaneio">` : '<div style="color:var(--muted);font-size:13px;">Sem foto disponível.</div>'}</div>`; document.getElementById('modal-ver-comp').classList.remove('hidden'); }
+  function fecharVerComp(){ document.getElementById('modal-ver-comp').classList.add('hidden'); }
 
-    // Carregar lista de motoristas
-    const sel = document.getElementById('liberar-motorista-sel');
-    sel.innerHTML = '<option value="">Carregando...</option>';
-    try{
-      if(navigator.onLine){
-        const data = await api('listUsers', { adminEmail: user.email });
-        const motoristas = data.users.filter(u=>u.role==='motorista' && u.status==='ativo');
-        if(motoristas.length===0){
-          sel.innerHTML = '<option value="">Nenhum motorista cadastrado.</option>';
-        } else {
-          sel.innerHTML = '<option value="">— Selecione —</option>' +
-            motoristas.map(m=>`<option value="${escapeHtml(m.email)}" data-nome="${escapeHtml(m.nome)}">${escapeHtml(m.nome)}</option>`).join('');
-        }
-      } else {
-        sel.innerHTML = '<option value="">Sem conexão para carregar motoristas.</option>';
-      }
-    }catch(e){
-      sel.innerHTML = '<option value="">Erro ao carregar.</option>';
-    }
-    document.getElementById('modal-liberar').classList.remove('hidden');
-  }
-
-  function fecharModalLiberar(){
-    document.getElementById('modal-liberar').classList.add('hidden');
-    _liberarRomaneioId = null;
-  }
-
-  async function confirmarLiberar(){
-    const sel = document.getElementById('liberar-motorista-sel');
-    const motEmail = sel.value;
-    const motNome = sel.options[sel.selectedIndex]?.dataset?.nome || '';
-    const errEl = document.getElementById('liberar-err');
-    if(!motEmail){ errEl.textContent='Selecione um motorista.'; return; }
-
-    const all = load(LS_ROMANEIOS, []);
-    const r = all.find(x=>x.id===_liberarRomaneioId);
-    if(!r){ fecharModalLiberar(); return; }
-    r.status = 'liberado';
-    r.motoristaEmail = motEmail;
-    r.motoristaNome = motNome;
-    r.synced = false;
-    save(LS_ROMANEIOS, all);
-    syncPending();
-    fecharModalLiberar();
-    renderHistorico();
-    renderAdminRomaneios();
-    toast('Romaneio liberado para ' + motNome);
-  }
-
-  // ---------- MODAL COMPROVAÇÃO DE ENTREGA ----------
-  let _compRomaneioId = null;
-  let _compFotoBase64 = null;
-
-  function abrirModalComp(id){
-    _compRomaneioId = id;
-    _compFotoBase64 = null;
-    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
-    document.getElementById('comp-rom-info').innerHTML =
-      `<b>${escapeHtml(r.id)}</b><br>${escapeHtml(r.empresaOrigem)} → ${escapeHtml(r.empresaDestino)}<br>Data: ${r.dataEmissao}`;
-    document.getElementById('comp-assinatura').value = '';
-    document.getElementById('comp-err').textContent = '';
-    document.getElementById('comp-foto-preview').classList.remove('visible');
-    document.getElementById('comp-foto-preview').src = '';
-    document.getElementById('modal-comprovacao').classList.remove('hidden');
-  }
-
-  function fecharModalComp(){
-    document.getElementById('modal-comprovacao').classList.add('hidden');
-    _compRomaneioId = null;
-    _compFotoBase64 = null;
-  }
-
-  function onFotoSelecionada(event){
-    const file = event.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-      _compFotoBase64 = e.target.result;
-      const preview = document.getElementById('comp-foto-preview');
-      preview.src = _compFotoBase64;
-      preview.classList.add('visible');
-    };
-    reader.readAsDataURL(file);
-  }
-
-  async function confirmarEntrega(){
-    const assinatura = document.getElementById('comp-assinatura').value.trim();
-    const errEl = document.getElementById('comp-err');
-    if(!assinatura){ errEl.textContent='Informe quem assinou o recebimento.'; return; }
-    if(!_compFotoBase64){ errEl.textContent='Tire ou selecione uma foto do romaneio assinado.'; return; }
-
-    const all = load(LS_ROMANEIOS, []);
-    const r = all.find(x=>x.id===_compRomaneioId);
-    if(!r){ fecharModalComp(); return; }
-    r.status = 'entregue';
-    r.synced = false;
-    r.comprovacao = {
-      assinatura,
-      foto: _compFotoBase64,
-      dataHora: nowISO(),
-      motorista: user.nome,
-      motoristaEmail: user.email
-    };
-    save(LS_ROMANEIOS, all);
-    syncPending();
-    fecharModalComp();
-    renderMotorista();
-    renderHistorico();
-    toast('Entrega comprovada! ✅');
-  }
-
-  function verComprovacao(id){
-    const r = load(LS_ROMANEIOS, []).find(x=>x.id===id);
-    if(!r || !r.comprovacao){ toast('Comprovação não encontrada.'); return; }
-    const c = r.comprovacao;
-    const fotoSrc = c.foto || r.fotoUrl || '';
-    document.getElementById('ver-comp-content').innerHTML = `
-      <div class="comprovacao-box">
-        <div style="font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.7;">
-          <b style="color:var(--text);">Romaneio:</b> ${escapeHtml(r.id)}<br>
-          <b style="color:var(--text);">Assinado por:</b> ${escapeHtml(c.assinatura)}<br>
-          <b style="color:var(--text);">Motorista:</b> ${escapeHtml(c.motorista)}<br>
-          <b style="color:var(--text);">Data/Hora:</b> ${fmtDate(c.dataHora)}
-        </div>
-        ${fotoSrc ? `<img src="${fotoSrc}" alt="Foto do romaneio">` : '<div style="color:var(--muted);font-size:13px;">Sem foto disponível.</div>'}
-      </div>`;
-    document.getElementById('modal-ver-comp').classList.remove('hidden');
-  }
-
-  function fecharVerComp(){
-    document.getElementById('modal-ver-comp').classList.add('hidden');
-  }
-
-  // ---------- BOOT ----------
   function boot(){
     const savedUser = load(LS_USER, null);
     if(savedUser){ user = savedUser; initApp(); }
     else showScreen('login');
-    setInterval(()=>{
-      if(navigator.onLine && user){
-        syncPending();
-        const onEmpresas = !document.getElementById('tab-empresas').classList.contains('hidden');
-        carregarEmpresas(onEmpresas);
-      }
-    }, 30000);
-
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('sw.js').catch(()=>{});
-    }
+    setInterval(()=>{ if(navigator.onLine && user){ syncPending(); const onEmpresas = !document.getElementById('tab-empresas').classList.contains('hidden'); carregarEmpresas(onEmpresas); } }, 30000);
+    if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
   }
 
-  return {
-    showScreen, login, register, logout,
-    verifyEmail, resendCode, requestReset, confirmReset,
-    switchTab, setOp, startScanner, stopScanner, toggleFlash, addManual,
-    confirmQty, skipQty,
-    removeItem, limparRascunho, emitirRomaneio,
-    filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio,
-    changeRole, changeStatus, removeUser,
-    renderEmpresas, abrirFormEmpresa, fecharFormEmpresa, salvarEmpresa, editarEmpresa, excluirEmpresa,
-    switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios,
-    renderDashboard, filtrarDashboardPeriodo, limparFiltroDashboard,
-    filterMotorista, renderMotorista,
-    abrirModalLiberar, fecharModalLiberar, confirmarLiberar,
-    abrirModalComp, fecharModalComp, onFotoSelecionada, confirmarEntrega, verComprovacao, fecharVerComp,
-    boot
-  };
+  return { showScreen, login, register, logout, verifyEmail, resendCode, requestReset, confirmReset, switchTab, setOp, startScanner, stopScanner, toggleFlash, addManual, confirmQty, skipQty, removeItem, limparRascunho, emitirRomaneio, filterHist, limparBusca, renderHistorico, reimprimir, cancelarRomaneio, changeRole, changeStatus, removeUser, renderEmpresas, abrirFormEmpresa, fecharFormEmpresa, salvarEmpresa, editarEmpresa, excluirEmpresa, switchAdminTab, loadAdminRomaneios, filterAdminHist, limparBuscaAdmin, renderAdminRomaneios, renderDashboard, filtrarDashboardPeriodo, limparFiltroDashboard, filterMotorista, renderMotorista, abrirModalLiberar, fecharModalLiberar, confirmarLiberar, abrirModalComp, fecharModalComp, onFotoSelecionada, confirmarEntrega, verComprovacao, fecharVerComp, boot };
 })();
 
 App.boot();
